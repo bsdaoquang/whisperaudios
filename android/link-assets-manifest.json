@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/GreycliffCF-Bold.ttf",
+      "sha1": "4bcec1ec7cbdb8099d2646c0bad443c6a2e841aa"
+    },
+    {
+      "path": "assets/fonts/GreycliffCF-DemiBold.ttf",
+      "sha1": "c7412108e872d13f901ab86f87959ccc3242558c"
+    },
+    {
+      "path": "assets/fonts/GreycliffCF-ExtraBold.ttf",
+      "sha1": "bb8d848e5de226adce14cf6dfa42ee955748512a"
+    },
+    {
+      "path": "assets/fonts/GreycliffCF-Medium.ttf",
+      "sha1": "83793506ce1144f268d01c8e25c2480a61a59c64"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "122728025595",
+    "firebase_url": "https://whisper-d1ec7-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "whisper-d1ec7",
+    "storage_bucket": "whisper-d1ec7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122728025595:android:e1ccb0c0694ac0204a8f5e",
+        "android_client_info": {
+          "package_name": "com.bsdaoquang.whisperaudios"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122728025595-kmlprlbv6a8dpce3i3t9v6vbsj96ga0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bsdaoquang.whisperaudios",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "122728025595-70fa5kdgdp4omtcbf8tsv80kfobar0j6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfyhpswPZx700UhaPlBJ8Yp3OGVIYE_40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122728025595-70fa5kdgdp4omtcbf8tsv80kfobar0j6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
