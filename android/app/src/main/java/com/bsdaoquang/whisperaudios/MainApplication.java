@@ -1,4 +1,4 @@
-package com.whisperaudios;
+package com.bsdaoquang.whisperaudios;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
