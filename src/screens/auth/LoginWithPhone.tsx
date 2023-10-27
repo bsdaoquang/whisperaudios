@@ -71,7 +71,7 @@ const LoginWithPhone = ({navigation}: any) => {
             >
               <RowComponent>
                 <Image
-                  source={require('../../assets/icons/icons8-vietnam-48.png')}
+                  source={require('../../../assets/images/icons/icons8-vietnam-48.png')}
                   style={{
                     width: 32,
                     height: 20,

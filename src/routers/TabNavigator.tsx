@@ -1,23 +1,23 @@
 /** @format */
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Home, MusicSquareSearch, User } from 'iconsax-react-native'
-import React from 'react'
-import { useColorScheme } from 'react-native'
-import { appColors } from '../constants/appColors'
-import HomeNavigator from './HomeNavigator'
-import ProfileNavigator from './ProfileNavigator'
-import SearchNavigator from './SearchNavigator'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Home, MusicSquareSearch, User} from 'iconsax-react-native';
+import React from 'react';
+import {useColorScheme} from 'react-native';
+import {appColors} from '../constants/appColors';
+import HomeNavigator from './HomeNavigator';
+import ProfileNavigator from './ProfileNavigator';
+import SearchNavigator from './SearchNavigator';
 
 const TabNavigator = () => {
-  const Tabs = createBottomTabNavigator()
+  const Tabs = createBottomTabNavigator();
 
-  const theme = useColorScheme()
-  const bgColor = theme === 'light' ? appColors.light : appColors.dark
+  const theme = useColorScheme();
+  const bgColor = theme === 'light' ? appColors.light : appColors.dark;
 
   return (
     <Tabs.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({route}) => ({
         headerShown: false,
         tabBarStyle: {
           backgroundColor: bgColor,
@@ -26,9 +26,9 @@ const TabNavigator = () => {
           borderColor: bgColor,
         },
         tabBarShowLabel: false,
-        tabBarIcon: ({ focused, color, size }) => {
-          let icon
-          let variant: any = focused ? 'Bold' : 'Outline'
+        tabBarIcon: ({focused, color, size}) => {
+          let icon;
+          let variant: any = focused ? 'Bold' : 'Outline';
           let iconColor =
             theme === 'dark'
               ? focused
@@ -36,10 +36,10 @@ const TabNavigator = () => {
                 : appColors.gray
               : focused
               ? appColors.text
-              : appColors.gray
+              : appColors.gray;
 
           if (route.name === 'HomeTab') {
-            icon = <Home variant={variant} size={size} color={iconColor} />
+            icon = <Home variant={variant} size={size} color={iconColor} />;
           } else if (route.name === 'SearchTab') {
             icon = (
               <MusicSquareSearch
@@ -47,12 +47,12 @@ const TabNavigator = () => {
                 size={size}
                 color={iconColor}
               />
-            )
+            );
           } else if (route.name === 'ProfileTab') {
-            icon = <User variant={variant} size={size} color={iconColor} />
+            icon = <User variant={variant} size={size} color={iconColor} />;
           }
 
-          return icon
+          return icon;
         },
       })}
     >
@@ -60,7 +60,7 @@ const TabNavigator = () => {
       <Tabs.Screen name="SearchTab" component={SearchNavigator} />
       <Tabs.Screen name="ProfileTab" component={ProfileNavigator} />
     </Tabs.Navigator>
-  )
-}
+  );
+};
 
-export default TabNavigator
+export default TabNavigator;

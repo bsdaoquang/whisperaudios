@@ -55,7 +55,8 @@ const TopLikedSwiper = () => {
       style={{
         alignItems: 'center',
       }}
-      onPress={() => navigation.navigate('AudioDetail', {audio: item})}>
+      onPress={() => navigation.navigate('AudioDetail', {audio: item})}
+    >
       <Image
         source={{uri: item.image}}
         style={{
@@ -72,7 +73,8 @@ const TopLikedSwiper = () => {
           justifyContent: 'flex-start',
           width: '100%',
           paddingHorizontal: 16,
-        }}>
+        }}
+      >
         <TitleComponent text={item.title} flex={0} size={20} />
         <AuthorComponent authorId={item.authorId} />
       </View>
@@ -83,7 +85,8 @@ const TopLikedSwiper = () => {
     <View
       style={{
         marginTop: 20,
-      }}>
+      }}
+    >
       {books && books.length > 0 && (
         <Carousel
           height={(appInfos.sizes.width - 32) * 1.4}
