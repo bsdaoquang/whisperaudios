@@ -2,7 +2,6 @@
 
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-
 import React, {useEffect, useState} from 'react';
 import {Image, View} from 'react-native';
 import {appInfos} from '../constants/appInfos';
@@ -32,7 +31,7 @@ const LatestBooks = () => {
     const items: any = await getItem();
     setBooks(JSON.parse(items));
 
-    const filter = fs
+    const filter = firestore()
       .collection(appInfos.databaseNames.audios)
       .orderBy('updatedAt')
       .limitToLast(10);

@@ -41,7 +41,6 @@ const Categories = () => {
             ...item.data(),
           });
         });
-        console.log(items);
         setItem(JSON.stringify(items));
         setCategories(items);
       }

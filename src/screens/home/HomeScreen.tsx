@@ -23,14 +23,12 @@ const HomeScreen = ({navigation}: any) => {
         styles={{
           padding: 16,
           justifyContent: 'space-between',
-        }}
-      >
+        }}>
         <TitleComponent text="Whisper Audios" size={22} />
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('ProfileTab', {screen: 'HomeAuth'})
-          }
-        >
+          }>
           <Image
             source={
               user.photoURL
@@ -47,11 +45,11 @@ const HomeScreen = ({navigation}: any) => {
         </TouchableOpacity>
       </RowComponent>
       <Categories />
-      {/*   <TopLikedSwiper />
+      <TopLikedSwiper />
       <ListeningComponent />
       <LatestBooks />
       <TopAuthorBooks />
-      <TopRatingBooks /> */}
+      <TopRatingBooks />
     </Container>
   );
 };

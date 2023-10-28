@@ -26,7 +26,7 @@ const TopRatingBooks = () => {
   const getRatingBooks = async () => {
     const items: any = await getItem();
     setRatings(JSON.parse(items));
-    const filter = fs
+    const filter = firestore()
       .collection(appInfos.databaseNames.ratings)
       .orderBy('time')
       .limitToLast(5);

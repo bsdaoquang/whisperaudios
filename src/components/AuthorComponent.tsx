@@ -32,7 +32,7 @@ const AuthorComponent = (props: Props) => {
       .doc(authorId)
       .get()
       .then((snap: any) => {
-        if (snap.exists()) {
+        if (snap.exists) {
           setAuthorDetail({
             key: authorId,
             ...snap.data(),
@@ -45,11 +45,7 @@ const AuthorComponent = (props: Props) => {
     <>
       {authorId && (
         <RowComponent>
-          <TextComponent
-            text={authorDetail.name}
-            size={12}
-            color={appColors.gray7}
-          />
+          <TextComponent text={authorDetail.name} color={appColors.gray7} />
         </RowComponent>
       )}
       {author && (

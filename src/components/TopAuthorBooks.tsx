@@ -24,7 +24,9 @@ const TopAuthorBooks = () => {
   const getAllAuthors = async () => {
     const items: any = await getItem();
     setAuthors(JSON.parse(items));
-    const filter = fs.collection(appInfos.databaseNames.authors).limit(10);
+    const filter = firestore()
+      .collection(appInfos.databaseNames.authors)
+      .limit(10);
 
     await filter
       .get()
