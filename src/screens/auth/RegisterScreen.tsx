@@ -18,6 +18,7 @@ import {Validate} from '../../utils/validate';
 import auth from '@react-native-firebase/auth';
 import LoadingModal from '../../modals/LoadingModal';
 import {handleAuthentication} from '../../utils/handleAuthentication';
+import {useDispatch} from 'react-redux';
 
 const RegisterScreen = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -32,6 +33,7 @@ const RegisterScreen = () => {
   const [isSecurityPass, setIsSecurityPass] = useState(false);
 
   const navigation: any = useNavigation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setHelpEmail('');
@@ -70,7 +72,7 @@ const RegisterScreen = () => {
                 const user = userCredential.user;
 
                 if (user) {
-                  handleAuthentication.UpdateUser(user).then(() => {
+                  handleAuthentication.UpdateUser(user, dispatch).then(() => {
                     setIsLogin(false);
                     navigation.goBack();
                   });

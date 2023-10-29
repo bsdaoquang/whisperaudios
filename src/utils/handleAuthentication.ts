@@ -5,7 +5,6 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {AccessToken, LoginManager} from 'react-native-fbsdk-next';
-import {sha256} from 'react-native-sha256';
 
 GoogleSignin.configure({
   webClientId:
@@ -37,7 +36,7 @@ export class handleAuthentication {
     // return result;
   };
 
-  static GoogleSignin = async () => {
+  static GoogleSignin = async (dispatch: any) => {
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     // Get the users ID token
     const {idToken} = await GoogleSignin.signIn();
@@ -53,7 +52,7 @@ export class handleAuthentication {
         return user;
       });
     if (user) {
-      this.UpdateUser(user);
+      this.UpdateUser(user, dispatch);
 
       return user;
     }
@@ -63,8 +62,6 @@ export class handleAuthentication {
       'public_profile',
       'email',
     ]);
-
-    console.log(result);
 
     // if (result.isCancelled) {
     //   console.log('User cancelled the login process');
@@ -82,12 +79,12 @@ export class handleAuthentication {
     // this.UpdateUser(user);
   };
 
-  static Login = async (data: {email: string; pass: string}) => {
+  static Login = async (data: {email: string; pass: string}, dispatch: any) => {
     await auth()
       .signInWithEmailAndPassword(data.email, data.pass)
       .then(userCredential => {
         const user = userCredential.user;
-        this.UpdateUser(user);
+        this.UpdateUser(user, dispatch);
         return user;
       })
       .catch(error => {
@@ -115,7 +112,7 @@ export class handleAuthentication {
     // }
   };
 
-  static UpdateUser = async (user: any) => {
+  static UpdateUser = async (user: any, dispatch: any) => {
     const data: any = {
       // metaData: user.metadata,
       displayName: user.displayName

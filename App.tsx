@@ -8,6 +8,7 @@ import {getCountry} from 'react-native-localize';
 import {i18n} from './src/languages/i18n';
 import store from './src/redux/store';
 import TabNavigator from './src/routers/TabNavigator';
+import Router from './src/routers/Router';
 
 const App = () => {
   const lang = getCountry();
@@ -19,7 +20,7 @@ const App = () => {
       <GestureHandlerRootView style={{flex: 1}}>
         <Provider store={store}>
           <NavigationContainer>
-            <TabNavigator />
+            <Router />
           </NavigationContainer>
         </Provider>
       </GestureHandlerRootView>

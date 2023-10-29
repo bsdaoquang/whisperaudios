@@ -19,6 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import LoadingModal from '../../modals/LoadingModal';
 
 import auth from '@react-native-firebase/auth';
+import {useDispatch} from 'react-redux';
 
 const LoginScreen = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -31,6 +32,7 @@ const LoginScreen = () => {
   const [isChangePass, setIsChangePass] = useState(false);
 
   const navigation: any = useNavigation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setHelpEmail('');
@@ -63,7 +65,7 @@ const LoginScreen = () => {
               .then(userCredential => {
                 const user = userCredential.user;
 
-                handleAuthentication.UpdateUser(user).then(() => {
+                handleAuthentication.UpdateUser(user, dispatch).then(() => {
                   setIsLogin(false);
                 });
               })

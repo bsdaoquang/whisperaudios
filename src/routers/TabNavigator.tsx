@@ -54,8 +54,7 @@ const TabNavigator = () => {
 
           return icon;
         },
-      })}
-    >
+      })}>
       <Tabs.Screen name="HomeTab" component={HomeNavigator} />
       <Tabs.Screen name="SearchTab" component={SearchNavigator} />
       <Tabs.Screen name="ProfileTab" component={ProfileNavigator} />

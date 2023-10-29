@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
   name: 'addUser',
@@ -10,18 +10,18 @@ const userSlice = createSlice({
   },
   reducers: {
     addUser: (state, action) => {
-      state.userData = action.payload
+      state.userData = action.payload;
     },
     removeUser: (state, action) => {
       state.userData = {
         uid: '',
         fcmtoken: '',
-      }
+      };
     },
   },
-})
+});
 
-export const userReducer = userSlice.reducer
-export const { addUser, removeUser } = userSlice.actions
+export const userReducer = userSlice.reducer;
+export const {addUser, removeUser} = userSlice.actions;
 //selector
-export const userSelector = (state: any) => state.userReducer.userData
+export const userSelector = (state: any) => state.userReducer.userData;

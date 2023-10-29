@@ -33,7 +33,7 @@ const LoginComponent = () => {
       <RowComponent
         onPress={async () => {
           setIsLoading(true);
-          await handleAuthentication.GoogleSignin().then((res: any) => {
+          await handleAuthentication.GoogleSignin(dispatch).then((res: any) => {
             if (res.uid) {
               setIsLoading(false);
               dispatch(
@@ -67,10 +67,11 @@ const LoginComponent = () => {
         />
       </RowComponent>
       <RowComponent
-        onPress={async () =>
-          handleAuthentication.FacebookSignin().then(res => {
-            console.log(res);
-          })
+        onPress={
+          async () => console.log('Comming soon')
+          // handleAuthentication.FacebookSignin().then(res => {
+          //   console.log(res);
+          // })
         }
         styles={[
           globalStyles.card,
