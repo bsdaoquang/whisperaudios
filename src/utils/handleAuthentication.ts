@@ -5,6 +5,7 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {AccessToken, LoginManager} from 'react-native-fbsdk-next';
+import {sha256} from 'react-native-sha256';
 
 GoogleSignin.configure({
   webClientId:
@@ -82,17 +83,17 @@ export class handleAuthentication {
   };
 
   static Login = async (data: {email: string; pass: string}) => {
-    // signInWithEmailAndPassword(auth, data.email, data.pass)
-    //  const user =	signInWithEmailAndPassword( data.email, data.pass)
-    // 		(userCredential) => {
-    // 			const user = userCredential.user;
-    // 			this.UpdateUser(user);
-    // 		}
-    // 	);
-    // } catch (error) {
-    // 	console.log(`Không thể đăng nhập: ${error}`);
-    // 	return 'error';
-    // }
+    await auth()
+      .signInWithEmailAndPassword(data.email, data.pass)
+      .then(userCredential => {
+        const user = userCredential.user;
+        this.UpdateUser(user);
+        return user;
+      })
+      .catch(error => {
+        console.log('Can not login', error);
+        return 'error';
+      });
   };
 
   // resent email verified

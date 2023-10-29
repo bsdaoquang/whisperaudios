@@ -39,7 +39,6 @@ const LoginScreen = () => {
   }, [email, pass]);
 
   const handleLoginWithEmailAndPass = async () => {
-    console.log('fafaa');
     setIsLogin(true);
 
     if (email) {
@@ -63,6 +62,7 @@ const LoginScreen = () => {
               .signInWithEmailAndPassword(email, pass)
               .then(userCredential => {
                 const user = userCredential.user;
+
                 handleAuthentication.UpdateUser(user).then(() => {
                   setIsLogin(false);
                 });
