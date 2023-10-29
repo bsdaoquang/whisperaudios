@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Whisper Audios</string>
+    <string name="facebook_app_id">866099694705447</string><string name="facebook_client_token">38490b009998ec8500fa122d0692334b</string>
 </resources>

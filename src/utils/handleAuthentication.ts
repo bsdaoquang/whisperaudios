@@ -1,20 +1,19 @@
 /** @format */
 
-import { doc, setDoc } from 'firebase/firestore'
-import { fs } from '../firebase/firebaseConfig'
-import { appInfos } from '../constants/appInfos'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import auth from '@react-native-firebase/auth'
-// import { AccessToken, LoginManager } from 'react-native-fbsdk-next'
+import {appInfos} from '../constants/appInfos';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import {AccessToken, LoginManager} from 'react-native-fbsdk-next';
 
 GoogleSignin.configure({
   webClientId:
     '122728025595-dni755pvglind3b2ta26q2g5mg32c5i7.apps.googleusercontent.com',
-})
+});
 
 export class handleAuthentication {
-  static Register = async (data: { email: string; pass: string }) => {
-    let result = ''
+  static Register = async (data: {email: string; pass: string}) => {
+    let result = '';
 
     // await auth()
     // 	.createUserWithEmailAndPassword(data.email, data.pass)
@@ -35,50 +34,54 @@ export class handleAuthentication {
     // 	});
 
     // return result;
-  }
+  };
 
   static GoogleSignin = async () => {
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true })
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn()
+    const {idToken} = await GoogleSignin.signIn();
 
     // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken)
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
     // Sign-in the user with the credential
     const user = await auth()
       .signInWithCredential(googleCredential)
-      .then(async (authCreatedential) => {
-        const user = authCreatedential.user
-        return user
-      })
+      .then(async authCreatedential => {
+        const user = authCreatedential.user;
+        return user;
+      });
     if (user) {
-      this.UpdateUser(user)
+      this.UpdateUser(user);
 
-      return user
+      return user;
     }
-  }
+  };
   static FacebookSignin = async () => {
-    // const result = await LoginManager.logInWithPermissions([
-    //   'public_profile',
-    //   'email',
-    // ])
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+
+    console.log(result);
+
     // if (result.isCancelled) {
-    //   console.log('User cancelled the login process')
+    //   console.log('User cancelled the login process');
     // }
-    // const data: any = await AccessToken.getCurrentAccessToken()
+    // const data: any = await AccessToken.getCurrentAccessToken();
     // if (!data) {
-    //   console.log('Something went wrong obtaining access token')
+    //   console.log('Something went wrong obtaining access token');
     // }
     // const facebookCredential = auth.FacebookAuthProvider.credential(
     //   data.accessToken,
-    // )
-    // // Sign-in the user with the credential
-    // const user = auth().signInWithCredential(facebookCredential)
-    // console.log(user)
-  }
+    // );
 
-  static Login = async (data: { email: string; pass: string }) => {
+    // // Sign-in the user with the credential
+    // const user = auth().signInWithCredential(facebookCredential);
+    // this.UpdateUser(user);
+  };
+
+  static Login = async (data: {email: string; pass: string}) => {
     // signInWithEmailAndPassword(auth, data.email, data.pass)
     //  const user =	signInWithEmailAndPassword( data.email, data.pass)
     // 		(userCredential) => {
@@ -90,7 +93,7 @@ export class handleAuthentication {
     // 	console.log(`Không thể đăng nhập: ${error}`);
     // 	return 'error';
     // }
-  }
+  };
 
   // resent email verified
   static ResentEmailVerified = async (email: string) => {
@@ -100,7 +103,7 @@ export class handleAuthentication {
     // } catch (error) {
     // 	return 'Error';
     // }
-  }
+  };
 
   static LoginWithPhoneNumber = async (phone: string) => {
     // try {
@@ -109,7 +112,7 @@ export class handleAuthentication {
     // } catch (error) {
     // 	return error;
     // }
-  }
+  };
 
   static UpdateUser = async (user: any) => {
     const data: any = {
@@ -124,18 +127,20 @@ export class handleAuthentication {
       phoneNumber: user.phoneNumber ?? '',
       photoURL: user.photoURL ?? '',
       emailVerified: user.emailVerified,
-    }
+    };
 
     try {
-      await setDoc(doc(fs, appInfos.databaseNames.users, user.uid), data).then(
-        () => {
-          console.log('User info updated')
-        },
-      )
+      await firestore()
+        .collection(appInfos.databaseNames.users)
+        .doc(user.uid)
+        .set(data)
+        .then(() => {
+          console.log('User info updated');
+        });
     } catch (error) {
-      console.log(`Không thể cập nhật thông tin user: ${error}`)
+      console.log(`Không thể cập nhật thông tin user: ${error}`);
     }
-  }
+  };
 
   // 	static Logout = async () => {
   // 		try {

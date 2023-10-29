@@ -11,7 +11,6 @@ import TabNavigator from './src/routers/TabNavigator';
 
 const App = () => {
   const lang = getCountry();
-  console.log(lang.toLowerCase());
   i18n.locale = lang ? lang.toLowerCase() : 'us';
 
   return (

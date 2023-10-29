@@ -17,6 +17,7 @@ import {handleAuthentication} from '../utils/handleAuthentication';
 import {showToast} from '../utils/showToast';
 import {RowComponent} from './RowComponent';
 import TextComponent from './TextComponent';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const LoginComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,23 +31,23 @@ const LoginComponent = () => {
         <TextComponent text="Hoặc đăng nhập với" color={appColors.gray} />
       </RowComponent>
       <RowComponent
-        // onPress={async () => {
-        //   setIsLoading(true);
-        //   await handleAuthentication.GoogleSignin().then((res: any) => {
-        //     if (res.uid) {
-        //       setIsLoading(false);
-        //       dispatch(
-        //         addUser({
-        //           uid: res.uid,
-        //           fcmToken: '',
-        //         }),
-        //       );
-        //     } else {
-        //       setIsLoading(false);
-        //       showToast('Đăng nhập thất bại');
-        //     }
-        //   });
-        // }}
+        onPress={async () => {
+          setIsLoading(true);
+          await handleAuthentication.GoogleSignin().then((res: any) => {
+            if (res.uid) {
+              setIsLoading(false);
+              dispatch(
+                addUser({
+                  uid: res.uid,
+                  fcmToken: '',
+                }),
+              );
+            } else {
+              setIsLoading(false);
+              showToast('Đăng nhập thất bại');
+            }
+          });
+        }}
         styles={[
           globalStyles.card,
           {
@@ -65,10 +66,10 @@ const LoginComponent = () => {
           color={appColors.white}
         />
       </RowComponent>
-      {/* <RowComponent
+      <RowComponent
         onPress={async () =>
-          handleAuthentication.FacebookSignin().then((res) => {
-            console.log(res)
+          handleAuthentication.FacebookSignin().then(res => {
+            console.log(res);
           })
         }
         styles={[
@@ -78,11 +79,10 @@ const LoginComponent = () => {
             paddingVertical: 10,
             backgroundColor: appColors.info4,
           },
-        ]}
-      >
+        ]}>
         <FontAwesome name="facebook" size={22} color={appColors.white} />
         <TextComponent
-          styles={{ textAlign: 'center', marginLeft: -32 }}
+          styles={{textAlign: 'center', marginLeft: -32}}
           size={16}
           flex={1}
           text="Facebook"
@@ -90,7 +90,7 @@ const LoginComponent = () => {
           color={appColors.white}
         />
       </RowComponent>
-      <RowComponent
+      {/* <RowComponent
         onPress={async () => navigation.navigate('LoginWithPhone')}
         styles={[
           globalStyles.card,
