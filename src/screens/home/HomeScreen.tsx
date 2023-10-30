@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 import {userSelector} from '../../redux/reducers/userReducer';
 import {Image, TouchableOpacity} from 'react-native';
 import ListeningComponent from '../../components/ListeningComponent';
+import FastImage from 'react-native-fast-image';
 
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);
@@ -29,7 +30,7 @@ const HomeScreen = ({navigation}: any) => {
           onPress={() =>
             navigation.navigate('ProfileTab', {screen: 'HomeAuth'})
           }>
-          <Image
+          <FastImage
             source={
               user.photoURL
                 ? {uri: user.photoURL}
@@ -39,8 +40,8 @@ const HomeScreen = ({navigation}: any) => {
               width: 40,
               height: 40,
               borderRadius: 100,
-              resizeMode: 'cover',
             }}
+            resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity>
       </RowComponent>

@@ -3,12 +3,17 @@ import {StatusBar} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Provider} from 'react-redux';
 
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {NavigationContainer} from '@react-navigation/native';
 import {getCountry} from 'react-native-localize';
 import {i18n} from './src/languages/i18n';
 import store from './src/redux/store';
-import TabNavigator from './src/routers/TabNavigator';
 import Router from './src/routers/Router';
+
+GoogleSignin.configure({
+  webClientId:
+    '122728025595-dni755pvglind3b2ta26q2g5mg32c5i7.apps.googleusercontent.com',
+});
 
 const App = () => {
   const lang = getCountry();

@@ -11,6 +11,7 @@ import {Author} from '../models';
 import {globalStyles} from '../styles/globalStyles';
 import TabbarComponent from './TabbarComponent';
 import TextComponent from './TextComponent';
+import FastImage from 'react-native-fast-image';
 
 const TopAuthorBooks = () => {
   const [authors, setAuthors] = useState<Author[]>([]);
@@ -73,7 +74,7 @@ const TopAuthorBooks = () => {
               onPress={() =>
                 navigation.navigate('AuthorDetail', {author: item})
               }>
-              <Image
+              <FastImage
                 source={{
                   uri: item.image ? item.image : appInfos.avatarDefault,
                 }}
@@ -81,8 +82,8 @@ const TopAuthorBooks = () => {
                   width: 60,
                   height: 60,
                   marginBottom: 8,
-                  resizeMode: 'cover',
                 }}
+                resizeMode={FastImage.resizeMode.cover}
               />
               <TextComponent text={item.name} line={1} />
             </TouchableOpacity>

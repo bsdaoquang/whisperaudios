@@ -6,11 +6,6 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {AccessToken, LoginManager} from 'react-native-fbsdk-next';
 
-GoogleSignin.configure({
-  webClientId:
-    '122728025595-dni755pvglind3b2ta26q2g5mg32c5i7.apps.googleusercontent.com',
-});
-
 export class handleAuthentication {
   static Register = async (data: {email: string; pass: string}) => {
     let result = '';

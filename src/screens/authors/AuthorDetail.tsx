@@ -1,7 +1,9 @@
 /** @format */
 
+import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
-import {FlatList, Image, View} from 'react-native';
+import {FlatList, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
 import ButtonComponent from '../../components/ButtonComponent';
 import Container from '../../components/Container';
@@ -12,7 +14,6 @@ import {RowComponent} from '../../components/RowComponent';
 import SectionComponent from '../../components/SectionComponent';
 import TitleComponent from '../../components/TitleComponent';
 import {appInfos} from '../../constants/appInfos';
-import firestore from '@react-native-firebase/firestore';
 import {i18n} from '../../languages/i18n';
 import {Author, Book} from '../../models';
 import {userSelector} from '../../redux/reducers/userReducer';
@@ -57,7 +58,7 @@ const AuthorDetail = ({navigation, route}: any) => {
     <Container back title={author.name}>
       <SectionComponent>
         <RowComponent>
-          <Image
+          <FastImage
             source={
               author.image
                 ? {uri: author.image}

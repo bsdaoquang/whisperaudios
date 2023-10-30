@@ -5,6 +5,7 @@ import {Alert, Image, TouchableOpacity} from 'react-native';
 import {appInfos} from '../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
 import {UserModel} from '../models';
+import FastImage from 'react-native-fast-image';
 
 interface Props {
   uid: string;
@@ -39,7 +40,7 @@ const UserComponent = (props: Props) => {
 
   return (
     <TouchableOpacity onPress={() => Alert.alert('Login', 'Login request')}>
-      <Image
+      <FastImage
         source={
           profile && profile.photoURL
             ? {uri: profile.photoURL}

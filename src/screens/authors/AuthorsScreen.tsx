@@ -12,6 +12,7 @@ import {appInfos} from '../../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
 import {i18n} from '../../languages/i18n';
 import {Author} from '../../models';
+import FastImage from 'react-native-fast-image';
 
 const AuthorsScreen = ({navigation}: any) => {
   const [authors, setAuthors] = useState<Author[]>([]);
@@ -55,7 +56,7 @@ const AuthorsScreen = ({navigation}: any) => {
         paddingBottom: 16,
         marginHorizontal: 16,
       }}>
-      <Image
+      <FastImage
         source={
           item.image
             ? {uri: item.image}

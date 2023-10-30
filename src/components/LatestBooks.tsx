@@ -15,6 +15,7 @@ import SpaceComponent from './SpaceComponent';
 import TabbarComponent from './TabbarComponent';
 import TextComponent from './TextComponent';
 import TitleComponent from './TitleComponent';
+import FastImage from 'react-native-fast-image';
 
 const LatestBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -65,13 +66,14 @@ const LatestBooks = () => {
       styles={{
         marginBottom: 24,
       }}>
-      <Image
+      <FastImage
         source={{uri: item.image}}
         style={{
           width: 70,
           height: 70,
           borderRadius: 8,
         }}
+        resizeMode={FastImage.resizeMode.cover}
       />
       <View
         style={{

@@ -14,6 +14,7 @@ import TitleComponent from '../../components/TitleComponent';
 import {appColors} from '../../constants/appColors';
 import {globalStyles} from '../../styles/globalStyles';
 import {handleAuthentication} from '../../utils/handleAuthentication';
+import FastImage from 'react-native-fast-image';
 
 const LoginWithPhone = ({navigation}: any) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -21,9 +22,8 @@ const LoginWithPhone = ({navigation}: any) => {
   const [helpPhone, setHelpPhone] = useState('');
   const [phoneCode, setPhoneCode] = useState('+84');
   const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
-  const [confirmation, setConfirmation] = useState<
-    FirebaseAuthTypes.ConfirmationResult
-  >();
+  const [confirmation, setConfirmation] =
+    useState<FirebaseAuthTypes.ConfirmationResult>();
 
   const handleRegisterWithPhone = async () => {
     if (phoneNumber && phoneNumber.length === 10) {
@@ -54,8 +54,7 @@ const LoginWithPhone = ({navigation}: any) => {
             styles={{
               flex: 5,
               alignItems: 'flex-start',
-            }}
-          >
+            }}>
             <TouchableOpacity
               style={{
                 ...globalStyles.rowCenter,
@@ -67,10 +66,9 @@ const LoginWithPhone = ({navigation}: any) => {
                 padding: 10,
                 borderRadius: 8,
                 justifyContent: 'space-between',
-              }}
-            >
+              }}>
               <RowComponent>
-                <Image
+                <FastImage
                   source={require('../../../assets/images/icons/icons8-vietnam-48.png')}
                   style={{
                     width: 32,
@@ -86,8 +84,7 @@ const LoginWithPhone = ({navigation}: any) => {
             <View
               style={{
                 flex: 3,
-              }}
-            >
+              }}>
               <InputCompoment
                 placeholder="Số điện thoại"
                 value={phoneNumber}

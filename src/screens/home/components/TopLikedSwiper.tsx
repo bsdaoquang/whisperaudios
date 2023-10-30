@@ -11,6 +11,7 @@ import TitleComponent from '../../../components/TitleComponent';
 import {appInfos} from '../../../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
 import {Book} from '../../../models/Book';
+import FastImage from 'react-native-fast-image';
 
 const TopLikedSwiper = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -56,14 +57,14 @@ const TopLikedSwiper = () => {
         alignItems: 'center',
       }}
       onPress={() => navigation.navigate('AudioDetail', {audio: item})}>
-      <Image
+      <FastImage
         source={{uri: item.image}}
         style={{
           width: appInfos.sizes.width - 32,
           height: (appInfos.sizes.width - 32) * 1.3,
           borderRadius: 12,
-          resizeMode: 'cover',
         }}
+        resizeMode={FastImage.resizeMode.cover}
       />
       <View
         style={{

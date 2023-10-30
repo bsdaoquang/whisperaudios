@@ -3,6 +3,7 @@
 import React from 'react';
 import {Platform, View, Image, ImageResizeMode} from 'react-native';
 import TitleComponent from './TitleComponent';
+import FastImage, {ResizeMode} from 'react-native-fast-image';
 
 interface Props {
   uri?: string;
@@ -10,7 +11,7 @@ interface Props {
   width?: number;
   styles?: any;
   title?: string;
-  resize?: ImageResizeMode;
+  resize?: ResizeMode;
 }
 
 export const ImageCard = (props: Props) => {
@@ -18,7 +19,7 @@ export const ImageCard = (props: Props) => {
 
   return (
     <View>
-      <Image
+      <FastImage
         source={uri ? {uri} : require('../../assets/images/default-book.png')}
         style={[
           styles,
@@ -35,7 +36,7 @@ export const ImageCard = (props: Props) => {
             shadowRadius: 16.0,
           },
         ]}
-        resizeMode={resize ?? 'cover'}
+        resizeMode={resize ?? FastImage.resizeMode.cover}
       />
       {title && <TitleComponent text={title} />}
       {/* {title && (

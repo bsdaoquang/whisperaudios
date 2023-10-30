@@ -10,6 +10,7 @@ import TextComponent from './TextComponent';
 import TitleComponent from './TitleComponent';
 import RatingComponent from './RatingComponent';
 import {appColors} from '../constants/appColors';
+import FastImage from 'react-native-fast-image';
 
 interface Props {
   authorId?: string;
@@ -52,7 +53,7 @@ const AuthorComponent = (props: Props) => {
         <RowComponent
           onPress={onPress}
           styles={{marginBottom: 16, paddingHorizontal: 16}}>
-          <Image
+          <FastImage
             source={
               authorDetail.image
                 ? {uri: authorDetail.image}
@@ -61,8 +62,8 @@ const AuthorComponent = (props: Props) => {
             style={{
               width: 50,
               height: 50,
-              resizeMode: 'cover',
             }}
+            resizeMode={FastImage.resizeMode.cover}
           />
           <View style={{marginLeft: 12, flex: 1, alignItems: 'flex-start'}}>
             <TitleComponent text={authorDetail.name} />
