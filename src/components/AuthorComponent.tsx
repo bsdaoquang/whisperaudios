@@ -1,25 +1,26 @@
 /** @format */
 
-import {View, Text, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Author} from '../models';
-import {appInfos} from '../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
+import React, {useEffect, useState} from 'react';
+import {StyleProp, TextStyle, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {appColors} from '../constants/appColors';
+import {appInfos} from '../constants/appInfos';
+import {Author} from '../models';
+import RatingComponent from './RatingComponent';
 import {RowComponent} from './RowComponent';
 import TextComponent from './TextComponent';
 import TitleComponent from './TitleComponent';
-import RatingComponent from './RatingComponent';
-import {appColors} from '../constants/appColors';
-import FastImage from 'react-native-fast-image';
 
 interface Props {
   authorId?: string;
   onPress?: () => void;
   author?: Author;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 const AuthorComponent = (props: Props) => {
-  const {authorId, onPress, author} = props;
+  const {authorId, onPress, author, textStyle} = props;
 
   const [authorDetail, setAuthorDetail] = useState<Author | undefined>(author);
 
@@ -45,14 +46,19 @@ const AuthorComponent = (props: Props) => {
   return authorDetail ? (
     <>
       {authorId && (
-        <RowComponent>
-          <TextComponent text={authorDetail.name} color={appColors.gray7} />
+        <RowComponent onPress={onPress ? () => onPress() : undefined}>
+          <TextComponent
+            styles={[textStyle]}
+            text={authorDetail.name}
+            color={appColors.gray7}
+          />
         </RowComponent>
       )}
       {author && (
         <RowComponent
           onPress={onPress}
-          styles={{marginBottom: 16, paddingHorizontal: 16}}>
+          styles={{marginBottom: 16, paddingHorizontal: 16}}
+        >
           <FastImage
             source={
               authorDetail.image

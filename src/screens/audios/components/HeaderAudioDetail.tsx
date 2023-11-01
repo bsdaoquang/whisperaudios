@@ -21,23 +21,26 @@ const HeaderAudioDetail = (props: Props) => {
         paddingVertical: 20,
         paddingHorizontal: 16,
         justifyContent: 'space-between',
-      }}>
+      }}
+    >
       <TouchableOpacity
         style={{
-          width: 34,
-          height: 34,
-          backgroundColor: 'rgba(0,0,0,0.4)',
+          width: 30,
+          height: 30,
+          backgroundColor: 'rgba(255, 255, 255,0.9)',
           borderRadius: 100,
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onPress={() => navigation.goBack()}>
-        <ArrowLeft2 size={22} color={appColors.white} />
+        onPress={() => navigation.goBack()}
+      >
+        <ArrowLeft2 size={20} color={appColors.text} />
       </TouchableOpacity>
       <View
         style={{
           flex: 1,
-        }}>
+        }}
+      >
         <TitleComponent
           text="Audio Detail"
           size={18}
