@@ -24,6 +24,7 @@ import TagComponent from '../../components/TagComponent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {globalStyles} from '../../styles/globalStyles';
+import Infocomponent from './components/Infocomponent';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -45,7 +46,7 @@ const AudioDetail = ({route, navigation}: any) => {
         style={{flex: 1}}
       >
         <HeaderAudioDetail />
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{paddingTop: '50%'}} />
           <SectionComponent>
             <RowComponent styles={{marginBottom: 8}}>
@@ -89,7 +90,7 @@ const AudioDetail = ({route, navigation}: any) => {
                 textStyle={{color: appColors.primary, fontSize: 12}}
               />
             </RowComponent>
-            <RowComponent>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <TitleComponent
                 text={audio.title}
                 flex={0}
@@ -104,7 +105,7 @@ const AudioDetail = ({route, navigation}: any) => {
                   textStyle={{color: appColors.white}}
                 />
               </RowComponent>
-            </RowComponent>
+            </View>
           </SectionComponent>
           <SectionComponent>
             <RowComponent
@@ -158,6 +159,7 @@ const AudioDetail = ({route, navigation}: any) => {
               </TouchableOpacity>
             </RowComponent>
           </SectionComponent>
+          {tabSelected === 'info' ? <Infocomponent item={audio} /> : <></>}
         </ScrollView>
         <View
           style={{
@@ -172,8 +174,8 @@ const AudioDetail = ({route, navigation}: any) => {
               styles.tab,
               globalStyles.rowCenter,
               {
-                backgroundColor: `rgba(245, 245, 246, 0.8)`,
-                paddingHorizontal: 20,
+                backgroundColor: `rgba(245, 245, 246, 1)`,
+                paddingHorizontal: 16,
               },
             ]}
           >
