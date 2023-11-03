@@ -2,7 +2,7 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Provider} from 'react-redux';
-
+import {Host} from 'react-native-portalize/lib/Host';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {NavigationContainer} from '@react-navigation/native';
 import {getCountry} from 'react-native-localize';
@@ -24,9 +24,11 @@ const App = () => {
       <StatusBar hidden />
       <GestureHandlerRootView style={{flex: 1}}>
         <Provider store={store}>
-          <NavigationContainer>
-            <Router />
-          </NavigationContainer>
+          <Host>
+            <NavigationContainer>
+              <Router />
+            </NavigationContainer>
+          </Host>
         </Provider>
       </GestureHandlerRootView>
     </>

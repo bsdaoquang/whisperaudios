@@ -2,7 +2,7 @@
 
 import {useNavigation} from '@react-navigation/native';
 import {ArrowLeft2} from 'iconsax-react-native';
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect, useRef, useState} from 'react';
 import {
   ScrollView,
   StyleProp,
@@ -16,6 +16,9 @@ import {darkStyles} from '../styles/darkStyles';
 import {lightStyles} from '../styles/lightStyles';
 import {RowComponent} from './RowComponent';
 import TitleComponent from './TitleComponent';
+import {useSelector} from 'react-redux';
+import {playingSelector} from '../redux/reducers/playingData';
+import PlayingControlModal from '../modals/PlayingControlModal';
 
 interface Props {
   children: any;
@@ -30,10 +33,11 @@ interface Props {
 
 const Container = (props: Props) => {
   const {title, children, back, right, scroll, styles, search, isFlex} = props;
-
   const theme = useColorScheme();
   const styleTheme = theme === 'light' ? lightStyles : darkStyles;
   const navigation: any = useNavigation();
+
+  const playlist = useSelector(playingSelector);
 
   return (
     <View style={[styleTheme.container, styles]}>

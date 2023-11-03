@@ -27,6 +27,9 @@ import Infocomponent from './components/Infocomponent';
 import {Chapter} from '../../models/Book';
 import firestore from '@react-native-firebase/firestore';
 import {LoadingComponent} from '../../components/LoadingComponent';
+import {useDispatch} from 'react-redux';
+import {addPlaying} from '../../redux/reducers/playingData';
+import Container from '../../components/Container';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -35,6 +38,8 @@ const AudioDetail = ({route, navigation}: any) => {
   const [isVisibleModalPlay, setIsVisibleModalPlay] = useState(false);
   const [tabSelected, setTabSelected] = useState<'info' | 'chaps'>('info');
   const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getChapterInfo();
@@ -58,177 +63,190 @@ const AudioDetail = ({route, navigation}: any) => {
       });
   };
 
+  const handleAddPlaylist = (index: number) => {
+    dispatch(
+      addPlaying({
+        chaps: chapters,
+        chapIndex: index,
+      }),
+    );
+  };
+
   return (
-    <ImageBackground
-      source={{uri: audio.image}}
-      style={{
-        width: appInfos.sizes.width,
-        height: appInfos.sizes.height,
-      }}
-      imageStyle={{resizeMode: 'cover'}}>
-      <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.9)']}
-        locations={[0, 0.75]}
-        style={{flex: 1}}>
-        <HeaderAudioDetail />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{paddingTop: '50%'}} />
-          <SectionComponent>
-            <RowComponent styles={{marginBottom: 8}}>
-              <TagComponent
-                icon={
-                  <AntDesign
-                    name="star"
-                    size={14}
-                    color={appColors.primary}
-                    style={{marginRight: 4}}
-                  />
-                }
-                text="4.5"
-                styles={styles.tag}
-                textStyle={{color: appColors.primary, fontSize: 12}}
-              />
-              <TagComponent
-                icon={
-                  <MaterialCommunityIcons
-                    name="playlist-music"
-                    size={17}
-                    color={appColors.primary}
-                    style={{marginRight: 4}}
-                  />
-                }
-                text={audio.totalChaps?.toString() ?? ''}
-                styles={styles.tag}
-                textStyle={{color: appColors.primary, fontSize: 12}}
-              />
-              <TagComponent
-                icon={
-                  <MaterialCommunityIcons
-                    name="motion-play"
-                    size={14}
-                    color={appColors.primary}
-                    style={{marginRight: 4}}
-                  />
-                }
-                text={audio.listens.toString() ?? '0'}
-                styles={styles.tag}
-                textStyle={{color: appColors.primary, fontSize: 12}}
-              />
-            </RowComponent>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <TitleComponent
-                text={audio.title}
-                flex={0}
-                font={fontFamilies.bold}
-                size={22}
-                line={2}
-                styles={{textAlign: 'center'}}
-              />
-              <RowComponent>
-                <TextComponent text="By: " flex={0} />
-                <AuthorComponent
-                  authorId={audio.authorId}
-                  textStyle={{color: appColors.white}}
+    <Container>
+      <ImageBackground
+        source={{uri: audio.image}}
+        style={{
+          width: appInfos.sizes.width,
+          height: appInfos.sizes.height,
+        }}
+        imageStyle={{resizeMode: 'cover'}}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.9)']}
+          locations={[0, 0.75]}
+          style={{flex: 1}}>
+          <HeaderAudioDetail />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{paddingTop: '50%'}} />
+            <SectionComponent>
+              <RowComponent styles={{marginBottom: 8}}>
+                <TagComponent
+                  icon={
+                    <AntDesign
+                      name="star"
+                      size={14}
+                      color={appColors.primary}
+                      style={{marginRight: 4}}
+                    />
+                  }
+                  text="4.5"
+                  styles={styles.tag}
+                  textStyle={{color: appColors.primary, fontSize: 12}}
+                />
+                <TagComponent
+                  icon={
+                    <MaterialCommunityIcons
+                      name="playlist-music"
+                      size={17}
+                      color={appColors.primary}
+                      style={{marginRight: 4}}
+                    />
+                  }
+                  text={audio.totalChaps?.toString() ?? ''}
+                  styles={styles.tag}
+                  textStyle={{color: appColors.primary, fontSize: 12}}
+                />
+                <TagComponent
+                  icon={
+                    <MaterialCommunityIcons
+                      name="motion-play"
+                      size={14}
+                      color={appColors.primary}
+                      style={{marginRight: 4}}
+                    />
+                  }
+                  text={audio.listens.toString() ?? '0'}
+                  styles={styles.tag}
+                  textStyle={{color: appColors.primary, fontSize: 12}}
                 />
               </RowComponent>
-            </View>
-          </SectionComponent>
-          <SectionComponent>
-            <RowComponent
-              styles={{
-                backgroundColor: `rgba(245, 245, 246, 0.1)`,
-                // opacity: 0.5,
-                borderRadius: 100,
-                padding: 4,
-              }}>
-              <TouchableOpacity
-                onPress={() => setTabSelected('info')}
-                style={[
-                  styles.tab,
-                  {
-                    borderRadius: 100,
-                    backgroundColor:
-                      tabSelected === 'info'
-                        ? `rgba(245, 245, 246, 0.8)`
-                        : undefined,
-                  },
-                ]}>
-                <TextComponent
-                  text="Infomations"
-                  color={
-                    tabSelected === 'info' ? appColors.text : appColors.white
-                  }
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <TitleComponent
+                  text={audio.title}
+                  flex={0}
+                  font={fontFamilies.bold}
+                  size={22}
+                  line={2}
+                  styles={{textAlign: 'center'}}
                 />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => setTabSelected('chaps')}
-                style={[
-                  styles.tab,
-                  {
-                    borderRadius: 100,
-                    backgroundColor:
-                      tabSelected === 'chaps'
-                        ? `rgba(245, 245, 246, 0.8)`
-                        : undefined,
-                  },
-                ]}>
-                <TextComponent
-                  text="Chapters"
-                  color={
-                    tabSelected === 'chaps' ? appColors.text : appColors.white
-                  }
-                />
-              </TouchableOpacity>
-            </RowComponent>
-          </SectionComponent>
-          {tabSelected === 'info' ? (
-            <Infocomponent item={audio} />
-          ) : chapters.length > 0 ? (
-            chapters.map((item, index) => (
+                <RowComponent>
+                  <TextComponent text="By: " flex={0} />
+                  <AuthorComponent
+                    authorId={audio.authorId}
+                    textStyle={{color: appColors.white}}
+                  />
+                </RowComponent>
+              </View>
+            </SectionComponent>
+            <SectionComponent>
               <RowComponent
                 styles={{
-                  paddingHorizontal: 16,
-                  marginBottom: 16,
+                  backgroundColor: `rgba(245, 245, 246, 0.1)`,
+                  // opacity: 0.5,
+                  borderRadius: 100,
+                  padding: 4,
                 }}>
-                <TextComponent
-                  text={item.title}
-                  flex={1}
-                  font={fontFamilies.medium}
-                />
+                <TouchableOpacity
+                  onPress={() => setTabSelected('info')}
+                  style={[
+                    styles.tab,
+                    {
+                      borderRadius: 100,
+                      backgroundColor:
+                        tabSelected === 'info'
+                          ? `rgba(245, 245, 246, 0.8)`
+                          : undefined,
+                    },
+                  ]}>
+                  <TextComponent
+                    text="Infomations"
+                    color={
+                      tabSelected === 'info' ? appColors.text : appColors.white
+                    }
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => setTabSelected('chaps')}
+                  style={[
+                    styles.tab,
+                    {
+                      borderRadius: 100,
+                      backgroundColor:
+                        tabSelected === 'chaps'
+                          ? `rgba(245, 245, 246, 0.8)`
+                          : undefined,
+                    },
+                  ]}>
+                  <TextComponent
+                    text="Chapters"
+                    color={
+                      tabSelected === 'chaps' ? appColors.text : appColors.white
+                    }
+                  />
+                </TouchableOpacity>
               </RowComponent>
-            ))
-          ) : (
-            <LoadingComponent isLoading={isLoading} value={chapters.length} />
-          )}
-        </ScrollView>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-          }}>
-          <TouchableOpacity
-            onPress={() => setIsVisibleModalPlay(true)}
-            style={[
-              styles.tab,
-              globalStyles.rowCenter,
-              {
-                backgroundColor: `rgba(245, 245, 246, 1)`,
-                paddingHorizontal: 16,
-              },
-            ]}>
-            <MaterialCommunityIcons
-              name="motion-play"
-              size={14}
-              color={appColors.primary}
-              style={{marginRight: 4}}
-            />
-            <TextComponent text="Listen now" color={appColors.primary} />
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
-    </ImageBackground>
+            </SectionComponent>
+            {tabSelected === 'info' ? (
+              <Infocomponent item={audio} />
+            ) : chapters.length > 0 ? (
+              chapters.map((item, index) => (
+                <RowComponent
+                  key={`item${index}`}
+                  onPress={() => handleAddPlaylist(index)}
+                  styles={{
+                    paddingHorizontal: 16,
+                    marginBottom: 16,
+                  }}>
+                  <TextComponent
+                    text={item.title}
+                    flex={1}
+                    font={fontFamilies.medium}
+                  />
+                </RowComponent>
+              ))
+            ) : (
+              <LoadingComponent isLoading={isLoading} value={chapters.length} />
+            )}
+          </ScrollView>
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 20,
+              right: 20,
+            }}>
+            <TouchableOpacity
+              onPress={() => handleAddPlaylist(0)}
+              style={[
+                styles.tab,
+                globalStyles.rowCenter,
+                {
+                  backgroundColor: `rgba(245, 245, 246, 1)`,
+                  paddingHorizontal: 16,
+                },
+              ]}>
+              <MaterialCommunityIcons
+                name="motion-play"
+                size={14}
+                color={appColors.primary}
+                style={{marginRight: 4}}
+              />
+              <TextComponent text="Listen now" color={appColors.primary} />
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+      </ImageBackground>
+    </Container>
   );
 };
 
