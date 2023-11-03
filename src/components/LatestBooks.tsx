@@ -3,7 +3,7 @@
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Image, View} from 'react-native';
+import {Image, View, useColorScheme} from 'react-native';
 import {appInfos} from '../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
 import {Book} from '../models';
@@ -16,12 +16,14 @@ import TabbarComponent from './TabbarComponent';
 import TextComponent from './TextComponent';
 import TitleComponent from './TitleComponent';
 import FastImage from 'react-native-fast-image';
+import {DocumentUpload} from 'iconsax-react-native';
+import {appColors} from '../constants/appColors';
 
 const LatestBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
 
   const {setItem, getItem} = useAsyncStorage(appInfos.localNames.latestBooks);
-
+  const theme = useColorScheme();
   const navigation: any = useNavigation();
 
   useEffect(() => {
@@ -86,11 +88,19 @@ const LatestBooks = () => {
         <TitleComponent text={item.title} size={16} flex={0} />
 
         <ChapterComponent id={item.chapsId} key="title" />
+        <SpaceComponent height={4} />
         <TextComponent
+          icon={
+            <DocumentUpload
+              size={16}
+              color={theme === 'light' ? appColors.gray : appColors.white}
+            />
+          }
           text={GetTime.getFullTimeString(item.updatedAt)}
           size={12}
         />
-        <SpaceComponent height={8} />
+        <SpaceComponent height={4} />
+
         <TextComponent
           size={12}
           text={`${item.status === 'Full' ? 'Hoàn thành' : 'Đang cập nhật'}`}

@@ -1,6 +1,6 @@
 /** @format */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
   ScrollView,
@@ -9,28 +9,54 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {RowComponent} from '../../components/RowComponent';
-import SectionComponent from '../../components/SectionComponent';
-import TextComponent from '../../components/TextComponent';
-import {appInfos} from '../../constants/appInfos';
-import {Book} from '../../models';
-import HeaderAudioDetail from './components/HeaderAudioDetail';
-import SpaceComponent from '../../components/SpaceComponent';
-import TitleComponent from '../../components/TitleComponent';
-import {fontFamilies} from '../../constants/fontFamilies';
-import AuthorComponent from '../../components/AuthorComponent';
-import {appColors} from '../../constants/appColors';
-import TagComponent from '../../components/TagComponent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AuthorComponent from '../../components/AuthorComponent';
+import {RowComponent} from '../../components/RowComponent';
+import SectionComponent from '../../components/SectionComponent';
+import TagComponent from '../../components/TagComponent';
+import TextComponent from '../../components/TextComponent';
+import TitleComponent from '../../components/TitleComponent';
+import {appColors} from '../../constants/appColors';
+import {appInfos} from '../../constants/appInfos';
+import {fontFamilies} from '../../constants/fontFamilies';
+import {Book} from '../../models';
 import {globalStyles} from '../../styles/globalStyles';
+import HeaderAudioDetail from './components/HeaderAudioDetail';
 import Infocomponent from './components/Infocomponent';
-import ChapterComponent from '../../components/ChapterComponent';
+import {Chapter} from '../../models/Book';
+import firestore from '@react-native-firebase/firestore';
+import {LoadingComponent} from '../../components/LoadingComponent';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
 
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [isVisibleModalPlay, setIsVisibleModalPlay] = useState(false);
   const [tabSelected, setTabSelected] = useState<'info' | 'chaps'>('info');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    getChapterInfo();
+  }, [audio]);
+
+  const getChapterInfo = async () => {
+    setIsLoading(true);
+    await firestore()
+      .collection(appInfos.databaseNames.chapters)
+      .doc(audio.chapsId)
+      .get()
+      .then((snap: any) => {
+        if (snap.exists) {
+          setChapters(snap.data().chaps);
+        }
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setIsLoading(false);
+        console.log(error);
+      });
+  };
 
   return (
     <ImageBackground
@@ -158,8 +184,22 @@ const AudioDetail = ({route, navigation}: any) => {
           </SectionComponent>
           {tabSelected === 'info' ? (
             <Infocomponent item={audio} />
+          ) : chapters.length > 0 ? (
+            chapters.map((item, index) => (
+              <RowComponent
+                styles={{
+                  paddingHorizontal: 16,
+                  marginBottom: 16,
+                }}>
+                <TextComponent
+                  text={item.title}
+                  flex={1}
+                  font={fontFamilies.medium}
+                />
+              </RowComponent>
+            ))
           ) : (
-            <ChapterComponent id={audio.chapsId} isList />
+            <LoadingComponent isLoading={isLoading} value={chapters.length} />
           )}
         </ScrollView>
         <View
@@ -169,7 +209,7 @@ const AudioDetail = ({route, navigation}: any) => {
             right: 20,
           }}>
           <TouchableOpacity
-            onPress={() => console.log('')}
+            onPress={() => setIsVisibleModalPlay(true)}
             style={[
               styles.tab,
               globalStyles.rowCenter,

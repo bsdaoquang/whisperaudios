@@ -30,8 +30,6 @@ export class GetTime {
 
     return `${add0ToNumber(newDate.getDate())}/${add0ToNumber(
       newDate.getMonth() + 1,
-    )}/${newDate.getFullYear()} ${add0ToNumber(
-      newDate.getHours(),
-    )}:${add0ToNumber(newDate.getMinutes())}`;
+    )}/${newDate.getFullYear()}`;
   };
 }
