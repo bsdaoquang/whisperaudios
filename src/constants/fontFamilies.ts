@@ -1,6 +1,6 @@
 export const fontFamilies = {
-  regular: 'GreycliffCF-Regular.ttf',
-  medium: 'GreycliffCF-Medium.ttf',
-  semiBole: 'GreycliffCF-DemiBold.ttf',
-  bold: 'GreycliffCF-Bold.ttf',
+  regular: 'GreycliffCF-Regular',
+  medium: 'GreycliffCF-Medium',
+  semiBole: 'GreycliffCF-DemiBold',
+  bold: 'GreycliffCF-Bold',
 };

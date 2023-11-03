@@ -94,8 +94,9 @@ const AudioDetail = ({route, navigation}: any) => {
                 text={audio.title}
                 flex={0}
                 font={fontFamilies.bold}
-                size={18}
+                size={22}
                 line={2}
+                styles={{textAlign: 'center'}}
               />
               <RowComponent>
                 <TextComponent text="By: " flex={0} />

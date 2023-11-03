@@ -41,8 +41,7 @@ const TextComponent = (props: Props) => {
             color: color ?? textColor,
           },
           styles,
-        ]}
-      >
+        ]}>
         {text}
       </Text>
     </RowComponent>
