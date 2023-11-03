@@ -18,6 +18,7 @@
 		2B6F96D27B30476996EA0AC3 /* GreycliffCF-DemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9773AE115034BA9BFD68EBD /* GreycliffCF-DemiBold.ttf */; };
 		55DFA4D51AA5494FAF24092A /* GreycliffCF-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2C4F82D99114E4CA2014976 /* GreycliffCF-ExtraBold.ttf */; };
 		8268D965B95641B4849D4694 /* GreycliffCF-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0563F8998E641C485BDE7B0 /* GreycliffCF-Medium.ttf */; };
+		D84B439D1880404CB3EE113C /* GreycliffCF-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 850D11E8A8A748B4AF7A7967 /* GreycliffCF-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		E9773AE115034BA9BFD68EBD /* GreycliffCF-DemiBold.ttf */ = {isa = PBXFileReference; name = "GreycliffCF-DemiBold.ttf"; path = "../assets/fonts/GreycliffCF-DemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D2C4F82D99114E4CA2014976 /* GreycliffCF-ExtraBold.ttf */ = {isa = PBXFileReference; name = "GreycliffCF-ExtraBold.ttf"; path = "../assets/fonts/GreycliffCF-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D0563F8998E641C485BDE7B0 /* GreycliffCF-Medium.ttf */ = {isa = PBXFileReference; name = "GreycliffCF-Medium.ttf"; path = "../assets/fonts/GreycliffCF-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		850D11E8A8A748B4AF7A7967 /* GreycliffCF-Regular.ttf */ = {isa = PBXFileReference; name = "GreycliffCF-Regular.ttf"; path = "../assets/fonts/GreycliffCF-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 				E9773AE115034BA9BFD68EBD /* GreycliffCF-DemiBold.ttf */,
 				D2C4F82D99114E4CA2014976 /* GreycliffCF-ExtraBold.ttf */,
 				D0563F8998E641C485BDE7B0 /* GreycliffCF-Medium.ttf */,
+				850D11E8A8A748B4AF7A7967 /* GreycliffCF-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				2B6F96D27B30476996EA0AC3 /* GreycliffCF-DemiBold.ttf in Resources */,
 				55DFA4D51AA5494FAF24092A /* GreycliffCF-ExtraBold.ttf in Resources */,
 				8268D965B95641B4849D4694 /* GreycliffCF-Medium.ttf in Resources */,
+				D84B439D1880404CB3EE113C /* GreycliffCF-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,7 +517,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "WhisperAudios/Info.plist";
-             INFOPLIST_KEY_CFBundleDisplayName = "Whisper Audios";
+				INFOPLIST_KEY_CFBundleDisplayName = "Whisper Audios";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -540,7 +544,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = "WhisperAudios/Info.plist";
-             INFOPLIST_KEY_CFBundleDisplayName = "Whisper Audios";
+				INFOPLIST_KEY_CFBundleDisplayName = "Whisper Audios";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

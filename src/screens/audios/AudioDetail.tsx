@@ -25,6 +25,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {globalStyles} from '../../styles/globalStyles';
 import Infocomponent from './components/Infocomponent';
+import ChapterComponent from '../../components/ChapterComponent';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -38,13 +39,11 @@ const AudioDetail = ({route, navigation}: any) => {
         width: appInfos.sizes.width,
         height: appInfos.sizes.height,
       }}
-      imageStyle={{resizeMode: 'cover'}}
-    >
+      imageStyle={{resizeMode: 'cover'}}>
       <LinearGradient
         colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.9)']}
         locations={[0, 0.75]}
-        style={{flex: 1}}
-      >
+        style={{flex: 1}}>
         <HeaderAudioDetail />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{paddingTop: '50%'}} />
@@ -114,8 +113,7 @@ const AudioDetail = ({route, navigation}: any) => {
                 // opacity: 0.5,
                 borderRadius: 100,
                 padding: 4,
-              }}
-            >
+              }}>
               <TouchableOpacity
                 onPress={() => setTabSelected('info')}
                 style={[
@@ -127,8 +125,7 @@ const AudioDetail = ({route, navigation}: any) => {
                         ? `rgba(245, 245, 246, 0.8)`
                         : undefined,
                   },
-                ]}
-              >
+                ]}>
                 <TextComponent
                   text="Infomations"
                   color={
@@ -148,8 +145,7 @@ const AudioDetail = ({route, navigation}: any) => {
                         ? `rgba(245, 245, 246, 0.8)`
                         : undefined,
                   },
-                ]}
-              >
+                ]}>
                 <TextComponent
                   text="Chapters"
                   color={
@@ -159,15 +155,18 @@ const AudioDetail = ({route, navigation}: any) => {
               </TouchableOpacity>
             </RowComponent>
           </SectionComponent>
-          {tabSelected === 'info' ? <Infocomponent item={audio} /> : <></>}
+          {tabSelected === 'info' ? (
+            <Infocomponent item={audio} />
+          ) : (
+            <ChapterComponent id={audio.chapsId} isList />
+          )}
         </ScrollView>
         <View
           style={{
             position: 'absolute',
             bottom: 20,
             right: 20,
-          }}
-        >
+          }}>
           <TouchableOpacity
             onPress={() => console.log('')}
             style={[
@@ -177,8 +176,7 @@ const AudioDetail = ({route, navigation}: any) => {
                 backgroundColor: `rgba(245, 245, 246, 1)`,
                 paddingHorizontal: 16,
               },
-            ]}
-          >
+            ]}>
             <MaterialCommunityIcons
               name="motion-play"
               size={14}

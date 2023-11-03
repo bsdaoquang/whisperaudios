@@ -16,6 +16,10 @@
     {
       "path": "assets/fonts/GreycliffCF-Medium.ttf",
       "sha1": "83793506ce1144f268d01c8e25c2480a61a59c64"
+    },
+    {
+      "path": "assets/fonts/GreycliffCF-Regular.ttf",
+      "sha1": "d6d1974fc9cd0a22eb8c1b4919eef9a33c09759f"
     }
   ]
 }

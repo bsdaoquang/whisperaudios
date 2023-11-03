@@ -27,12 +27,11 @@ const TitleComponent = (props: Props) => {
         textStyle,
         {
           fontSize: size ?? 16,
-          fontFamily: font ?? fontFamilies.semiBole,
+          fontFamily: font ?? fontFamilies.bold,
           flex: flex ?? 1,
         },
         styles,
-      ]}
-    >
+      ]}>
       {text}
     </Text>
   );
