@@ -16,8 +16,8 @@ import {darkStyles} from '../styles/darkStyles';
 import {lightStyles} from '../styles/lightStyles';
 import {RowComponent} from './RowComponent';
 import TitleComponent from './TitleComponent';
-import {useSelector} from 'react-redux';
-import {playingSelector} from '../redux/reducers/playingData';
+import {useDispatch, useSelector} from 'react-redux';
+import {disableModal, playingSelector} from '../redux/reducers/playingData';
 import PlayingControlModal from '../modals/PlayingControlModal';
 
 interface Props {
@@ -29,26 +29,16 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   search?: ReactNode;
   isFlex?: boolean;
-  isShow?: boolean;
 }
 
 const Container = (props: Props) => {
-  const {title, children, back, right, scroll, styles, search, isFlex, isShow} =
-    props;
+  const {title, children, back, right, scroll, styles, search, isFlex} = props;
   const [isVisibleModalPlaylist, setIsVisibleModalPlaylist] = useState(false);
   const theme = useColorScheme();
   const styleTheme = theme === 'light' ? lightStyles : darkStyles;
   const navigation: any = useNavigation();
+  const dispatch = useDispatch();
 
-  const playlist = useSelector(playingSelector);
-
-  useEffect(() => {
-    if (isShow) {
-      setIsVisibleModalPlaylist(true);
-    } else {
-      setIsVisibleModalPlaylist(false);
-    }
-  }, [playlist.chaps, isShow]);
   return (
     <View style={[styleTheme.container, styles]}>
       {title || right || back ? (
@@ -106,7 +96,10 @@ const Container = (props: Props) => {
 
       <PlayingControlModal
         visible={isVisibleModalPlaylist}
-        onClose={() => setIsVisibleModalPlaylist(false)}
+        onClose={() => {
+          setIsVisibleModalPlaylist(false);
+          dispatch(disableModal({}));
+        }}
       />
     </View>
   );

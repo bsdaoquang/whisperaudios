@@ -4,6 +4,7 @@ import {StyleProp, Text, TextStyle, useColorScheme} from 'react-native';
 import {lightStyles} from '../styles/lightStyles';
 import {darkStyles} from '../styles/darkStyles';
 import {fontFamilies} from '../constants/fontFamilies';
+import {appColors} from '../constants/appColors';
 
 interface Props {
   color?: string;

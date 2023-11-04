@@ -1,12 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {Chapter} from '../../models/Book';
+import {Book, Chapter} from '../../models/Book';
 
 const initialState: {
-  chaps: Chapter[];
+  chaps?: Chapter[];
   chapIndex: number;
+  isShow?: boolean;
+  audio?: Book;
 } = {
   chaps: [],
   chapIndex: 0,
+  isShow: false,
+  audio: undefined,
 };
 
 const playingSlice = createSlice({
@@ -21,10 +25,13 @@ const playingSlice = createSlice({
     remotePlaying: (state, action) => {
       state.playing = initialState;
     },
+    disableModal: (state, action) => {
+      state.playing = {...state.playing, isShow: false};
+    },
   },
 });
 
 export const playingReducer = playingSlice.reducer;
-export const {addPlaying, remotePlaying} = playingSlice.actions;
+export const {addPlaying, remotePlaying, disableModal} = playingSlice.actions;
 //selector
 export const playingSelector = (state: any) => state.playingReducer.playing;
