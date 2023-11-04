@@ -29,16 +29,26 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   search?: ReactNode;
   isFlex?: boolean;
+  isShow?: boolean;
 }
 
 const Container = (props: Props) => {
-  const {title, children, back, right, scroll, styles, search, isFlex} = props;
+  const {title, children, back, right, scroll, styles, search, isFlex, isShow} =
+    props;
+  const [isVisibleModalPlaylist, setIsVisibleModalPlaylist] = useState(false);
   const theme = useColorScheme();
   const styleTheme = theme === 'light' ? lightStyles : darkStyles;
   const navigation: any = useNavigation();
 
   const playlist = useSelector(playingSelector);
 
+  useEffect(() => {
+    if (isShow) {
+      setIsVisibleModalPlaylist(true);
+    } else {
+      setIsVisibleModalPlaylist(false);
+    }
+  }, [playlist.chaps, isShow]);
   return (
     <View style={[styleTheme.container, styles]}>
       {title || right || back ? (
@@ -93,6 +103,11 @@ const Container = (props: Props) => {
           <View style={{flex: 1}}>{children}</View>
         )}
       </View>
+
+      <PlayingControlModal
+        visible={isVisibleModalPlaylist}
+        onClose={() => setIsVisibleModalPlaylist(false)}
+      />
     </View>
   );
 };

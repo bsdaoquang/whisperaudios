@@ -21,8 +21,6 @@ const PlayingControlModal = (props: Props) => {
   const playlist = useSelector(playingSelector);
   const dispatch = useDispatch();
 
-  // console.log(playlist, visible);
-
   useEffect(() => {
     visible ? modalizeRef.current?.open() : modalizeRef.current?.close();
   }, [visible]);

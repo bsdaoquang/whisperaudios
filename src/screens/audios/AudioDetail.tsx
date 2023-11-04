@@ -70,10 +70,11 @@ const AudioDetail = ({route, navigation}: any) => {
         chapIndex: index,
       }),
     );
+    setIsVisibleModalPlay(true);
   };
 
   return (
-    <Container>
+    <Container isShow={isVisibleModalPlay}>
       <ImageBackground
         source={{uri: audio.image}}
         style={{
