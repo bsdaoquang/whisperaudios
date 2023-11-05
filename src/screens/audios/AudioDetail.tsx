@@ -37,9 +37,6 @@ const AudioDetail = ({route, navigation}: any) => {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [tabSelected, setTabSelected] = useState<'info' | 'chaps'>('info');
   const [isLoading, setIsLoading] = useState(false);
-  const [isVisibleModalPlay, setIsVisibleModalPlay] = useState(false);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     getChapterInfo();
@@ -64,21 +61,18 @@ const AudioDetail = ({route, navigation}: any) => {
   };
 
   const handleAddPlaylist = (index: number) => {
-    dispatch(
-      addPlaying({
-        audio,
-        chaps: chapters,
-        chapIndex: index,
-        isShow: true,
-      }),
-    );
-    setIsVisibleModalPlay(true);
+    const data = {
+      key: audio.chapsId,
+      audio,
+      chaps: chapters,
+      chapIndex: index,
+    };
+
+    chapters.length > 0 && navigation.navigate('PlayingScreen', data);
   };
 
   return (
-    <Container
-      isShow={isVisibleModalPlay}
-      onCloseModal={() => setIsVisibleModalPlay(false)}>
+    <Container>
       <ImageBackground
         source={{uri: audio.image}}
         style={{

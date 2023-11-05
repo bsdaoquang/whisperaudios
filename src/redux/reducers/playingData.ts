@@ -2,11 +2,13 @@ import {createSlice} from '@reduxjs/toolkit';
 import {Book, Chapter} from '../../models/Book';
 
 const initialState: {
+  key: string;
   chaps?: Chapter[];
   chapIndex: number;
   isShow?: boolean;
   audio?: Book;
 } = {
+  key: '',
   chaps: [],
   chapIndex: 0,
   isShow: false,
