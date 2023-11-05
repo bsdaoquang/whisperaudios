@@ -45,6 +45,12 @@ import {InputCompoment} from '../../components/InputComponent';
 import ButtonComponent from '../../components/ButtonComponent';
 import ButtonIcon from '../../components/ButtonIcon';
 import ModalChoiceChap from '../../modals/ModalChoiceChap';
+import {useIsFocused} from '@react-navigation/native';
+import {HandleAudio} from '../../utils/handleAudio';
+import firestore from '@react-native-firebase/firestore';
+import {appInfos} from '../../constants/appInfos';
+import {useSelector} from 'react-redux';
+import {userSelector} from '../../redux/reducers/userReducer';
 
 const PlayingScreen = ({route, navigation}: any) => {
   const {
@@ -66,70 +72,95 @@ const PlayingScreen = ({route, navigation}: any) => {
   const [volume, setVolume] = useState(1);
   const [isVisibleModalChoiceChap, setIsVisibleModalChoiceChap] =
     useState(false);
+  const [liked, setLiked] = useState<string[]>([]);
 
   const progress = useProgress();
   const playBackState = usePlaybackState();
   const theme = useColorScheme();
   const textColor = theme === 'light' ? appColors.dark : appColors.white;
   const iconSize = 20;
+  const isFocused = useIsFocused();
+  const auth = useSelector(userSelector);
 
   useEffect(() => {
-    TrackPlayer.addEventListener(
-      Event.PlaybackActiveTrackChanged,
-      async res => {
-        res.track && setActiviTrack(res);
-        // await TrackPlayer.pause();
-      },
-    );
-
-    TrackPlayer.addEventListener(Event.PlaybackError, error =>
-      console.log(error),
-    );
-
-    return () => {
-      TrackPlayer.stop(); // Causes a crash
-      TrackPlayer.reset(); // Also causes a crash :(
-    };
-  }, []);
-
-  useEffect(() => {
-    handleAddTrack();
-  }, [key, chaps, audio]);
-
-  useEffect(() => {
-    if (
-      playBackState.state === State.Buffering ||
-      playBackState.state === State.Loading
-    ) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
+    if (isFocused) {
+      // HandleAudio.UpdateListening(audio.listens, audio.key as string);
     }
-
-    if (playBackState.state === State.Ready) {
-      TrackPlayer.play();
-    }
-  }, [playBackState]);
+  }, [isFocused]);
 
   useEffect(() => {
-    if (chapIndex > 0) {
-      handleSkipTo(chapIndex);
-    }
-  }, [chapIndex]);
+    handleCheckLiked();
+  }, [audio]);
 
-  useEffect(() => {
-    async function changeSpeed() {
-      await TrackPlayer.setRate(speed);
-    }
+  // useEffect(() => {
+  //   TrackPlayer.addEventListener(
+  //     Event.PlaybackActiveTrackChanged,
+  //     async res => {
+  //       res.track && setActiviTrack(res);
+  //       // await TrackPlayer.pause();
+  //     },
+  //   );
 
-    changeSpeed();
-  }, [speed]);
-  useEffect(() => {
-    async function changeVolume() {
-      await TrackPlayer.setVolume(volume);
-    }
-    changeVolume();
-  }, [volume]);
+  //   TrackPlayer.addEventListener(Event.PlaybackError, error =>
+  //     console.log(error),
+  //   );
+
+  //   return () => {
+  //     TrackPlayer.stop(); // Causes a crash
+  //     TrackPlayer.reset(); // Also causes a crash :(
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   handleAddTrack();
+  // }, [key, chaps, audio]);
+
+  // useEffect(() => {
+  //   if (
+  //     playBackState.state === State.Buffering ||
+  //     playBackState.state === State.Loading
+  //   ) {
+  //     setIsLoading(true);
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+
+  //   if (playBackState.state === State.Ready) {
+  //     TrackPlayer.play();
+  //   }
+  // }, [playBackState]);
+
+  // useEffect(() => {
+  //   if (chapIndex > 0) {
+  //     handleSkipTo(chapIndex);
+  //   }
+  // }, [chapIndex]);
+
+  // useEffect(() => {
+  //   async function changeSpeed() {
+  //     await TrackPlayer.setRate(speed);
+  //   }
+
+  //   changeSpeed();
+  // }, [speed]);
+  // useEffect(() => {
+  //   async function changeVolume() {
+  //     await TrackPlayer.setVolume(volume);
+  //   }
+  //   changeVolume();
+  // }, [volume]);
+
+  const handleCheckLiked = async () => {
+    await firestore()
+      .collection(appInfos.databaseNames.audios)
+      .doc(audio.key)
+      .get()
+      .then((snap: any) => {
+        if (snap.exists) {
+          setLiked(snap.data().liked ?? []);
+        }
+      });
+  };
 
   const handleAddTrack = async () => {
     await TrackPlayer.reset().then(async () => {
@@ -350,11 +381,18 @@ const PlayingScreen = ({route, navigation}: any) => {
               />
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() =>
+                HandleAudio.UpdateLiked(
+                  audio.liked,
+                  audio.key as string,
+                  auth.uid,
+                ).then(res => handleCheckLiked())
+              }
               style={{
                 paddingHorizontal: 12,
               }}>
               <Ionicons
-                name={`heart-outline`}
+                name={liked.includes(auth.uid) ? `heart` : 'heart-outline'}
                 size={iconSize}
                 color={textColor}
               />
