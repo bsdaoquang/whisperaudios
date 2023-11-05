@@ -1,12 +1,18 @@
 import Slider from '@react-native-community/slider';
-import React, {ReactNode, useEffect, useState} from 'react';
+import {
+  Heart,
+  SearchNormal1,
+  VolumeHigh,
+  VolumeLow,
+} from 'iconsax-react-native';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  StyleProp,
+  FlatList,
+  Modal,
   StyleSheet,
   TouchableOpacity,
   View,
-  ViewStyle,
   useColorScheme,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -31,7 +37,14 @@ import TitleComponent from '../../components/TitleComponent';
 import {appColors} from '../../constants/appColors';
 import {Book} from '../../models';
 import {Chap} from '../../models/Chapter';
+import {globalStyles} from '../../styles/globalStyles';
 import {GetTime} from '../../utils/getTime';
+import {fontFamilies} from '../../constants/fontFamilies';
+import TabbarComponent from '../../components/TabbarComponent';
+import {InputCompoment} from '../../components/InputComponent';
+import ButtonComponent from '../../components/ButtonComponent';
+import ButtonIcon from '../../components/ButtonIcon';
+import ModalChoiceChap from '../../modals/ModalChoiceChap';
 
 const PlayingScreen = ({route, navigation}: any) => {
   const {
@@ -46,10 +59,13 @@ const PlayingScreen = ({route, navigation}: any) => {
     chapIndex: number;
   } = route.params;
 
-  const [index, setIndex] = useState(chapIndex);
   const [isLoading, setIsLoading] = useState(false);
   const [activiTrack, setActiviTrack] =
     useState<PlaybackActiveTrackChangedEvent>();
+  const [speed, setSpeed] = useState(1);
+  const [volume, setVolume] = useState(1);
+  const [isVisibleModalChoiceChap, setIsVisibleModalChoiceChap] =
+    useState(false);
 
   const progress = useProgress();
   const playBackState = usePlaybackState();
@@ -58,9 +74,13 @@ const PlayingScreen = ({route, navigation}: any) => {
   const iconSize = 20;
 
   useEffect(() => {
-    TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, res => {
-      res.track && setActiviTrack(res);
-    });
+    TrackPlayer.addEventListener(
+      Event.PlaybackActiveTrackChanged,
+      async res => {
+        res.track && setActiviTrack(res);
+        // await TrackPlayer.pause();
+      },
+    );
 
     TrackPlayer.addEventListener(Event.PlaybackError, error =>
       console.log(error),
@@ -91,6 +111,26 @@ const PlayingScreen = ({route, navigation}: any) => {
     }
   }, [playBackState]);
 
+  useEffect(() => {
+    if (chapIndex > 0) {
+      handleSkipTo(chapIndex);
+    }
+  }, [chapIndex]);
+
+  useEffect(() => {
+    async function changeSpeed() {
+      await TrackPlayer.setRate(speed);
+    }
+
+    changeSpeed();
+  }, [speed]);
+  useEffect(() => {
+    async function changeVolume() {
+      await TrackPlayer.setVolume(volume);
+    }
+    changeVolume();
+  }, [volume]);
+
   const handleAddTrack = async () => {
     await TrackPlayer.reset().then(async () => {
       if (audio && chaps.length > 0) {
@@ -116,6 +156,10 @@ const PlayingScreen = ({route, navigation}: any) => {
     }
   };
 
+  const handleSkipTo = async (index: number) => {
+    await TrackPlayer.skip(index);
+  };
+
   return audio && chaps.length > 0 ? (
     <Container>
       <RowComponent styles={{padding: 16, justifyContent: 'space-between'}}>
@@ -139,6 +183,7 @@ const PlayingScreen = ({route, navigation}: any) => {
         <TitleComponent text={audio.title} size={22} flex={0} />
         <AuthorComponent authorId={audio.authorId} />
       </SectionComponent>
+
       <SectionComponent>
         <TextComponent
           text={
@@ -183,6 +228,7 @@ const PlayingScreen = ({route, navigation}: any) => {
           />
         </RowComponent>
       </SectionComponent>
+
       <SectionComponent>
         <RowComponent styles={{justifyContent: 'space-around'}}>
           <TouchableOpacity
@@ -275,7 +321,124 @@ const PlayingScreen = ({route, navigation}: any) => {
             />
           </TouchableOpacity>
         </RowComponent>
+        <RowComponent
+          styles={{
+            justifyContent: 'space-between',
+            marginTop: 12,
+          }}>
+          <RowComponent styles={{flex: 1}}>
+            <VolumeLow size={iconSize - 4} color={textColor} />
+            <View style={{flex: 1}}>
+              <Slider
+                minimumTrackTintColor={appColors.primary}
+                thumbTintColor={appColors.primary}
+                maximumTrackTintColor="#e0e0e0"
+                value={volume}
+                minimumValue={0}
+                maximumValue={1}
+                onSlidingComplete={async val => setVolume(val)}
+              />
+            </View>
+            <VolumeHigh size={iconSize - 4} color={textColor} />
+          </RowComponent>
+          <RowComponent styles={{flex: 1, justifyContent: 'flex-end'}}>
+            <TouchableOpacity>
+              <Ionicons
+                name={`cloud-download-outline`}
+                size={iconSize}
+                color={textColor}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                paddingHorizontal: 12,
+              }}>
+              <Ionicons
+                name={`heart-outline`}
+                size={iconSize}
+                color={textColor}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[globalStyles.rowCenter]}
+              onPress={() =>
+                setSpeed(
+                  speed === 0.5
+                    ? 1
+                    : speed === 1
+                    ? 1.5
+                    : speed === 1.5
+                    ? 2
+                    : 0.5,
+                )
+              }>
+              <TitleComponent
+                text={`x${speed.toFixed(1)}`}
+                flex={0}
+                size={16}
+              />
+            </TouchableOpacity>
+          </RowComponent>
+        </RowComponent>
       </SectionComponent>
+
+      <View style={{flex: 1, paddingHorizontal: 16}}>
+        <RowComponent>
+          <TitleComponent text="Playlist" flex={1} />
+          <ButtonIcon
+            icon={<SearchNormal1 size={iconSize} color={textColor} />}
+            onPress={() => setIsVisibleModalChoiceChap(true)}
+          />
+        </RowComponent>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={chaps}
+          style={{paddingTop: 8}}
+          renderItem={({item, index}) => (
+            <RowComponent
+              key={`item${index}`}
+              onPress={
+                activiTrack?.index !== index
+                  ? () => handleSkipTo(index)
+                  : undefined
+              }
+              styles={{
+                marginBottom: 16,
+                justifyContent: 'space-between',
+              }}>
+              <TextComponent
+                text={item.title}
+                flex={0}
+                color={
+                  activiTrack?.index === index
+                    ? appColors.primary
+                    : theme === 'dark'
+                    ? appColors.white
+                    : appColors.text
+                }
+                font={fontFamilies.medium}
+              />
+              {activiTrack?.index === index && (
+                <TextComponent
+                  size={12}
+                  color={appColors.gray}
+                  text={`Playing`}
+                  flex={0}
+                />
+              )}
+            </RowComponent>
+          )}
+        />
+      </View>
+      <ModalChoiceChap
+        visible={isVisibleModalChoiceChap}
+        onClose={() => setIsVisibleModalChoiceChap(false)}
+        index={activiTrack?.index ? activiTrack.index : 0}
+        onSelected={async index => {
+          await TrackPlayer.skip(index);
+          setIsVisibleModalChoiceChap(false);
+        }}
+      />
     </Container>
   ) : (
     <></>

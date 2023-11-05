@@ -61,7 +61,7 @@ const ButtonComponent = (props: Props) => {
         styles,
       ]}>
       {icon && icon}
-      {text && <TitleComponent styles={textStyle} text={text} />}
+      {text && <TitleComponent styles={textStyle} text={text} flex={0} />}
     </TouchableOpacity>
   );
 };

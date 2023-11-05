@@ -1,5 +1,6 @@
 /** @format */
 
+import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
@@ -12,6 +13,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthorComponent from '../../components/AuthorComponent';
+import Container from '../../components/Container';
+import {LoadingComponent} from '../../components/LoadingComponent';
 import {RowComponent} from '../../components/RowComponent';
 import SectionComponent from '../../components/SectionComponent';
 import TagComponent from '../../components/TagComponent';
@@ -21,15 +24,10 @@ import {appColors} from '../../constants/appColors';
 import {appInfos} from '../../constants/appInfos';
 import {fontFamilies} from '../../constants/fontFamilies';
 import {Book} from '../../models';
+import {Chapter} from '../../models/Book';
 import {globalStyles} from '../../styles/globalStyles';
 import HeaderAudioDetail from './components/HeaderAudioDetail';
 import Infocomponent from './components/Infocomponent';
-import {Chapter} from '../../models/Book';
-import firestore from '@react-native-firebase/firestore';
-import {LoadingComponent} from '../../components/LoadingComponent';
-import {useDispatch} from 'react-redux';
-import {addPlaying} from '../../redux/reducers/playingData';
-import Container from '../../components/Container';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -196,6 +194,7 @@ const AudioDetail = ({route, navigation}: any) => {
                 </TouchableOpacity>
               </RowComponent>
             </SectionComponent>
+
             {tabSelected === 'info' ? (
               <Infocomponent item={audio} />
             ) : chapters.length > 0 ? (
@@ -218,31 +217,33 @@ const AudioDetail = ({route, navigation}: any) => {
               <LoadingComponent isLoading={isLoading} value={chapters.length} />
             )}
           </ScrollView>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 20,
-              right: 20,
-            }}>
-            <TouchableOpacity
-              onPress={() => handleAddPlaylist(0)}
-              style={[
-                styles.tab,
-                globalStyles.rowCenter,
-                {
-                  backgroundColor: `rgba(245, 245, 246, 1)`,
-                  paddingHorizontal: 16,
-                },
-              ]}>
-              <MaterialCommunityIcons
-                name="motion-play"
-                size={14}
-                color={appColors.primary}
-                style={{marginRight: 4}}
-              />
-              <TextComponent text="Listen now" color={appColors.primary} />
-            </TouchableOpacity>
-          </View>
+          {chapters.length > 0 && (
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 20,
+                right: 20,
+              }}>
+              <TouchableOpacity
+                onPress={() => handleAddPlaylist(0)}
+                style={[
+                  styles.tab,
+                  globalStyles.rowCenter,
+                  {
+                    backgroundColor: `rgba(245, 245, 246, 1)`,
+                    paddingHorizontal: 16,
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="motion-play"
+                  size={14}
+                  color={appColors.primary}
+                  style={{marginRight: 4}}
+                />
+                <TextComponent text="Listen now" color={appColors.primary} />
+              </TouchableOpacity>
+            </View>
+          )}
         </LinearGradient>
       </ImageBackground>
     </Container>

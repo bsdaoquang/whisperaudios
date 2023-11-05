@@ -15,10 +15,9 @@ import TrackPlayer, {Event} from 'react-native-track-player';
 // };
 
 module.exports = async function () {
-  TrackPlayer.addEventListener(
-    Event.RemotePlay,
-    async () => await TrackPlayer.play(),
-  );
+  TrackPlayer.addEventListener(Event.RemotePlay, async () => {
+    await TrackPlayer.play();
+  });
   TrackPlayer.addEventListener(Event.RemotePause, async event => {
     await TrackPlayer.pause();
   });
@@ -27,6 +26,10 @@ module.exports = async function () {
     Event.RemoteNext,
     async () => await TrackPlayer.skipToNext(),
   );
+
+  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, res => {
+    console.log('fafs');
+  });
 
   TrackPlayer.addEventListener('playback-track-changed', async event => {
     // await handleSaveListenBook(event);
@@ -42,16 +45,4 @@ module.exports = async function () {
       await TrackPlayer.removeUpcomingTracks();
     });
   });
-
-  // TrackPlayer.addEventListener(Event.RemoteJumpForward, async () => {
-  //   await TrackPlayer.stop();
-  // });
-
-  // TrackPlayer.addEventListener(
-  //   Event.RemoteJumpBackward,
-  //   async () => await TrackPlayer.skip(0),
-  // );
-  // TrackPlayer.addEventListener('remote-jump-forward', async () =>
-  //   TrackPlayer.seekTo((await TrackPlayer.getProgress().position) + 15),
-  // );
 };
