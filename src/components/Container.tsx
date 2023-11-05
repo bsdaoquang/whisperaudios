@@ -29,11 +29,23 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   search?: ReactNode;
   isFlex?: boolean;
+  isShow?: boolean;
+  onCloseModal?: () => void;
 }
 
 const Container = (props: Props) => {
-  const {title, children, back, right, scroll, styles, search, isFlex} = props;
-  const [isVisibleModalPlaylist, setIsVisibleModalPlaylist] = useState(false);
+  const {
+    title,
+    children,
+    back,
+    right,
+    scroll,
+    styles,
+    search,
+    isFlex,
+    isShow,
+    onCloseModal,
+  } = props;
   const theme = useColorScheme();
   const styleTheme = theme === 'light' ? lightStyles : darkStyles;
   const navigation: any = useNavigation();
@@ -95,9 +107,9 @@ const Container = (props: Props) => {
       </View>
 
       <PlayingControlModal
-        visible={isVisibleModalPlaylist}
+        visible={isShow ? true : false}
         onClose={() => {
-          setIsVisibleModalPlaylist(false);
+          onCloseModal && onCloseModal();
           dispatch(disableModal({}));
         }}
       />

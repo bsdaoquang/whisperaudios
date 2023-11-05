@@ -37,6 +37,7 @@ const AudioDetail = ({route, navigation}: any) => {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [tabSelected, setTabSelected] = useState<'info' | 'chaps'>('info');
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisibleModalPlay, setIsVisibleModalPlay] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -71,11 +72,13 @@ const AudioDetail = ({route, navigation}: any) => {
         isShow: true,
       }),
     );
-    // setIsVisibleModalPlay(true);
+    setIsVisibleModalPlay(true);
   };
 
   return (
-    <Container>
+    <Container
+      isShow={isVisibleModalPlay}
+      onCloseModal={() => setIsVisibleModalPlay(false)}>
       <ImageBackground
         source={{uri: audio.image}}
         style={{
