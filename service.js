@@ -32,7 +32,7 @@ module.exports = async function () {
   });
 
   TrackPlayer.addEventListener('playback-track-changed', async event => {
-    // await handleSaveListenBook(event);
+    console.log(event);
   });
 
   TrackPlayer.addEventListener(

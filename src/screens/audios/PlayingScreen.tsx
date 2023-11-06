@@ -1,7 +1,12 @@
 import Slider from '@react-native-community/slider';
 import firestore from '@react-native-firebase/firestore';
 import {useIsFocused} from '@react-navigation/native';
-import {SearchNormal1, VolumeHigh, VolumeLow} from 'iconsax-react-native';
+import {
+  ArrowLeft2,
+  SearchNormal1,
+  VolumeHigh,
+  VolumeLow,
+} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -47,6 +52,8 @@ import ModalSchedulerTimer from '../../modals/ModalSchedulerTimer';
 import BackgroundTimer from 'react-native-background-timer';
 import {Event} from 'react-native-track-player';
 import {showToast} from '../../utils/showToast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingModal from '../../modals/LoadingModal';
 const eventEmitter = new NativeEventEmitter();
 
 const PlayingScreen = ({route, navigation}: any) => {
@@ -73,6 +80,7 @@ const PlayingScreen = ({route, navigation}: any) => {
     useState(false);
   const [liked, setLiked] = useState<string[]>([]);
   const [schedulerTime, setSchedulerTime] = useState(0);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const progress = useProgress();
   const playBackState = usePlaybackState();
@@ -162,6 +170,17 @@ const PlayingScreen = ({route, navigation}: any) => {
       });
   };
 
+  const handleStopPlaylist = async () => {
+    setIsUpdating(true);
+    await TrackPlayer.stop().then(async () => {
+      await TrackPlayer.removeUpcomingTracks();
+      await AsyncStorage.removeItem(appInfos.localNames.audioId).then(() => {
+        setIsUpdating(false);
+        navigation.goBack();
+      });
+    });
+  };
+
   const handleSkipTo = async (index: number) => {
     await TrackPlayer.skip(index);
   };
@@ -188,6 +207,11 @@ const PlayingScreen = ({route, navigation}: any) => {
       await TrackPlayer.pause();
     } else {
       await TrackPlayer.play();
+
+      await AsyncStorage.setItem(
+        appInfos.localNames.audioId,
+        audio.key as string,
+      );
     }
   };
 
@@ -216,11 +240,15 @@ const PlayingScreen = ({route, navigation}: any) => {
     <Container>
       <RowComponent styles={{padding: 16, justifyContent: 'space-between'}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign
-            name="close"
-            size={24}
+          <ArrowLeft2
+            size={26}
             color={theme === 'dark' ? appColors.white : appColors.text}
           />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[globalStyles.rowCenter]}
+          onPress={handleStopPlaylist}>
+          <TextComponent text="Xoá danh sách phát" />
         </TouchableOpacity>
       </RowComponent>
 
@@ -471,11 +499,7 @@ const PlayingScreen = ({route, navigation}: any) => {
               item={item}
               index={index}
               onSelectChap={async index => await TrackPlayer.skip(index)}
-              activeChap={
-                activiTrack && activiTrack?.index
-                  ? activiTrack.index
-                  : undefined
-              }
+              activeChap={activiTrack?.index ? activiTrack.index : 0}
             />
           )}
         />
@@ -497,6 +521,8 @@ const PlayingScreen = ({route, navigation}: any) => {
           setIsVisibleModalChoiceChap(false);
         }}
       />
+
+      <LoadingModal visible={isUpdating} />
     </Container>
   ) : (
     <></>
