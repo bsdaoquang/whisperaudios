@@ -1,15 +1,11 @@
 import Slider from '@react-native-community/slider';
-import {
-  Heart,
-  SearchNormal1,
-  VolumeHigh,
-  VolumeLow,
-} from 'iconsax-react-native';
+import firestore from '@react-native-firebase/firestore';
+import {useIsFocused} from '@react-navigation/native';
+import {SearchNormal1, VolumeHigh, VolumeLow} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Modal,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -17,7 +13,6 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import TrackPlayer, {
-  Event,
   PlaybackActiveTrackChangedEvent,
   State,
   Track,
@@ -27,7 +22,9 @@ import TrackPlayer, {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
 import AuthorComponent from '../../components/AuthorComponent';
+import ButtonIcon from '../../components/ButtonIcon';
 import Container from '../../components/Container';
 import {RowComponent} from '../../components/RowComponent';
 import SectionComponent from '../../components/SectionComponent';
@@ -35,22 +32,15 @@ import SpaceComponent from '../../components/SpaceComponent';
 import TextComponent from '../../components/TextComponent';
 import TitleComponent from '../../components/TitleComponent';
 import {appColors} from '../../constants/appColors';
+import {appInfos} from '../../constants/appInfos';
+import ModalChoiceChap from '../../modals/ModalChoiceChap';
 import {Book} from '../../models';
 import {Chap} from '../../models/Chapter';
+import {userSelector} from '../../redux/reducers/userReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import {GetTime} from '../../utils/getTime';
-import {fontFamilies} from '../../constants/fontFamilies';
-import TabbarComponent from '../../components/TabbarComponent';
-import {InputCompoment} from '../../components/InputComponent';
-import ButtonComponent from '../../components/ButtonComponent';
-import ButtonIcon from '../../components/ButtonIcon';
-import ModalChoiceChap from '../../modals/ModalChoiceChap';
-import {useIsFocused} from '@react-navigation/native';
 import {HandleAudio} from '../../utils/handleAudio';
-import firestore from '@react-native-firebase/firestore';
-import {appInfos} from '../../constants/appInfos';
-import {useSelector} from 'react-redux';
-import {userSelector} from '../../redux/reducers/userReducer';
+import AudioItem from './components/AudioItem';
 
 const PlayingScreen = ({route, navigation}: any) => {
   const {
@@ -432,40 +422,22 @@ const PlayingScreen = ({route, navigation}: any) => {
           showsVerticalScrollIndicator={false}
           data={chaps}
           style={{paddingTop: 8}}
-          renderItem={({item, index}) => (
-            <RowComponent
-              key={`item${index}`}
-              onPress={
-                activiTrack?.index !== index
-                  ? () => handleSkipTo(index)
-                  : undefined
-              }
-              styles={{
-                marginBottom: 16,
-                justifyContent: 'space-between',
-              }}>
-              <TextComponent
-                text={item.title}
-                flex={0}
-                color={
-                  activiTrack?.index === index
-                    ? appColors.primary
-                    : theme === 'dark'
-                    ? appColors.white
-                    : appColors.text
+          renderItem={({item, index}) =>
+            index === 0 ? (
+              <AudioItem
+                item={item}
+                index={index}
+                onSelectChap={async index => await TrackPlayer.skip(index)}
+                activeChap={
+                  activiTrack && activiTrack?.index
+                    ? activiTrack.index
+                    : undefined
                 }
-                font={fontFamilies.medium}
               />
-              {activiTrack?.index === index && (
-                <TextComponent
-                  size={12}
-                  color={appColors.gray}
-                  text={`Playing`}
-                  flex={0}
-                />
-              )}
-            </RowComponent>
-          )}
+            ) : (
+              <></>
+            )
+          }
         />
       </View>
       <ModalChoiceChap
