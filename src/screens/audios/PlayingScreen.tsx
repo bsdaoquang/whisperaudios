@@ -72,6 +72,7 @@ const PlayingScreen = ({route, navigation}: any) => {
   const [isVisibleModalSleepTimer, setIsVisibleModalSleepTimer] =
     useState(false);
   const [liked, setLiked] = useState<string[]>([]);
+  const [schedulerTime, setSchedulerTime] = useState(0);
 
   const progress = useProgress();
   const playBackState = usePlaybackState();
@@ -192,11 +193,22 @@ const PlayingScreen = ({route, navigation}: any) => {
 
   const handleScheduler = async (time: number) => {
     // Start a timer that runs once after X milliseconds
-    const timeoutId = BackgroundTimer.setTimeout(async () => {
-      await TrackPlayer.pause();
-    }, time * 60 * 1000);
 
-    showToast(`Đã hẹn giờ tắt sau ${time} phút nữa`);
+    let timeoutId;
+
+    if (schedulerTime === 0) {
+      BackgroundTimer.stop();
+    } else {
+      timeoutId = BackgroundTimer.setTimeout(async () => {
+        await TrackPlayer.pause();
+      }, time * 60 * 1000);
+    }
+
+    showToast(
+      schedulerTime === 0
+        ? `Đã hẹn giờ tắt sau ${time} phút nữa`
+        : 'Đã tắt hẹn giờ',
+    );
     setIsVisibleModalSleepTimer(false);
   };
 
@@ -383,10 +395,17 @@ const PlayingScreen = ({route, navigation}: any) => {
           </RowComponent>
           <RowComponent styles={{flex: 1, justifyContent: 'flex-end'}}>
             <ButtonIcon
-              onPress={() => setIsVisibleModalSleepTimer(true)}
+              onPress={
+                schedulerTime > 0
+                  ? () => {
+                      setSchedulerTime(0);
+                      handleScheduler(0);
+                    }
+                  : () => setIsVisibleModalSleepTimer(true)
+              }
               icon={
                 <MaterialCommunityIcons
-                  name={`power-sleep`}
+                  name={schedulerTime > 0 ? 'sleep-off' : `power-sleep`}
                   size={iconSize + 2}
                   color={textColor}
                 />
@@ -464,7 +483,10 @@ const PlayingScreen = ({route, navigation}: any) => {
       <ModalSchedulerTimer
         visible={isVisibleModalSleepTimer}
         onClose={() => setIsVisibleModalSleepTimer(false)}
-        onSelected={time => handleScheduler(time)}
+        onSelected={time => {
+          setSchedulerTime(time);
+          handleScheduler(time);
+        }}
       />
       <ModalChoiceChap
         visible={isVisibleModalChoiceChap}
