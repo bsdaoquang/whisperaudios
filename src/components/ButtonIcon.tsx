@@ -11,7 +11,7 @@ const ButtonIcon = (props: Props) => {
   const {icon, onPress, styles} = props;
 
   return (
-    <TouchableOpacity style={styles} onPress={onPress}>
+    <TouchableOpacity style={[styles]} onPress={onPress}>
       {icon}
     </TouchableOpacity>
   );

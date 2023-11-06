@@ -1,10 +1,19 @@
-import React from 'react';
-import {Modal, View, useColorScheme} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import ButtonIcon from '../components/ButtonIcon';
-import {RowComponent} from '../components/RowComponent';
-import TitleComponent from '../components/TitleComponent';
+import {
+  View,
+  Text,
+  Modal,
+  useColorScheme,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
 import {appColors} from '../constants/appColors';
+import {RowComponent} from '../components/RowComponent';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {InputCompoment} from '../components/InputComponent';
+import TitleComponent from '../components/TitleComponent';
+import ButtonIcon from '../components/ButtonIcon';
+import TextComponent from '../components/TextComponent';
+import {fontFamilies} from '../constants/fontFamilies';
 
 interface Props {
   visible: boolean;
@@ -12,10 +21,12 @@ interface Props {
   onSelected: (val: number) => void;
 }
 
-const ModalDefault = (props: Props) => {
+const ModalSchedulerTimer = (props: Props) => {
   const {visible, onClose, onSelected} = props;
 
   const theme = useColorScheme();
+
+  const timers = [5, 10, 15, 30, 60, 120];
 
   return (
     <Modal
@@ -41,7 +52,7 @@ const ModalDefault = (props: Props) => {
             borderRadius: 12,
           }}>
           <RowComponent styles={{justifyContent: 'flex-end', marginBottom: 12}}>
-            <TitleComponent flex={1} text="Chọn chương" />
+            <TitleComponent flex={1} text="Hẹn giờ tắt" />
             <ButtonIcon
               onPress={onClose}
               icon={
@@ -53,10 +64,29 @@ const ModalDefault = (props: Props) => {
               }
             />
           </RowComponent>
+          <View style={{}}>
+            <TextComponent
+              text="Bản phát nhạc của bạn sẽ tự động ngừng lại sau:"
+              line={2}
+              flex={1}
+            />
+            {timers.map((item, index) => (
+              <RowComponent
+                key={`item${index}`}
+                styles={{marginTop: 16}}
+                onPress={() => onSelected(item)}>
+                <TitleComponent
+                  font={fontFamilies.medium}
+                  text={`${item} phút`}
+                  flex={1}
+                />
+              </RowComponent>
+            ))}
+          </View>
         </View>
       </View>
     </Modal>
   );
 };
 
-export default ModalDefault;
+export default ModalSchedulerTimer;

@@ -24,13 +24,21 @@ const AudioItem = (props: Props) => {
   const [downloading, setDownloading] = useState(false);
   const [downloadingJobId, setDownloadingJobId] = useState<number>();
 
-  useEffect(() => {
-    getFileDownloaded();
-  }, []);
+  // useEffect(() => {
+  //   getFileDownloaded();
+  // }, []);
 
   const getFileDownloaded = async () => {
+    console.log('Read file');
+    const writeGrander = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    );
+    if (!writeGrander) {
+      Alert.alert('Write permissions have not been granted');
+      return;
+    }
     // get a list of files and directories in the main bundle
-    RNFS.readDir(RNFS.DocumentDirectoryPath + item.downloadFilename) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
+    await RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
       .then(result => {
         console.log('GOT RESULT', result);
 
@@ -47,26 +55,27 @@ const AudioItem = (props: Props) => {
       })
       .then(contents => {
         // log the file contents
-        console.log(contents);
+        console.log('contents: ', contents);
       })
       .catch(err => {
-        console.log(err.message, err.code);
+        console.log('Error: ', err.message, err.code);
       });
   };
 
   const handleDownloadFile = async (item: Chap) => {
-    const writeGranted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    const readGrander = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
     );
-    if (!writeGranted) {
-      console.log('Read and write permissions have not been granted');
+
+    if (!readGrander) {
+      Alert.alert('Read permissions have not been granted');
       return;
     } else if (downloadingJobId) {
       Alert.alert('Lỗi', 'Xin lỗi bạn chỉ có thể download 1 file mỗi lần');
     } else {
       const url = item.downloadUrl;
       const filePath = RNFS.DocumentDirectoryPath + item.downloadFilename;
-      console.log(filePath);
+
       setDownloading(true);
 
       RNFS.downloadFile({
@@ -126,7 +135,7 @@ const AudioItem = (props: Props) => {
           />
         )}
 
-        {downloading && (
+        {/* {downloading && (
           <RowComponent
             styles={{alignItems: 'center', justifyContent: 'center'}}>
             <TextComponent
@@ -139,7 +148,8 @@ const AudioItem = (props: Props) => {
                 flex: 1,
                 marginHorizontal: 8,
                 height: 4,
-                backgroundColor: appColors.gray,
+                borderRadius: 100,
+                backgroundColor: appColors.dark1,
               }}>
               <View
                 style={{
@@ -164,9 +174,9 @@ const AudioItem = (props: Props) => {
               />
             )}
           </RowComponent>
-        )}
+        )} */}
       </View>
-      {!downloading && (
+      {/* {!downloading && (
         <ButtonIcon
           icon={
             <Ionicons
@@ -177,7 +187,7 @@ const AudioItem = (props: Props) => {
           }
           onPress={() => handleDownloadFile(item)}
         />
-      )}
+      )} */}
     </RowComponent>
   );
 };

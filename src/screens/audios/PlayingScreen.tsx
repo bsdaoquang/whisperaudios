@@ -6,6 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  NativeEventEmitter,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -41,6 +42,12 @@ import {globalStyles} from '../../styles/globalStyles';
 import {GetTime} from '../../utils/getTime';
 import {HandleAudio} from '../../utils/handleAudio';
 import AudioItem from './components/AudioItem';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ModalSchedulerTimer from '../../modals/ModalSchedulerTimer';
+import BackgroundTimer from 'react-native-background-timer';
+import {Event} from 'react-native-track-player';
+import {showToast} from '../../utils/showToast';
+const eventEmitter = new NativeEventEmitter();
 
 const PlayingScreen = ({route, navigation}: any) => {
   const {
@@ -62,6 +69,8 @@ const PlayingScreen = ({route, navigation}: any) => {
   const [volume, setVolume] = useState(1);
   const [isVisibleModalChoiceChap, setIsVisibleModalChoiceChap] =
     useState(false);
+  const [isVisibleModalSleepTimer, setIsVisibleModalSleepTimer] =
+    useState(false);
   const [liked, setLiked] = useState<string[]>([]);
 
   const progress = useProgress();
@@ -72,73 +81,73 @@ const PlayingScreen = ({route, navigation}: any) => {
   const isFocused = useIsFocused();
   const auth = useSelector(userSelector);
 
-  useEffect(() => {
-    if (isFocused) {
-      // HandleAudio.UpdateListening(audio.listens, audio.key as string);
-    }
-  }, [isFocused]);
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     // HandleAudio.UpdateListening(audio.listens, audio.key as string);
+  //   }
+  // }, [isFocused]);
 
   useEffect(() => {
     handleCheckLiked();
   }, [audio]);
 
-  // useEffect(() => {
-  //   TrackPlayer.addEventListener(
-  //     Event.PlaybackActiveTrackChanged,
-  //     async res => {
-  //       res.track && setActiviTrack(res);
-  //       // await TrackPlayer.pause();
-  //     },
-  //   );
+  useEffect(() => {
+    TrackPlayer.addEventListener(
+      Event.PlaybackActiveTrackChanged,
+      async res => {
+        res.track && setActiviTrack(res);
+        // await TrackPlayer.pause();
+      },
+    );
 
-  //   TrackPlayer.addEventListener(Event.PlaybackError, error =>
-  //     console.log(error),
-  //   );
+    TrackPlayer.addEventListener(Event.PlaybackError, error =>
+      console.log(error),
+    );
 
-  //   return () => {
-  //     TrackPlayer.stop(); // Causes a crash
-  //     TrackPlayer.reset(); // Also causes a crash :(
-  //   };
-  // }, []);
+    return () => {
+      TrackPlayer.stop(); // Causes a crash
+      TrackPlayer.reset(); // Also causes a crash :(
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   handleAddTrack();
-  // }, [key, chaps, audio]);
+  useEffect(() => {
+    handleAddTrack();
+  }, [key, chaps, audio]);
 
-  // useEffect(() => {
-  //   if (
-  //     playBackState.state === State.Buffering ||
-  //     playBackState.state === State.Loading
-  //   ) {
-  //     setIsLoading(true);
-  //   } else {
-  //     setIsLoading(false);
-  //   }
+  useEffect(() => {
+    if (
+      playBackState.state === State.Buffering ||
+      playBackState.state === State.Loading
+    ) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
 
-  //   if (playBackState.state === State.Ready) {
-  //     TrackPlayer.play();
-  //   }
-  // }, [playBackState]);
+    if (playBackState.state === State.Ready) {
+      TrackPlayer.play();
+    }
+  }, [playBackState]);
 
-  // useEffect(() => {
-  //   if (chapIndex > 0) {
-  //     handleSkipTo(chapIndex);
-  //   }
-  // }, [chapIndex]);
+  useEffect(() => {
+    if (chapIndex > 0) {
+      handleSkipTo(chapIndex);
+    }
+  }, [chapIndex]);
 
-  // useEffect(() => {
-  //   async function changeSpeed() {
-  //     await TrackPlayer.setRate(speed);
-  //   }
+  useEffect(() => {
+    async function changeSpeed() {
+      await TrackPlayer.setRate(speed);
+    }
 
-  //   changeSpeed();
-  // }, [speed]);
-  // useEffect(() => {
-  //   async function changeVolume() {
-  //     await TrackPlayer.setVolume(volume);
-  //   }
-  //   changeVolume();
-  // }, [volume]);
+    changeSpeed();
+  }, [speed]);
+  useEffect(() => {
+    async function changeVolume() {
+      await TrackPlayer.setVolume(volume);
+    }
+    changeVolume();
+  }, [volume]);
 
   const handleCheckLiked = async () => {
     await firestore()
@@ -150,6 +159,10 @@ const PlayingScreen = ({route, navigation}: any) => {
           setLiked(snap.data().liked ?? []);
         }
       });
+  };
+
+  const handleSkipTo = async (index: number) => {
+    await TrackPlayer.skip(index);
   };
 
   const handleAddTrack = async () => {
@@ -177,8 +190,14 @@ const PlayingScreen = ({route, navigation}: any) => {
     }
   };
 
-  const handleSkipTo = async (index: number) => {
-    await TrackPlayer.skip(index);
+  const handleScheduler = async (time: number) => {
+    // Start a timer that runs once after X milliseconds
+    const timeoutId = BackgroundTimer.setTimeout(async () => {
+      await TrackPlayer.pause();
+    }, time * 60 * 1000);
+
+    showToast(`Đã hẹn giờ tắt sau ${time} phút nữa`);
+    setIsVisibleModalSleepTimer(false);
   };
 
   return audio && chaps.length > 0 ? (
@@ -363,14 +382,17 @@ const PlayingScreen = ({route, navigation}: any) => {
             <VolumeHigh size={iconSize - 4} color={textColor} />
           </RowComponent>
           <RowComponent styles={{flex: 1, justifyContent: 'flex-end'}}>
-            <TouchableOpacity>
-              <Ionicons
-                name={`cloud-download-outline`}
-                size={iconSize}
-                color={textColor}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
+            <ButtonIcon
+              onPress={() => setIsVisibleModalSleepTimer(true)}
+              icon={
+                <MaterialCommunityIcons
+                  name={`power-sleep`}
+                  size={iconSize + 2}
+                  color={textColor}
+                />
+              }
+            />
+            <ButtonIcon
               onPress={() =>
                 HandleAudio.UpdateLiked(
                   audio.liked,
@@ -378,15 +400,18 @@ const PlayingScreen = ({route, navigation}: any) => {
                   auth.uid,
                 ).then(res => handleCheckLiked())
               }
-              style={{
+              styles={{
                 paddingHorizontal: 12,
-              }}>
-              <Ionicons
-                name={liked.includes(auth.uid) ? `heart` : 'heart-outline'}
-                size={iconSize}
-                color={textColor}
-              />
-            </TouchableOpacity>
+              }}
+              icon={
+                <Ionicons
+                  name={liked.includes(auth.uid) ? `heart` : 'heart-outline'}
+                  size={iconSize}
+                  color={textColor}
+                />
+              }
+            />
+
             <TouchableOpacity
               style={[globalStyles.rowCenter]}
               onPress={() =>
@@ -422,24 +447,25 @@ const PlayingScreen = ({route, navigation}: any) => {
           showsVerticalScrollIndicator={false}
           data={chaps}
           style={{paddingTop: 8}}
-          renderItem={({item, index}) =>
-            index === 0 ? (
-              <AudioItem
-                item={item}
-                index={index}
-                onSelectChap={async index => await TrackPlayer.skip(index)}
-                activeChap={
-                  activiTrack && activiTrack?.index
-                    ? activiTrack.index
-                    : undefined
-                }
-              />
-            ) : (
-              <></>
-            )
-          }
+          renderItem={({item, index}) => (
+            <AudioItem
+              item={item}
+              index={index}
+              onSelectChap={async index => await TrackPlayer.skip(index)}
+              activeChap={
+                activiTrack && activiTrack?.index
+                  ? activiTrack.index
+                  : undefined
+              }
+            />
+          )}
         />
       </View>
+      <ModalSchedulerTimer
+        visible={isVisibleModalSleepTimer}
+        onClose={() => setIsVisibleModalSleepTimer(false)}
+        onSelected={time => handleScheduler(time)}
+      />
       <ModalChoiceChap
         visible={isVisibleModalChoiceChap}
         onClose={() => setIsVisibleModalChoiceChap(false)}

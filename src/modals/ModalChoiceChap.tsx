@@ -1,16 +1,14 @@
-import {
-  View,
-  Text,
-  Modal,
-  useColorScheme,
-  TouchableOpacity,
-} from 'react-native';
 import React, {useState} from 'react';
-import {appColors} from '../constants/appColors';
-import {RowComponent} from '../components/RowComponent';
+import {Modal, View, useColorScheme} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {InputCompoment} from '../components/InputComponent';
 import ButtonComponent from '../components/ButtonComponent';
+import ButtonIcon from '../components/ButtonIcon';
+import {InputCompoment} from '../components/InputComponent';
+import {RowComponent} from '../components/RowComponent';
+import SectionComponent from '../components/SectionComponent';
+import TextComponent from '../components/TextComponent';
+import TitleComponent from '../components/TitleComponent';
+import {appColors} from '../constants/appColors';
 import {i18n} from '../languages/i18n';
 import {globalStyles} from '../styles/globalStyles';
 
@@ -55,20 +53,30 @@ const ModalChoiceChap = (props: Props) => {
             borderRadius: 12,
           }}>
           <RowComponent styles={{justifyContent: 'flex-end', marginBottom: 12}}>
-            <TouchableOpacity onPress={onClose}>
-              <AntDesign
-                name="close"
-                size={24}
-                color={theme === 'light' ? appColors.dark : appColors.white}
-              />
-            </TouchableOpacity>
+            <TitleComponent flex={1} text="Chọn chương" />
+            <ButtonIcon
+              onPress={onClose}
+              icon={
+                <AntDesign
+                  name="close"
+                  size={24}
+                  color={theme === 'light' ? appColors.dark : appColors.white}
+                />
+              }
+            />
           </RowComponent>
-
+          <View style={{marginBottom: 12}}>
+            <TextComponent
+              line={2}
+              text="Nhập chương bạn muốn nghe, sau đó bấm đồng ý để bắt đầu thưởng thức"
+              flex={1}
+            />
+          </View>
           <InputCompoment
             type="number-pad"
             value={indexSelected.toString()}
             onChange={val => setIndexSelected(val ? parseInt(val) : 0)}
-            clear
+            clear={index !== 0}
           />
 
           <ButtonComponent

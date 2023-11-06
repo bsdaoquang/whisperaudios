@@ -1,7 +1,7 @@
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {StatusBar} from 'react-native';
+import {NativeEventEmitter, StatusBar} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {getCountry} from 'react-native-localize';
 import {Host} from 'react-native-portalize/lib/Host';
@@ -10,11 +10,9 @@ import {Provider} from 'react-redux';
 import {i18n} from './src/languages/i18n';
 import store from './src/redux/store';
 import Router from './src/routers/Router';
+import _BackgroundTimer from 'react-native-background-timer';
 
-GoogleSignin.configure({
-  webClientId:
-    '122728025595-dni755pvglind3b2ta26q2g5mg32c5i7.apps.googleusercontent.com',
-});
+const eventEmitter = new NativeEventEmitter();
 
 const App = () => {
   const lang = getCountry();
@@ -22,6 +20,8 @@ const App = () => {
 
   useEffect(() => {
     settupPlayer();
+
+    eventEmitter.removeAllListeners('backgroundTimer');
   }, []);
 
   const settupPlayer = async () => {
