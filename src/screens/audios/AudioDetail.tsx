@@ -132,12 +132,13 @@ const AudioDetail = ({route, navigation}: any) => {
                   text={audio.title}
                   flex={0}
                   font={fontFamilies.bold}
+                  color={appColors.light}
                   size={22}
                   line={2}
                   styles={{textAlign: 'center'}}
                 />
                 <RowComponent>
-                  <TextComponent text="By: " flex={0} />
+                  <TextComponent text="By: " flex={0} color={appColors.light} />
                   <AuthorComponent
                     authorId={audio.authorId}
                     textStyle={{color: appColors.white}}
@@ -210,6 +211,7 @@ const AudioDetail = ({route, navigation}: any) => {
                     text={item.title}
                     flex={1}
                     font={fontFamilies.medium}
+                    color={appColors.light}
                   />
                 </RowComponent>
               ))

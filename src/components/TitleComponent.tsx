@@ -30,6 +30,11 @@ const TitleComponent = (props: Props) => {
           fontSize: size ?? 16,
           fontFamily: font ?? fontFamilies.bold,
           flex: flex ?? 1,
+          color: color
+            ? color
+            : theme === 'light'
+            ? appColors.dark
+            : appColors.light,
         },
         styles,
       ]}>

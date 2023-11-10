@@ -18,6 +18,8 @@ export interface Book {
   type: string;
   status?: string;
   totalChaps?: number;
+  recordBy: string;
+  uploadBy: string;
 }
 
 export interface Chapter {

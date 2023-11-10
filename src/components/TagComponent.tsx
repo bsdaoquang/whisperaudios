@@ -13,6 +13,7 @@ import {darkStyles} from '../styles/darkStyles';
 import {globalStyles} from '../styles/globalStyles';
 import {lightStyles} from '../styles/lightStyles';
 import TextComponent from './TextComponent';
+import {appColors} from '../constants/appColors';
 
 interface Props {
   text: string;
@@ -20,10 +21,11 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   icon?: ReactNode;
+  borderWidth?: number;
 }
 
 const TagComponent = (props: Props) => {
-  const {text, onPress, styles, textStyle, icon} = props;
+  const {text, onPress, styles, textStyle, icon, borderWidth} = props;
   const theme = useColorScheme();
   const themeStyle = theme === 'light' ? lightStyles.tag : darkStyles.tag;
 
@@ -34,12 +36,11 @@ const TagComponent = (props: Props) => {
         themeStyle,
         globalStyles.rowCenter,
         {
-          borderWidth: 1,
-          borderColor: '#f3f3f3',
+          borderWidth: borderWidth ?? 1,
+          borderColor: theme === 'light' ? appColors.text2 : '#f3f3f3',
         },
         styles,
-      ]}
-    >
+      ]}>
       {icon ?? icon}
       <TextComponent text={text} styles={textStyle} />
     </TouchableOpacity>
@@ -49,12 +50,11 @@ const TagComponent = (props: Props) => {
         themeStyle,
         globalStyles.rowCenter,
         {
-          borderWidth: 1,
-          borderColor: '#f3f3f3',
+          borderWidth: borderWidth ?? 1,
+          borderColor: theme === 'light' ? appColors.text2 : '#f3f3f3',
         },
         styles,
-      ]}
-    >
+      ]}>
       {icon ?? icon}
       <TextComponent text={text} styles={textStyle} />
     </View>

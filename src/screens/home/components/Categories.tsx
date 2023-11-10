@@ -3,7 +3,7 @@
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 
 import React, {useEffect, useState} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, useColorScheme} from 'react-native';
 import TagComponent from '../../../components/TagComponent';
 import {appColors} from '../../../constants/appColors';
 import {appInfos} from '../../../constants/appInfos';
@@ -17,6 +17,7 @@ const Categories = () => {
 
   const {getItem, setItem} = useAsyncStorage(appInfos.localNames.topCategories);
   const navigation: any = useNavigation();
+  const theme = useColorScheme();
 
   useEffect(() => {
     getCategories();
@@ -51,10 +52,16 @@ const Categories = () => {
       showsHorizontalScrollIndicator={false}
       ListHeaderComponent={
         <TagComponent
+          borderWidth={0}
           onPress={() => navigation.navigate('CategoriesScreen', {id: ''})}
           text={i18n.t('all')}
-          styles={{backgroundColor: appColors.light}}
-          textStyle={{color: appColors.dark1}}
+          styles={{
+            backgroundColor:
+              theme === 'dark' ? appColors.light : appColors.primary,
+          }}
+          textStyle={{
+            color: theme === 'dark' ? appColors.dark : appColors.light,
+          }}
         />
       }
       horizontal

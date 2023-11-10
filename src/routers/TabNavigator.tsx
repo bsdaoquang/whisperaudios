@@ -35,7 +35,7 @@ const TabNavigator = () => {
                 ? appColors.light
                 : appColors.gray
               : focused
-              ? appColors.text
+              ? appColors.primary
               : appColors.gray;
 
           if (route.name === 'HomeTab') {

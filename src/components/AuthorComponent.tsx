@@ -11,17 +11,18 @@ import RatingComponent from './RatingComponent';
 import {RowComponent} from './RowComponent';
 import TextComponent from './TextComponent';
 import TitleComponent from './TitleComponent';
+import {useNavigation} from '@react-navigation/native';
 
 interface Props {
   authorId?: string;
-  onPress?: () => void;
+  onPress?: boolean;
   author?: Author;
   textStyle?: StyleProp<TextStyle>;
 }
 
 const AuthorComponent = (props: Props) => {
   const {authorId, onPress, author, textStyle} = props;
-
+  const navigation: any = useNavigation();
   const [authorDetail, setAuthorDetail] = useState<Author | undefined>(author);
 
   useEffect(() => {
@@ -46,19 +47,29 @@ const AuthorComponent = (props: Props) => {
   return authorDetail ? (
     <>
       {authorId && (
-        <RowComponent onPress={onPress ? () => onPress() : undefined}>
+        <RowComponent
+          onPress={
+            onPress
+              ? () =>
+                  navigation.navigate('AuthorDetail', {author: authorDetail})
+              : undefined
+          }>
           <TextComponent
             styles={[textStyle]}
             text={authorDetail.name}
-            color={appColors.gray7}
+            color={onPress ? appColors.link : undefined}
           />
         </RowComponent>
       )}
       {author && (
         <RowComponent
-          onPress={onPress}
-          styles={{marginBottom: 16, paddingHorizontal: 16}}
-        >
+          onPress={
+            onPress
+              ? () =>
+                  navigation.navigate('AuthorDetail', {author: authorDetail})
+              : undefined
+          }
+          styles={{marginBottom: 16, paddingHorizontal: 16}}>
           <FastImage
             source={
               authorDetail.image
@@ -72,7 +83,10 @@ const AuthorComponent = (props: Props) => {
             resizeMode={FastImage.resizeMode.cover}
           />
           <View style={{marginLeft: 12, flex: 1, alignItems: 'flex-start'}}>
-            <TitleComponent text={authorDetail.name} />
+            <TitleComponent
+              color={onPress ? appColors.link : undefined}
+              text={authorDetail.name}
+            />
             <RatingComponent count={5} />
           </View>
         </RowComponent>

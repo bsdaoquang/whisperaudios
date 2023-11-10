@@ -24,7 +24,7 @@ const RatingComponent = (props: Props) => {
   }, [bookId]);
 
   const getBookRatings = async () => {
-    const filter = fs
+    const filter = firestore()
       .collection(appInfos.databaseNames.ratings)
       .where('bookId', '==', bookId);
 
@@ -55,7 +55,7 @@ const RatingComponent = (props: Props) => {
           key={`icon${index}`}
           name={'staro'}
           size={size ?? 16}
-          color={appColors.yellow1}
+          color={appColors.yellow4}
         />
       ))}
     </RowComponent>
