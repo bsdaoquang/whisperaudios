@@ -16,7 +16,6 @@ interface Props {
 
 const RatingComponent = (props: Props) => {
   const {count, readOnly, bookId, size} = props;
-
   const [countStart, setCountStart] = useState<number>(count ? count : 0);
 
   useEffect(() => {

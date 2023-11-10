@@ -24,7 +24,7 @@ const Infocomponent = (props: Props) => {
           justifyContent: 'flex-start',
           paddingVertical: 10,
           borderBottomColor: appColors.gray7,
-          borderBottomWidth: 0.2,
+          // borderBottomWidth: 0.2,
         }}>
         <TextComponent text={`${title}: `} flex={0} color={appColors.light} />
         {value}
@@ -66,8 +66,22 @@ const Infocomponent = (props: Props) => {
           <TextComponent text={GetTime.getFullTimeString(item.createdAt)} />,
         )}
         {renderInfoItem(
+          'Số chương',
+          <TextComponent text={item.totalChaps?.toString() ?? ''} />,
+        )}
+        {renderInfoItem(
           'Cập nhật lần cuối',
           <TextComponent text={GetTime.getFullTimeString(item.updatedAt)} />,
+        )}
+        {renderInfoItem(
+          'Lượt nghe',
+          <TextComponent text={item.listens.toString() ?? ''} />,
+        )}
+        {renderInfoItem(
+          'Yêu thích',
+          <TextComponent
+            text={item.liked ? item.liked.length.toString() : '0'}
+          />,
         )}
       </SectionComponent>
     </View>

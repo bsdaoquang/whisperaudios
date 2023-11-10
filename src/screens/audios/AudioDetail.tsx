@@ -28,6 +28,7 @@ import {Chapter} from '../../models/Book';
 import {globalStyles} from '../../styles/globalStyles';
 import HeaderAudioDetail from './components/HeaderAudioDetail';
 import Infocomponent from './components/Infocomponent';
+import RatingAudio from './components/RatingAudio';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -197,7 +198,12 @@ const AudioDetail = ({route, navigation}: any) => {
             </SectionComponent>
 
             {tabSelected === 'info' ? (
-              <Infocomponent item={audio} />
+              <>
+                <Infocomponent item={audio} />
+                <SectionComponent>
+                  <RatingAudio audioId={audio.key as string} />
+                </SectionComponent>
+              </>
             ) : chapters.length > 0 ? (
               chapters.map((item, index) => (
                 <RowComponent
