@@ -186,6 +186,10 @@ const PlayingScreen = ({route, navigation}: any) => {
   };
 
   const handleAddTrack = async () => {
+    await AsyncStorage.setItem(
+      appInfos.localNames.audioId,
+      audio.key as string,
+    );
     await TrackPlayer.reset().then(async () => {
       if (audio && chaps.length > 0) {
         // TrackPlayer.reset();
@@ -204,14 +208,13 @@ const PlayingScreen = ({route, navigation}: any) => {
 
   const togglePlayer = async () => {
     if (playBackState.state === State.Playing) {
+      await HandleAudio.SaveListeningProgress(
+        progress.position,
+        activiTrack?.index ?? 0,
+      );
       await TrackPlayer.pause();
     } else {
       await TrackPlayer.play();
-
-      await AsyncStorage.setItem(
-        appInfos.localNames.audioId,
-        audio.key as string,
-      );
     }
   };
 

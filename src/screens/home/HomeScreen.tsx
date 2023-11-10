@@ -14,9 +14,34 @@ import {userSelector} from '../../redux/reducers/userReducer';
 import {Image, TouchableOpacity} from 'react-native';
 import ListeningComponent from '../../components/ListeningComponent';
 import FastImage from 'react-native-fast-image';
+import firestore from '@react-native-firebase/firestore';
+import {appInfos} from '../../constants/appInfos';
+import ButtonComponent from '../../components/ButtonComponent';
 
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);
+
+  // const handleFixDatabase = async () => {
+  //   await firestore()
+  //     .collection(appInfos.databaseNames.users)
+  //     .get()
+  //     .then(snap => {
+  //       if (snap.empty) {
+  //         console.log('user not found');
+  //       } else {
+  //         snap.forEach(async (item: any) => {
+  //           const user = item.data();
+
+  //           firestore()
+  //             .doc(`users/${item.id}`)
+  //             .update({
+  //               readings: firestore.FieldValue.delete(),
+  //             })
+  //             .then(() => console.log('Deleted reading'));
+  //         });
+  //       }
+  //     });
+  // };
 
   return (
     <Container scroll>
@@ -45,6 +70,7 @@ const HomeScreen = ({navigation}: any) => {
           />
         </TouchableOpacity>
       </RowComponent>
+
       <Categories />
       <TopLikedSwiper />
       <ListeningComponent />

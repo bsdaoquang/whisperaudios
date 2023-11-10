@@ -11,6 +11,7 @@ export const appInfos = {
     ratings: 'ratings',
     users: 'users',
     searchs: 'searchs',
+    listenings: 'listenings',
   },
   sizes: {
     width: Dimensions.get('window').width,
@@ -27,5 +28,6 @@ export const appInfos = {
     categories: 'categories',
     authors: 'authors',
     audioId: 'audioId',
+    uid: 'uid',
   },
 };

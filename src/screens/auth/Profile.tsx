@@ -7,6 +7,8 @@ import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {removeUser} from '../../redux/reducers/userReducer';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {appInfos} from '../../constants/appInfos';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -15,7 +17,8 @@ const Profile = () => {
     await GoogleSignin.signOut();
     await auth()
       .signOut()
-      .then(() => {
+      .then(async () => {
+        await AsyncStorage.removeItem(appInfos.localNames.uid);
         dispatch(removeUser({}));
       });
   };

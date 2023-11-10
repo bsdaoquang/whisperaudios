@@ -33,20 +33,26 @@ const LoginComponent = () => {
       <RowComponent
         onPress={async () => {
           setIsLoading(true);
-          await handleAuthentication.GoogleSignin(dispatch).then((res: any) => {
-            if (res.uid) {
-              setIsLoading(false);
-              dispatch(
-                addUser({
-                  uid: res.uid,
-                  fcmToken: '',
-                }),
-              );
-            } else {
+          await handleAuthentication
+            .GoogleSignin(dispatch)
+            .then((res: any) => {
+              if (res.uid) {
+                setIsLoading(false);
+                dispatch(
+                  addUser({
+                    uid: res.uid,
+                    fcmToken: '',
+                  }),
+                );
+              } else {
+                setIsLoading(false);
+                showToast('Đăng nhập thất bại');
+              }
+            })
+            .catch(() => {
               setIsLoading(false);
               showToast('Đăng nhập thất bại');
-            }
-          });
+            });
         }}
         styles={[
           globalStyles.card,

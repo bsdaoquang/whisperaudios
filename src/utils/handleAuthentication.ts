@@ -5,6 +5,12 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {AccessToken, LoginManager} from 'react-native-fbsdk-next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+GoogleSignin.configure({
+  webClientId:
+    '122728025595-70fa5kdgdp4omtcbf8tsv80kfobar0j6.apps.googleusercontent.com',
+});
 
 export class handleAuthentication {
   static Register = async (data: {email: string; pass: string}) => {
@@ -121,6 +127,8 @@ export class handleAuthentication {
       photoURL: user.photoURL ?? '',
       emailVerified: user.emailVerified,
     };
+
+    await AsyncStorage.setItem(appInfos.localNames.uid, user.uid);
 
     try {
       await firestore()

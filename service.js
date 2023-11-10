@@ -1,4 +1,6 @@
 import TrackPlayer, {Event} from 'react-native-track-player';
+import {handleAuthentication} from './src/utils/handleAuthentication';
+import {HandleAudio} from './src/utils/handleAudio';
 
 // const handleSaveListenBook = async event => {
 //   const res = await AsyncStorage.getItem('bookData');
@@ -19,6 +21,9 @@ module.exports = async function () {
     await TrackPlayer.play();
   });
   TrackPlayer.addEventListener(Event.RemotePause, async event => {
+    const progress = await TrackPlayer.getProgress();
+    const trackIndex = await TrackPlayer.getActiveTrackIndex();
+    await HandleAudio.SaveListeningProgress(progress.position, trackIndex);
     await TrackPlayer.pause();
   });
 
@@ -32,7 +37,9 @@ module.exports = async function () {
   });
 
   TrackPlayer.addEventListener('playback-track-changed', async event => {
-    console.log(event);
+    const trackIndex = await TrackPlayer.getActiveTrackIndex();
+
+    await HandleAudio.UpdateTrackListened(trackIndex);
   });
 
   TrackPlayer.addEventListener(
