@@ -29,32 +29,37 @@ export class HandleAudio {
     const uid = await AsyncStorage.getItem(appInfos.localNames.uid);
     const audioId = await AsyncStorage.getItem(appInfos.localNames.audioId);
 
+    const ref = firestore().collection(appInfos.databaseNames.listenings);
+
     if (uid && audioId) {
-      firestore()
-        .collection(appInfos.databaseNames.users)
-        .doc(uid)
+      ref
+        .where('uid', '==', uid)
+        .where('audioId', '==', audioId)
         .get()
-        .then((snap: any) => {
-          if (snap.exists) {
-            const data: any = snap.data().listening ?? {};
-
-            const listening = {...data};
-            const audio = listening[`${audioId}`];
-
-            listening[`${audioId}`] = {
-              ...audio,
+        .then(snap => {
+          if (snap.empty) {
+            const data = {
+              uid,
+              audioId,
+              chaps: [chap ? chap + 1 : 1],
               position,
               chap: chap + 1,
               date: Date.now(),
             };
 
-            firestore()
-              .collection(appInfos.databaseNames.users)
-              .doc(uid)
-              .update({
-                listening: data,
-              })
-              .then(() => console.log('Chaps updated'));
+            ref.add(data).then(() => console.log('Listening added'));
+          } else {
+            snap.forEach(item => {
+              const listening: any = item.data();
+
+              listening.chap = chap + 1;
+              (listening.position = position), (listening.date = Date.now());
+
+              ref
+                .doc(item.id)
+                .update(listening)
+                .then(() => console.log('Listening updated!!!'));
+            });
           }
         });
     }
@@ -63,36 +68,37 @@ export class HandleAudio {
     const uid = await AsyncStorage.getItem(appInfos.localNames.uid);
     const audioId = await AsyncStorage.getItem(appInfos.localNames.audioId);
 
+    const ref = firestore().collection(appInfos.databaseNames.listenings);
+
     if (uid && audioId) {
-      firestore()
-        .collection(appInfos.databaseNames.users)
-        .doc(uid)
+      ref
+        .where('uid', '==', uid)
+        .where('audioId', '==', audioId)
         .get()
-        .then((snap: any) => {
-          if (snap.exists) {
-            const data: any = snap.data().listening ?? {};
-
-            const listening = {...data};
-            const audio = listening[`${audioId}`];
-            const chaps =
-              listening[`${audioId}`] && listening[`${audioId}`].chaps
-                ? listening[`${audioId}`].chaps
-                : [];
-
-            !chaps.includes(index + 1) && chaps.push(index + 1);
-
-            listening[`${audioId}`] = {
-              ...audio,
-              chaps,
+        .then(snap => {
+          if (snap.empty) {
+            const data = {
+              uid,
+              audioId,
+              chaps: [index ? index + 1 : 1],
             };
 
-            firestore()
-              .collection(appInfos.databaseNames.users)
-              .doc(uid)
-              .update({
-                listening,
-              })
-              .then(() => console.log('Chaps updated'));
+            ref.add(data).then(() => console.log('Listening added'));
+          } else {
+            snap.forEach(item => {
+              const listening: any = item.data();
+
+              const chaps = listening.chaps ?? [];
+
+              !chaps.includes(index + 1) && chaps.push(index + 1);
+
+              const data = {...listening, chaps};
+
+              ref
+                .doc(item.id)
+                .update(data)
+                .then(() => console.log('Listening updated!!!'));
+            });
           }
         });
     }
