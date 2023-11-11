@@ -38,6 +38,7 @@ import HeaderAudioDetail from './components/HeaderAudioDetail';
 import Infocomponent from './components/Infocomponent';
 import LinkComponent from '../../components/LinkComponent';
 import {GetTime} from '../../utils/getTime';
+import CategoryTab from '../../components/CategoryTab';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -157,6 +158,7 @@ const AudioDetail = ({route, navigation}: any) => {
     }
   };
 
+  console.log(listening);
   return (
     <Container>
       <ImageBackground
@@ -170,7 +172,10 @@ const AudioDetail = ({route, navigation}: any) => {
           colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.9)']}
           locations={[0, 0.75]}
           style={{flex: 1}}>
-          <HeaderAudioDetail />
+          <HeaderAudioDetail
+            audioId={audio.key as string}
+            liked={audio.liked ?? []}
+          />
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{paddingTop: '50%'}} />
             <SectionComponent>
@@ -231,6 +236,12 @@ const AudioDetail = ({route, navigation}: any) => {
                     authorId={audio.authorId}
                     textStyle={{color: appColors.white}}
                   />
+                </RowComponent>
+
+                <RowComponent styles={{marginTop: 12, flexWrap: 'wrap'}}>
+                  {audio.categories.map(catId => (
+                    <CategoryTab catId={catId} />
+                  ))}
                 </RowComponent>
               </View>
             </SectionComponent>
@@ -367,19 +378,21 @@ const AudioDetail = ({route, navigation}: any) => {
               <LoadingComponent isLoading={isLoading} value={chapters.length} />
             )}
           </ScrollView>
-          {chapters.length > 0 && listening ? (
+          {chapters.length > 0 && listening && listening.chap ? (
             <RowComponent styles={{paddingVertical: 12}}>
               <TouchableOpacity
                 style={{flex: 2, alignItems: 'center'}}
                 onPress={() =>
                   handleAddPlaylist(listening.chap - 1, listening.position)
                 }>
-                <TextComponent
-                  color={appColors.link}
-                  text={`Nghe tiếp ${
-                    chapters[listening.chap - 1].title
-                  } - ${GetTime.getTimeProgress(listening.position)}`}
-                />
+                {chapters[listening.chap - 1].title && (
+                  <TextComponent
+                    color={appColors.link}
+                    text={`Nghe tiếp ${
+                      chapters[listening.chap - 1].title
+                    } - ${GetTime.getTimeProgress(listening.position)}`}
+                  />
+                )}
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleAddPlaylist(0)}

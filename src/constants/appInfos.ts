@@ -30,4 +30,5 @@ export const appInfos = {
     audioId: 'audioId',
     uid: 'uid',
   },
+  androidUrl: '',
 };
