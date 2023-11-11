@@ -61,9 +61,11 @@ export interface ListeningBook {
 export interface Listening {
   key: string;
   chaps: number[];
-  date: number;
+  time: number;
   position: number;
   chap: number;
+  audioId: string;
+  uid: string;
 }
 
 export enum Fillter {

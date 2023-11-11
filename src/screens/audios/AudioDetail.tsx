@@ -158,7 +158,6 @@ const AudioDetail = ({route, navigation}: any) => {
     }
   };
 
-  console.log(listening);
   return (
     <Container>
       <ImageBackground
