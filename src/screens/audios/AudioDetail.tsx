@@ -30,13 +30,14 @@ import {appInfos} from '../../constants/appInfos';
 import {fontFamilies} from '../../constants/fontFamilies';
 import ModalRating from '../../modals/ModalRating';
 import {Book} from '../../models';
-import {Chapter} from '../../models/Book';
+import {Chapter, Listening} from '../../models/Book';
 import {RatingModel} from '../../models/RatingModel';
 import {userSelector} from '../../redux/reducers/userReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import HeaderAudioDetail from './components/HeaderAudioDetail';
 import Infocomponent from './components/Infocomponent';
 import LinkComponent from '../../components/LinkComponent';
+import {GetTime} from '../../utils/getTime';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -48,11 +49,13 @@ const AudioDetail = ({route, navigation}: any) => {
   const [totalRating, setTotalRating] = useState(0);
   const [star, setStar] = useState(0);
   const [isVisibleModalRating, setIsVisibleModalRating] = useState(false);
+  const [listening, setListening] = useState<Listening>();
 
   const auth = useSelector(userSelector);
 
   useEffect(() => {
     getChapterInfo();
+    getListening();
     getRatings();
   }, [audio]);
 
@@ -62,6 +65,25 @@ const AudioDetail = ({route, navigation}: any) => {
       setTotalRating(total / ratings.length);
     }
   }, [ratings]);
+
+  const getListening = async () => {
+    if (auth) {
+      firestore()
+        .collection(appInfos.databaseNames.listenings)
+        .where('audioId', '==', audio.key)
+        .where('uid', '==', auth.uid)
+        .onSnapshot(snap => {
+          if (!snap.empty) {
+            snap.forEach((item: any) => {
+              setListening({
+                key: item.id,
+                ...item.data(),
+              });
+            });
+          }
+        });
+    }
+  };
 
   const getChapterInfo = async () => {
     setIsLoading(true);
@@ -81,12 +103,13 @@ const AudioDetail = ({route, navigation}: any) => {
       });
   };
 
-  const handleAddPlaylist = (index: number) => {
+  const handleAddPlaylist = (index: number, position?: number) => {
     const data = {
       key: audio.chapsId,
       audio,
       chaps: chapters,
       chapIndex: index,
+      position: position ?? 0,
     };
 
     chapters.length > 0 && navigation.navigate('PlayingScreen', data);
@@ -330,7 +353,13 @@ const AudioDetail = ({route, navigation}: any) => {
                     text={item.title}
                     flex={1}
                     font={fontFamilies.medium}
-                    color={appColors.light}
+                    color={
+                      listening
+                        ? listening.chaps && listening.chaps.includes(index - 1)
+                          ? appColors.gray
+                          : appColors.white
+                        : appColors.white
+                    }
                   />
                 </RowComponent>
               ))
@@ -338,7 +367,41 @@ const AudioDetail = ({route, navigation}: any) => {
               <LoadingComponent isLoading={isLoading} value={chapters.length} />
             )}
           </ScrollView>
-          {chapters.length > 0 && (
+          {chapters.length > 0 && listening ? (
+            <RowComponent styles={{paddingVertical: 12}}>
+              <TouchableOpacity
+                style={{flex: 2, alignItems: 'center'}}
+                onPress={() =>
+                  handleAddPlaylist(listening.chap - 1, listening.position)
+                }>
+                <TextComponent
+                  color={appColors.link}
+                  text={`Nghe tiếp ${
+                    chapters[listening.chap - 1].title
+                  } - ${GetTime.getTimeProgress(listening.position)}`}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleAddPlaylist(0)}
+                style={[
+                  styles.tab,
+                  globalStyles.rowCenter,
+                  {
+                    flex: 1,
+                    backgroundColor: `rgba(245, 245, 246, 1)`,
+                    paddingHorizontal: 16,
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="motion-play"
+                  size={14}
+                  color={appColors.primary}
+                  style={{marginRight: 4}}
+                />
+                <TextComponent text="Nghe từ đầu" color={appColors.primary} />
+              </TouchableOpacity>
+            </RowComponent>
+          ) : (
             <View
               style={{
                 position: 'absolute',
@@ -361,7 +424,7 @@ const AudioDetail = ({route, navigation}: any) => {
                   color={appColors.primary}
                   style={{marginRight: 4}}
                 />
-                <TextComponent text="Listen now" color={appColors.primary} />
+                <TextComponent text="Nghe từ đầu" color={appColors.primary} />
               </TouchableOpacity>
             </View>
           )}

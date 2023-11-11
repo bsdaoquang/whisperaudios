@@ -62,11 +62,13 @@ const PlayingScreen = ({route, navigation}: any) => {
     audio,
     chaps,
     chapIndex,
+    position,
   }: {
     key: string;
     audio: Book;
     chaps: Chap[];
     chapIndex: number;
+    position: number;
   } = route.params;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -89,12 +91,6 @@ const PlayingScreen = ({route, navigation}: any) => {
   const iconSize = 20;
   const isFocused = useIsFocused();
   const auth = useSelector(userSelector);
-
-  // useEffect(() => {
-  //   if (isFocused) {
-  //     // HandleAudio.UpdateListening(audio.listens, audio.key as string);
-  //   }
-  // }, [isFocused]);
 
   useEffect(() => {
     handleCheckLiked();
@@ -151,12 +147,21 @@ const PlayingScreen = ({route, navigation}: any) => {
 
     changeSpeed();
   }, [speed]);
+
   useEffect(() => {
     async function changeVolume() {
       await TrackPlayer.setVolume(volume);
     }
     changeVolume();
   }, [volume]);
+
+  useEffect(() => {
+    async function changePosition() {
+      await TrackPlayer.seekTo(position);
+    }
+
+    changePosition();
+  }, [position]);
 
   const handleCheckLiked = async () => {
     await firestore()
