@@ -239,7 +239,7 @@ const AudioDetail = ({route, navigation}: any) => {
 
                 <RowComponent styles={{marginTop: 12, flexWrap: 'wrap'}}>
                   {audio.categories.map(catId => (
-                    <CategoryTab catId={catId} />
+                    <CategoryTab catId={catId} key={catId} />
                   ))}
                 </RowComponent>
               </View>

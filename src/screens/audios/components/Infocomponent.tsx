@@ -34,6 +34,9 @@ const Infocomponent = (props: Props) => {
 
   return (
     <View>
+      <RowComponent>
+        <TextComponent text="Nhận thông báo cập nhật" />
+      </RowComponent>
       <SectionComponent>
         <TitleComponent
           text="Description"

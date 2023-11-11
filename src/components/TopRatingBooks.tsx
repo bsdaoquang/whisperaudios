@@ -77,7 +77,7 @@ const TopRatingBooks = () => {
                 flex={0}
                 size={12}
               />
-              <TextComponent text={item.review} />
+              <TextComponent text={item.review} line={2} />
             </View>
           </RowComponent>
         ))}

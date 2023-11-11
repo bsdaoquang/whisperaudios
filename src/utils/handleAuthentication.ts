@@ -1,15 +1,15 @@
 /** @format */
 
-import {appInfos} from '../constants/appInfos';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import {AccessToken, LoginManager} from 'react-native-fbsdk-next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {LoginManager} from 'react-native-fbsdk-next';
+import {appInfos} from '../constants/appInfos';
 
 GoogleSignin.configure({
   webClientId:
-    '122728025595-70fa5kdgdp4omtcbf8tsv80kfobar0j6.apps.googleusercontent.com',
+    '411226039435-vtv8sug2n1sl5jh4bmjon6kj7s3q45ku.apps.googleusercontent.com',
 });
 
 export class handleAuthentication {
@@ -51,7 +51,8 @@ export class handleAuthentication {
       .then(async authCreatedential => {
         const user = authCreatedential.user;
         return user;
-      });
+      })
+      .catch(error => console.log(error));
     if (user) {
       this.UpdateUser(user, dispatch);
 

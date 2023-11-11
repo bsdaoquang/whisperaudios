@@ -1,18 +1,17 @@
 /** @format */
 
-import {View, Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 import {useSelector} from 'react-redux';
+import {i18n} from '../languages/i18n';
 import {userSelector} from '../redux/reducers/userReducer';
 import TabbarComponent from './TabbarComponent';
-import {i18n} from '../languages/i18n';
 
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../constants/appInfos';
-import {RowComponent} from './RowComponent';
 import {Listening} from '../models/Book';
-import TextComponent from './TextComponent';
 import ListeningCardItem from './ListeningCardItem';
+import {RowComponent} from './RowComponent';
 
 const ListeningComponent = () => {
   const user = useSelector(userSelector);

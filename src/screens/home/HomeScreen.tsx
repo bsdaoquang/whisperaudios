@@ -1,47 +1,39 @@
 /** @format */
 
 import React from 'react';
+import {TouchableOpacity} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {useSelector} from 'react-redux';
 import Container from '../../components/Container';
 import LatestBooks from '../../components/LatestBooks';
+import ListeningComponent from '../../components/ListeningComponent';
 import {RowComponent} from '../../components/RowComponent';
 import TitleComponent from '../../components/TitleComponent';
 import TopAuthorBooks from '../../components/TopAuthorBooks';
 import TopRatingBooks from '../../components/TopRatingBooks';
+import {userSelector} from '../../redux/reducers/userReducer';
 import Categories from './components/Categories';
 import TopLikedSwiper from './components/TopLikedSwiper';
-import {useSelector} from 'react-redux';
-import {userSelector} from '../../redux/reducers/userReducer';
-import {Image, TouchableOpacity} from 'react-native';
-import ListeningComponent from '../../components/ListeningComponent';
-import FastImage from 'react-native-fast-image';
+import {categories} from '../../data/categories';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../constants/appInfos';
-import ButtonComponent from '../../components/ButtonComponent';
-
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);
 
-  // const handleFixDatabase = async () => {
-  //   await firestore()
-  //     .collection(appInfos.databaseNames.users)
-  //     .get()
-  //     .then(snap => {
-  //       if (snap.empty) {
-  //         console.log('user not found');
-  //       } else {
-  //         snap.forEach(async (item: any) => {
-  //           const user = item.data();
-
-  //           firestore()
-  //             .doc(`users/${item.id}`)
-  //             .update({
-  //               readings: firestore.FieldValue.delete(),
-  //             })
-  //             .then(() => console.log('Deleted reading'));
-  //         });
-  //       }
-  //     });
-  // };
+  const handleFixData = () => {
+    // categories.forEach(item => {
+    //   firestore()
+    //     .collection(appInfos.databaseNames.categories)
+    //     .doc(item.key)
+    //     .update({
+    //       key: firestore.FieldValue.delete(),
+    //       searchTemrs: firestore.FieldValue.delete(),
+    //     })
+    //     .then(() => {
+    //       console.log('Updated!!');
+    //     });
+    // });
+  };
 
   return (
     <Container scroll>
@@ -74,6 +66,7 @@ const HomeScreen = ({navigation}: any) => {
       <Categories />
       <TopLikedSwiper />
       <ListeningComponent />
+
       <LatestBooks />
       <TopAuthorBooks />
       <TopRatingBooks />
