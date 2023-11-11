@@ -36,6 +36,7 @@ const LoginComponent = () => {
           await handleAuthentication
             .GoogleSignin(dispatch)
             .then((res: any) => {
+              console.log(res);
               if (res.uid) {
                 setIsLoading(false);
                 dispatch(
@@ -49,7 +50,8 @@ const LoginComponent = () => {
                 showToast('Đăng nhập thất bại');
               }
             })
-            .catch(() => {
+            .catch(error => {
+              console.log(error);
               setIsLoading(false);
               showToast('Đăng nhập thất bại');
             });
