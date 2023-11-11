@@ -40,6 +40,8 @@ interface Props {
   ref?: any;
   autoFocus?: boolean;
   borderRadius?: number;
+  multiline?: boolean;
+  numberOfLine?: number;
 }
 
 export const InputCompoment = (props: Props) => {
@@ -67,6 +69,8 @@ export const InputCompoment = (props: Props) => {
     ref,
     autoFocus,
     borderRadius,
+    multiline,
+    numberOfLine,
   } = props;
 
   const theme = useColorScheme();
@@ -126,6 +130,8 @@ export const InputCompoment = (props: Props) => {
           style={[inputStyle, styles]}
           autoCapitalize={isCapitalize}
           onEndEditing={onEnd}
+          numberOfLines={numberOfLine ?? 1}
+          multiline={multiline}
         />
 
         {affix && affix}

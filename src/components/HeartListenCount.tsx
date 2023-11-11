@@ -27,7 +27,7 @@ const HeartListenCount = (props: Props) => {
         text={`${liked ? liked.length : 0}`}
         size={12}
         line={1}
-        icon={<AntDesign name="like1" size={14} color={color} />}
+        icon={<AntDesign name="star" size={14} color={color} />}
       />
       <SpaceComponent width={8} />
       <TextComponent

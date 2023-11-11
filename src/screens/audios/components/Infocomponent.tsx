@@ -1,12 +1,12 @@
-import {View, Text, Touchable, TouchableOpacity} from 'react-native';
 import React, {ReactNode, useState} from 'react';
-import {Book} from '../../../models';
-import SectionComponent from '../../../components/SectionComponent';
-import TitleComponent from '../../../components/TitleComponent';
-import TextComponent from '../../../components/TextComponent';
-import {appColors} from '../../../constants/appColors';
-import {RowComponent} from '../../../components/RowComponent';
+import {TouchableOpacity, View} from 'react-native';
 import AuthorComponent from '../../../components/AuthorComponent';
+import {RowComponent} from '../../../components/RowComponent';
+import SectionComponent from '../../../components/SectionComponent';
+import TextComponent from '../../../components/TextComponent';
+import TitleComponent from '../../../components/TitleComponent';
+import {appColors} from '../../../constants/appColors';
+import {Book} from '../../../models';
 import {GetTime} from '../../../utils/getTime';
 
 interface Props {
@@ -54,6 +54,7 @@ const Infocomponent = (props: Props) => {
           <TextComponent text="See more" flex={1} color={appColors.link} />
         </TouchableOpacity>
       </SectionComponent>
+
       <SectionComponent>
         {renderInfoItem(
           'Tác giả',

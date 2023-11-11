@@ -1,8 +1,10 @@
 /** @format */
 
+import {Rating} from '@kolking/react-native-rating';
 import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   ImageBackground,
   ScrollView,
   StyleSheet,
@@ -12,23 +14,29 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
 import AuthorComponent from '../../components/AuthorComponent';
 import Container from '../../components/Container';
 import {LoadingComponent} from '../../components/LoadingComponent';
+import RatingItemComponent from '../../components/RatingItemComponent';
 import {RowComponent} from '../../components/RowComponent';
 import SectionComponent from '../../components/SectionComponent';
+import SpaceComponent from '../../components/SpaceComponent';
 import TagComponent from '../../components/TagComponent';
 import TextComponent from '../../components/TextComponent';
 import TitleComponent from '../../components/TitleComponent';
 import {appColors} from '../../constants/appColors';
 import {appInfos} from '../../constants/appInfos';
 import {fontFamilies} from '../../constants/fontFamilies';
+import ModalRating from '../../modals/ModalRating';
 import {Book} from '../../models';
 import {Chapter} from '../../models/Book';
+import {RatingModel} from '../../models/RatingModel';
+import {userSelector} from '../../redux/reducers/userReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import HeaderAudioDetail from './components/HeaderAudioDetail';
 import Infocomponent from './components/Infocomponent';
-import RatingAudio from './components/RatingAudio';
+import LinkComponent from '../../components/LinkComponent';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -36,10 +44,24 @@ const AudioDetail = ({route, navigation}: any) => {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [tabSelected, setTabSelected] = useState<'info' | 'chaps'>('info');
   const [isLoading, setIsLoading] = useState(false);
+  const [ratings, setRatings] = useState<RatingModel[]>([]);
+  const [totalRating, setTotalRating] = useState(0);
+  const [star, setStar] = useState(0);
+  const [isVisibleModalRating, setIsVisibleModalRating] = useState(false);
+
+  const auth = useSelector(userSelector);
 
   useEffect(() => {
     getChapterInfo();
+    getRatings();
   }, [audio]);
+
+  useEffect(() => {
+    if (ratings.length > 0) {
+      const total = ratings.reduce((a, b) => a + b.star, 0);
+      setTotalRating(total / ratings.length);
+    }
+  }, [ratings]);
 
   const getChapterInfo = async () => {
     setIsLoading(true);
@@ -70,6 +92,48 @@ const AudioDetail = ({route, navigation}: any) => {
     chapters.length > 0 && navigation.navigate('PlayingScreen', data);
   };
 
+  const getRatings = () => {
+    firestore()
+      .collection(appInfos.databaseNames.ratings)
+      .where('bookId', '==', audio.key)
+      .onSnapshot(snap => {
+        if (snap.empty) {
+          console.log(`Rating not yet`);
+        } else {
+          const items: RatingModel[] = [];
+
+          snap.forEach((item: any) => {
+            items.push({
+              key: item.id,
+              ...item.data(),
+            });
+          });
+
+          setRatings(items);
+        }
+      });
+  };
+
+  const handleRating = (num: number) => {
+    if (auth) {
+      setStar(num);
+      setIsVisibleModalRating(true);
+    } else {
+      setStar(0);
+      Alert.alert(
+        'Đăng nhập',
+        'Vui lòng đăng nhập và để lại đánh giá của bạn!',
+        [
+          {
+            style: 'default',
+            text: 'Đồng ý',
+            onPress: () => navigation.navigate('ProfileTab'),
+          },
+        ],
+      );
+    }
+  };
+
   return (
     <Container>
       <ImageBackground
@@ -97,7 +161,7 @@ const AudioDetail = ({route, navigation}: any) => {
                       style={{marginRight: 4}}
                     />
                   }
-                  text="4.5"
+                  text={totalRating.toFixed(1)}
                   styles={styles.tag}
                   textStyle={{color: appColors.primary, fontSize: 12}}
                 />
@@ -201,7 +265,56 @@ const AudioDetail = ({route, navigation}: any) => {
               <>
                 <Infocomponent item={audio} />
                 <SectionComponent>
-                  <RatingAudio audioId={audio.key as string} />
+                  <TitleComponent text="Đánh giá" />
+                  <TextComponent text="Bạn thấy audio này thế nào" flex={1} />
+                  <RowComponent styles={{paddingVertical: 16}}>
+                    <Rating
+                      rating={star}
+                      size={38}
+                      variant="stars-outline"
+                      fillColor={appColors.yellow4}
+                      touchColor={appColors.yellow4}
+                      onChange={val => handleRating(val)}
+                    />
+                  </RowComponent>
+                  <SpaceComponent height={18} />
+                  <TextComponent
+                    text="Điểm đánh giá bởi những người dùng khác đã nghe audio này"
+                    line={2}
+                  />
+                  <View style={{alignItems: 'center'}}>
+                    <TitleComponent
+                      text={totalRating.toFixed(1)}
+                      size={42}
+                      flex={0}
+                    />
+                    <Rating
+                      disabled
+                      rating={totalRating}
+                      size={14}
+                      fillColor={appColors.yellow4}
+                    />
+                    <TextComponent
+                      text={`${ratings.length} lượt đánh giá`}
+                      size={12}
+                      flex={0}
+                      styles={{paddingVertical: 8}}
+                    />
+                  </View>
+
+                  {ratings.map(
+                    (item, index) =>
+                      index < 6 && (
+                        <RatingItemComponent item={item} key={item.key} />
+                      ),
+                  )}
+
+                  <LinkComponent
+                    text="Xem tất cả đánh giá"
+                    onPress={() =>
+                      navigation.navigate('RatingsScreen', {ratings})
+                    }
+                  />
                 </SectionComponent>
               </>
             ) : chapters.length > 0 ? (
@@ -254,6 +367,15 @@ const AudioDetail = ({route, navigation}: any) => {
           )}
         </LinearGradient>
       </ImageBackground>
+      <ModalRating
+        visible={isVisibleModalRating}
+        onClose={() => {
+          setStar(0);
+          setIsVisibleModalRating(false);
+        }}
+        audioId={audio.key as string}
+        star={star}
+      />
     </Container>
   );
 };

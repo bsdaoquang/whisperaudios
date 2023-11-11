@@ -31,7 +31,7 @@ const TextComponent = (props: Props) => {
       {icon && icon}
       <SpaceComponent width={icon ? 4 : 0} />
       <Text
-        numberOfLines={line ?? 1}
+        numberOfLines={line ?? undefined}
         style={[
           textStyle,
           {

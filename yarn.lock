@@ -1505,6 +1505,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@kolking/react-native-rating@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@kolking/react-native-rating/-/react-native-rating-1.1.2.tgz#215fd0e6043bc4ee5d1a4e7948dd3ba283ce93bf"
+  integrity sha512-TfqVz539hIoUBWnoAJ02tOh/Lw+swxlVVyX18l+vEqRN/GmtLGybfFFK4mrItNJQ2En5Oia8qMf2glufn7OqBA==
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"

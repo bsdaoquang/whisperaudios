@@ -19,7 +19,6 @@ const LinkComponent = (props: Props) => {
     <TouchableOpacity onPress={onPress}>
       <TextComponent
         text={text}
-        flex={0}
         color={color ?? appColors.link}
         size={size ?? 14}
       />
