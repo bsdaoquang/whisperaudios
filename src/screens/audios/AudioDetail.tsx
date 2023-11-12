@@ -51,6 +51,7 @@ const AudioDetail = ({route, navigation}: any) => {
   const [star, setStar] = useState(0);
   const [isVisibleModalRating, setIsVisibleModalRating] = useState(false);
   const [listening, setListening] = useState<Listening[]>([]);
+  const [listensCount, setListensCount] = useState(0);
 
   const auth = useSelector(userSelector);
 
@@ -58,6 +59,7 @@ const AudioDetail = ({route, navigation}: any) => {
     getChapterInfo();
     getListening();
     getRatings();
+    getListeningCount();
   }, [audio]);
 
   useEffect(() => {
@@ -88,6 +90,17 @@ const AudioDetail = ({route, navigation}: any) => {
           }
         });
     }
+  };
+
+  const getListeningCount = () => {
+    firestore()
+      .collection(appInfos.databaseNames.listenings)
+      .where('audioId', '==', audio.key)
+      .onSnapshot(snap => {
+        if (!snap.empty) {
+          setListensCount(snap.size);
+        }
+      });
   };
 
   const getChapterInfo = async () => {
@@ -246,7 +259,7 @@ const AudioDetail = ({route, navigation}: any) => {
                       style={{marginRight: 4}}
                     />
                   }
-                  text={audio.listens.toString() ?? '0'}
+                  text={listensCount.toString()}
                   styles={styles.tag}
                   textStyle={{color: appColors.primary, fontSize: 12}}
                 />

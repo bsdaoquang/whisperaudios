@@ -2,6 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../constants/appInfos';
 import {showToast} from './showToast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
 
 const ref = firestore().collection(appInfos.databaseNames.audios);
 export class HandleAudio {
@@ -24,6 +25,33 @@ export class HandleAudio {
       .then(() => {
         return 'OK';
       });
+  };
+
+  static UpdateFollowers = async (audioId: string) => {
+    const uid = await AsyncStorage.getItem(appInfos.localNames.uid);
+
+    if (uid) {
+      firestore()
+        .doc(`${appInfos.databaseNames.audios}/${audioId}`)
+        .get()
+        .then((snap: any) => {
+          if (snap.exists) {
+            firestore()
+              .doc(`${appInfos.databaseNames.audios}/${audioId}`)
+              .update({
+                followers:
+                  snap.data().followers && snap.data().followers.includes(uid)
+                    ? firestore.FieldValue.arrayRemove(uid)
+                    : firestore.FieldValue.arrayUnion(uid),
+              })
+              .then(() => {
+                console.log('Done');
+              });
+          }
+        });
+    } else {
+      Alert.alert('Lỗi', 'Vui lòng đăng nhập để thực hiện chức năng này');
+    }
   };
 
   static HandleUpdateListening = async (track: number, position: number) => {

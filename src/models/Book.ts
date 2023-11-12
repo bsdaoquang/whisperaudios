@@ -20,6 +20,7 @@ export interface Book {
   totalChaps?: number;
   recordBy: string;
   uploadBy: string;
+  followers: string[];
 }
 
 export interface Chapter {

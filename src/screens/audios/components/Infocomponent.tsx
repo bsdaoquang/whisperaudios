@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {TouchableOpacity, View, useColorScheme} from 'react-native';
 import AuthorComponent from '../../../components/AuthorComponent';
 import {RowComponent} from '../../../components/RowComponent';
@@ -10,6 +10,11 @@ import {Book} from '../../../models';
 import {GetTime} from '../../../utils/getTime';
 import Octicons from 'react-native-vector-icons/Octicons';
 import SpaceComponent from '../../../components/SpaceComponent';
+import {HandleAudio} from '../../../utils/handleAudio';
+import {useSelector} from 'react-redux';
+import {userSelector} from '../../../redux/reducers/userReducer';
+import firestore from '@react-native-firebase/firestore';
+import {appInfos} from '../../../constants/appInfos';
 
 interface Props {
   item: Book;
@@ -18,6 +23,22 @@ interface Props {
 const Infocomponent = (props: Props) => {
   const {item} = props;
   const [line, setLine] = useState(5);
+  const user = useSelector(userSelector);
+  const [followers, setFollowers] = useState<string[]>([]);
+
+  useEffect(() => {
+    handleCheckFollowers();
+  }, [item.key]);
+
+  const handleCheckFollowers = () => {
+    firestore()
+      .doc(`${appInfos.databaseNames.audios}/${item.key}`)
+      .onSnapshot((snap: any) => {
+        if (snap.exists) {
+          setFollowers(snap.data().followers);
+        }
+      });
+  };
 
   const renderInfoItem = (title: string, value: ReactNode) => {
     return (
@@ -37,10 +58,25 @@ const Infocomponent = (props: Props) => {
   return (
     <View>
       <SectionComponent>
-        <RowComponent onPress={() => {}}>
-          <Octicons name={'bell-fill'} size={20} color={appColors.white} />
+        <RowComponent
+          onPress={() => HandleAudio.UpdateFollowers(item.key as string)}>
+          <Octicons
+            name={
+              followers && followers.includes(user.uid)
+                ? 'bell-slash'
+                : 'bell-fill'
+            }
+            size={20}
+            color={appColors.white}
+          />
           <SpaceComponent width={12} />
-          <TextComponent text="Đã đăng ký nhận thông báo cập nhật" />
+          <TextComponent
+            text={
+              followers && followers.includes(user.uid)
+                ? 'Huỷ theo dõi'
+                : 'Đăng ký nhận thông báo cập nhật'
+            }
+          />
         </RowComponent>
       </SectionComponent>
       <SectionComponent>

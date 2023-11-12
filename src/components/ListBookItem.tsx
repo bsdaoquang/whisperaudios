@@ -1,7 +1,7 @@
 /** @format */
 
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, useColorScheme} from 'react-native';
 import {Book} from '../models';
 import {darkStyles} from '../styles/darkStyles';
@@ -14,6 +14,8 @@ import RatingComponent from './RatingComponent';
 import {RowComponent} from './RowComponent';
 import SpaceComponent from './SpaceComponent';
 import TitleComponent from './TitleComponent';
+import firestore from '@react-native-firebase/firestore';
+import {appInfos} from '../constants/appInfos';
 
 interface Props {
   book: Book;
@@ -25,8 +27,25 @@ const ListBookItem = (props: Props) => {
   const {book, color, showRating} = props;
   const navigation: any = useNavigation();
 
+  const [listenCount, setListenCount] = useState(0);
+
   const theme = useColorScheme();
   const styleTheme = theme === 'dark' ? darkStyles.card : lightStyles.card;
+
+  useEffect(() => {
+    getListeningCount();
+  }, [book]);
+
+  const getListeningCount = () => {
+    firestore()
+      .collection(appInfos.databaseNames.listenings)
+      .where('audioId', '==', book.key)
+      .onSnapshot(snap => {
+        if (!snap.empty) {
+          setListenCount(snap.size);
+        }
+      });
+  };
 
   return (
     <RowComponent
@@ -56,7 +75,7 @@ const ListBookItem = (props: Props) => {
           <SpaceComponent height={8} />
           <HeartListenCount
             liked={book.liked}
-            listen={book.listens}
+            listen={listenCount}
             type={book.type}
             chaps={book.totalChaps}
           />
