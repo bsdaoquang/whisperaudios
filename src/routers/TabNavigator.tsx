@@ -3,17 +3,22 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home, MusicSquareSearch, User} from 'iconsax-react-native';
 import React from 'react';
-import {useColorScheme} from 'react-native';
+import {View, useColorScheme} from 'react-native';
 import {appColors} from '../constants/appColors';
 import HomeNavigator from './HomeNavigator';
 import ProfileNavigator from './ProfileNavigator';
 import SearchNavigator from './SearchNavigator';
+import {useSelector} from 'react-redux';
+import {userSelector} from '../redux/reducers/userReducer';
+import FastImage from 'react-native-fast-image';
 
 const TabNavigator = () => {
   const Tabs = createBottomTabNavigator();
 
   const theme = useColorScheme();
   const bgColor = theme === 'light' ? appColors.light : appColors.dark;
+
+  const user = useSelector(userSelector);
 
   return (
     <Tabs.Navigator
@@ -49,7 +54,22 @@ const TabNavigator = () => {
               />
             );
           } else if (route.name === 'ProfileTab') {
-            icon = <User variant={variant} size={size} color={iconColor} />;
+            icon = user.photoURL ? (
+              <FastImage
+                source={{uri: user.photoURL}}
+                style={{
+                  width: size,
+                  height: size,
+                  borderRadius: 100,
+                  padding: focused ? 2 : 0,
+                  borderWidth: focused ? 2 : 0,
+                  borderColor: appColors.white,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            ) : (
+              <User variant={variant} size={size} color={iconColor} />
+            );
           }
 
           return icon;

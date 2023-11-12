@@ -79,6 +79,8 @@ const AuthorsScreen = ({navigation}: any) => {
     <Container back title={i18n.t('author')}>
       {authors && authors.length > 0 && (
         <FlatList
+          showsVerticalScrollIndicator={false}
+          removeClippedSubviews
           data={authors}
           renderItem={({item}) => renderAuthorItem(item)}
         />

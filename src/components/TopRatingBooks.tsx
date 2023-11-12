@@ -49,39 +49,39 @@ const TopRatingBooks = () => {
     });
   };
 
-  return (
+  return ratings && ratings.length > 0 ? (
     <View style={{marginTop: 12}}>
       <TabbarComponent title="Ratings new" />
-      {ratings &&
-        ratings.length > 0 &&
-        ratings.map(item => (
-          <RowComponent
-            key={item.key}
-            styles={{
-              paddingHorizontal: 16,
+      {ratings.map(item => (
+        <RowComponent
+          key={item.key}
+          styles={{
+            paddingHorizontal: 16,
+            alignItems: 'flex-start',
+            marginBottom: 16,
+          }}>
+          <UserComponent uid={item.by} />
+          <View
+            style={{
+              paddingHorizontal: 12,
+              flex: 1,
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
-              marginBottom: 16,
             }}>
-            <UserComponent uid={item.by} />
-            <View
-              style={{
-                paddingHorizontal: 12,
-                flex: 1,
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-              }}>
-              <BookComponent id={item.bookId} type="title" />
-              <RatingComponent count={item.star} readOnly />
-              <TextComponent
-                text={GetTime.getFullTimeString(item.time)}
-                flex={0}
-                size={12}
-              />
-              <TextComponent text={item.review} line={2} />
-            </View>
-          </RowComponent>
-        ))}
+            <BookComponent id={item.bookId} type="title" />
+            <RatingComponent count={item.star} readOnly />
+            <TextComponent
+              text={GetTime.getFullTimeString(item.time)}
+              flex={0}
+              size={12}
+            />
+            <TextComponent text={item.review} line={2} />
+          </View>
+        </RowComponent>
+      ))}
     </View>
+  ) : (
+    <></>
   );
 };
 
