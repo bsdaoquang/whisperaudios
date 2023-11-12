@@ -9,6 +9,9 @@ import {PlayCircle} from 'iconsax-react-native';
 import {appColors} from '../constants/appColors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
+import {fontFamilies} from '../constants/fontFamilies';
+import TextComponent from './TextComponent';
+import SpaceComponent from './SpaceComponent';
 
 const ListeningCardItem = ({item}: {item: Listening}) => {
   const [audio, setaudio] = useState<Book>();
@@ -89,10 +92,23 @@ const ListeningCardItem = ({item}: {item: Listening}) => {
             alignItems: 'center',
           }}>
           <Ionicons name="play" size={32} color={appColors.white} />
+          <SpaceComponent height={12} />
           <TitleComponent
+            font={fontFamilies.medium}
             flex={0}
-            text={GetTime.getTimeProgress(item.position)}
+            text={chapters[item.chap - 1] ? chapters[item.chap - 1].title : ''}
             size={16}
+          />
+          <TextComponent
+            flex={0}
+            size={12}
+            text={GetTime.getTimeProgress(item.position)}
+          />
+          <SpaceComponent height={8} />
+          <TextComponent
+            size={12}
+            flex={0}
+            text={GetTime.getFullTimeString(item.date, true)}
           />
         </View>
       </ImageBackground>

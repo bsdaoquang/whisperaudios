@@ -25,10 +25,16 @@ export class GetTime {
     return `${add0ToNumber(newDate.getMonth() + 1)}/${newDate.getFullYear()}`;
   };
 
-  static getFullTimeString = (date: number) => {
+  static getFullTimeString = (date: number, isShowTime?: boolean) => {
     const newDate = new Date(date);
 
-    return `${add0ToNumber(newDate.getDate())}/${add0ToNumber(
+    return `${
+      isShowTime
+        ? `${add0ToNumber(newDate.getHours())}:${add0ToNumber(
+            newDate.getMinutes(),
+          )}`
+        : ''
+    } ${add0ToNumber(newDate.getDate())}/${add0ToNumber(
       newDate.getMonth() + 1,
     )}/${newDate.getFullYear()}`;
   };

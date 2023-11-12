@@ -23,7 +23,7 @@ const ListeningComponent = () => {
   }, [user]);
 
   const getListeningAudio = async () => {
-    await firestore()
+    firestore()
       .collection(appInfos.databaseNames.listenings)
       .where('uid', '==', user.uid)
       .limit(6)

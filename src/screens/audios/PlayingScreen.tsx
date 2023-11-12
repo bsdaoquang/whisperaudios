@@ -331,7 +331,7 @@ const PlayingScreen = ({route, navigation}: any) => {
             flex={0}
             size={12}
             color={appColors.description}
-            styles={{width: 40}}
+            styles={{minWidth: 44}}
           />
           <View style={{flex: 1}}>
             <Slider
@@ -350,7 +350,7 @@ const PlayingScreen = ({route, navigation}: any) => {
             text={GetTime.getTimeProgress(progress.duration)}
             flex={0}
             size={12}
-            styles={{width: 40}}
+            styles={{minWidth: 44}}
             color={appColors.description}
           />
         </RowComponent>
