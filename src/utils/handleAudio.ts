@@ -25,82 +25,91 @@ export class HandleAudio {
         return 'OK';
       });
   };
-  static SaveListeningProgress = async (position: number, chap: number) => {
+
+  static HandleUpdateListening = async (track: number, position: number) => {
     const uid = await AsyncStorage.getItem(appInfos.localNames.uid);
     const audioId = await AsyncStorage.getItem(appInfos.localNames.audioId);
 
-    const ref = firestore().collection(appInfos.databaseNames.listenings);
-
-    if (uid && audioId) {
-      ref
+    if (audioId && uid && track + 1 > 0 && position >= 0) {
+      const ref = firestore()
+        .collection(`${appInfos.databaseNames.listenings}`)
         .where('uid', '==', uid)
         .where('audioId', '==', audioId)
-        .get()
-        .then(snap => {
-          if (snap.empty) {
-            const data = {
-              uid,
-              audioId,
-              chaps: [chap ? chap + 1 : 1],
-              position,
-              chap: chap + 1,
-              date: Date.now(),
-            };
+        .where('chap', '==', track + 1);
 
-            ref.add(data).then(() => console.log('Listening added'));
-          } else {
-            snap.forEach(item => {
-              const listening: any = item.data();
+      ref.get().then(snap => {
+        const data = {
+          chap: track + 1,
+          audioId,
+          uid,
+          date: Date.now(),
+          position,
+        };
 
-              listening.chap = chap + 1;
-              (listening.position = position), (listening.date = Date.now());
-
-              ref
-                .doc(item.id)
-                .update(listening)
-                .then(() => console.log('Listening updated!!!'));
+        if (snap.empty) {
+          firestore()
+            .collection(appInfos.databaseNames.listenings)
+            .add(data)
+            .then(() => {
+              console.log('Listening added!!!');
             });
-          }
-        });
-    }
-  };
-  static UpdateTrackListened = async (index: number) => {
-    const uid = await AsyncStorage.getItem(appInfos.localNames.uid);
-    const audioId = await AsyncStorage.getItem(appInfos.localNames.audioId);
+        } else {
+          snap.forEach(async (item: any) => {
+            await firestore()
+              .collection(appInfos.databaseNames.listenings)
+              .doc(item.id)
+              .update(data)
+              .then(() => {
+                console.log('Listening updated!!!');
+              });
+          });
+        }
+      });
 
-    const ref = firestore().collection(appInfos.databaseNames.listenings);
+      // await ref.get().then((snap: any) => {
+      //   if (snap.exists) {
+      //     const data: {
+      //       date: number;
+      //       chaps: {chap: number; position: number; date: number}[];
+      //     } = snap.data();
 
-    if (uid && audioId) {
-      ref
-        .where('uid', '==', uid)
-        .where('audioId', '==', audioId)
-        .get()
-        .then(snap => {
-          if (snap.empty) {
-            const data = {
-              uid,
-              audioId,
-              chaps: [index ? index + 1 : 1],
-            };
+      //     const chaps = data.chaps;
 
-            ref.add(data).then(() => console.log('Listening added'));
-          } else {
-            snap.forEach(item => {
-              const listening: any = item.data();
+      //     const item = {
+      //       chap: track + 1,
+      //       position,
+      //       date: Date.now(),
+      //     };
 
-              const chaps = listening.chaps ?? [];
+      //     const index = chaps.findIndex(element => element.chap === track + 1);
 
-              !chaps.includes(index + 1) && chaps.push(index + 1);
+      //     if (index !== -1) {
+      //       chaps[index] = item;
+      //       ref.update({
+      //         date: Date.now(),
+      //         chaps,
+      //       });
+      //     } else {
+      //       ref.update({
+      //         date: Date.now(),
+      //         chaps: firestore.FieldValue.arrayUnion(item),
+      //       });
+      //     }
+      //   } else {
+      //     const data = {
+      //       date: Date.now(),
+      //       chaps: [
+      //         {
+      //           chap: track + 1,
+      //           position,
+      //           date: Date.now(),
+      //         },
+      //       ],
+      //     };
 
-              const data = {...listening, chaps};
-
-              ref
-                .doc(item.id)
-                .update(data)
-                .then(() => console.log('Listening updated!!!'));
-            });
-          }
-        });
+      //     ref.set(data).then(() => console.log('Listening updated!!!'));
+      //   }
+      // });
     }
   };
 }

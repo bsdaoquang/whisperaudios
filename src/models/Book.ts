@@ -61,7 +61,7 @@ export interface ListeningBook {
 export interface Listening {
   key: string;
   chaps: number[];
-  time: number;
+  date: number;
   position: number;
   chap: number;
   audioId: string;

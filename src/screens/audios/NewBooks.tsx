@@ -38,11 +38,10 @@ const NewBooks = ({route, navigation}: any) => {
   }, [tab]);
 
   const getBooksByTab = async () => {
-    await firestore()
+    firestore()
       .collection(appInfos.databaseNames.audios)
       .orderBy(tab)
-      .get()
-      .then((snap: any) => {
+      .onSnapshot((snap: any) => {
         if (snap.empty) {
           setBooks([]);
           setIsLoading(false);

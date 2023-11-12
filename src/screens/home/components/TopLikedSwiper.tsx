@@ -33,7 +33,7 @@ const TopLikedSwiper = () => {
       .orderBy('listens')
       .limitToLast(10);
 
-    await filter.get().then(snap => {
+    filter.onSnapshot(snap => {
       if (!snap.empty) {
         const items: Book[] = [];
 

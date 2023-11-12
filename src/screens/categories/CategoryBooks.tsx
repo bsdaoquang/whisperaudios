@@ -25,7 +25,7 @@ const CategoryBooks = ({navigation, route}: any) => {
       .where('categories', 'array-contains', id);
 
     setIsLoading(true);
-    await filter.get().then(snap => {
+    filter.onSnapshot(snap => {
       if (snap.empty) {
         console.log('Books not found');
         setIsLoading(false);

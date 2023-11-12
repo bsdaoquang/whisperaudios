@@ -1,5 +1,5 @@
 import React, {ReactNode, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View, useColorScheme} from 'react-native';
 import AuthorComponent from '../../../components/AuthorComponent';
 import {RowComponent} from '../../../components/RowComponent';
 import SectionComponent from '../../../components/SectionComponent';
@@ -8,6 +8,8 @@ import TitleComponent from '../../../components/TitleComponent';
 import {appColors} from '../../../constants/appColors';
 import {Book} from '../../../models';
 import {GetTime} from '../../../utils/getTime';
+import Octicons from 'react-native-vector-icons/Octicons';
+import SpaceComponent from '../../../components/SpaceComponent';
 
 interface Props {
   item: Book;
@@ -34,9 +36,13 @@ const Infocomponent = (props: Props) => {
 
   return (
     <View>
-      <RowComponent>
-        <TextComponent text="Nhận thông báo cập nhật" />
-      </RowComponent>
+      <SectionComponent>
+        <RowComponent onPress={() => {}}>
+          <Octicons name={'bell-fill'} size={20} color={appColors.white} />
+          <SpaceComponent width={12} />
+          <TextComponent text="Đã đăng ký nhận thông báo cập nhật" />
+        </RowComponent>
+      </SectionComponent>
       <SectionComponent>
         <TitleComponent
           text="Description"

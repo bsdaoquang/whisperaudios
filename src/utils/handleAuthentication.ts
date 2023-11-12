@@ -7,15 +7,9 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager} from 'react-native-fbsdk-next';
 import {appInfos} from '../constants/appInfos';
 
-GoogleSignin.configure({
-  webClientId:
-    '411226039435-vtv8sug2n1sl5jh4bmjon6kj7s3q45ku.apps.googleusercontent.com',
-});
-
 export class handleAuthentication {
   static Register = async (data: {email: string; pass: string}) => {
-    let result = '';
-
+    // let result = '';
     // await auth()
     // 	.createUserWithEmailAndPassword(data.email, data.pass)
     // 	.then((userCredentical) => {
@@ -28,12 +22,10 @@ export class handleAuthentication {
     // 		if (error.code === 'auth/email-already-in-use') {
     // 			result = 'Email đã được sử dụng';
     // 		}
-
     // 		if (error.code === 'auth/invalid-email') {
     // 			result = 'Địa chỉ email không tồn tại';
     // 		}
     // 	});
-
     // return result;
   };
 

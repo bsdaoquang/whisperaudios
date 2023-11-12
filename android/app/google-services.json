@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "411226039435-vtv8sug2n1sl5jh4bmjon6kj7s3q45ku.apps.googleusercontent.com",
+          "client_id": "411226039435-0m793pilrklqt2mdott40512a7s67lo0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bsdaoquang.whisperaudios",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "411226039435-a0bhljrf98g0eh5u7bfc6acnhgpju7os.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "411226039435-vtv8sug2n1sl5jh4bmjon6kj7s3q45ku.apps.googleusercontent.com",
+              "client_id": "411226039435-a0bhljrf98g0eh5u7bfc6acnhgpju7os.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

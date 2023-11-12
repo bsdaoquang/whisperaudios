@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
 import firestore from '@react-native-firebase/firestore';
 import {useIsFocused} from '@react-navigation/native';
@@ -7,9 +8,11 @@ import {
   VolumeHigh,
   VolumeLow,
 } from 'iconsax-react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
+  Alert,
+  BackHandler,
   FlatList,
   NativeEventEmitter,
   StyleSheet,
@@ -17,16 +20,18 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
+import BackgroundTimer from 'react-native-background-timer';
 import FastImage from 'react-native-fast-image';
 import TrackPlayer, {
+  Event,
   PlaybackActiveTrackChangedEvent,
   State,
   Track,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import AuthorComponent from '../../components/AuthorComponent';
@@ -39,21 +44,17 @@ import TextComponent from '../../components/TextComponent';
 import TitleComponent from '../../components/TitleComponent';
 import {appColors} from '../../constants/appColors';
 import {appInfos} from '../../constants/appInfos';
+import LoadingModal from '../../modals/LoadingModal';
 import ModalChoiceChap from '../../modals/ModalChoiceChap';
+import ModalSchedulerTimer from '../../modals/ModalSchedulerTimer';
 import {Book} from '../../models';
 import {Chap} from '../../models/Chapter';
 import {userSelector} from '../../redux/reducers/userReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import {GetTime} from '../../utils/getTime';
 import {HandleAudio} from '../../utils/handleAudio';
-import AudioItem from './components/AudioItem';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ModalSchedulerTimer from '../../modals/ModalSchedulerTimer';
-import BackgroundTimer from 'react-native-background-timer';
-import {Event} from 'react-native-track-player';
 import {showToast} from '../../utils/showToast';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import LoadingModal from '../../modals/LoadingModal';
+import AudioItem from './components/AudioItem';
 const eventEmitter = new NativeEventEmitter();
 
 const PlayingScreen = ({route, navigation}: any) => {
@@ -92,21 +93,20 @@ const PlayingScreen = ({route, navigation}: any) => {
   const isFocused = useIsFocused();
   const auth = useSelector(userSelector);
 
-  useEffect(() => {
-    handleCheckLiked();
-  }, [audio]);
+  useEffect(() => {}, [audio]);
 
   useEffect(() => {
     TrackPlayer.addEventListener(
       Event.PlaybackActiveTrackChanged,
       async res => {
-        res.track && setActiviTrack(res);
-        // await TrackPlayer.pause();
+        if (res.track) {
+          setActiviTrack(res);
+        }
       },
     );
 
     TrackPlayer.addEventListener(Event.PlaybackError, error =>
-      console.log(error),
+      showToast(error.message),
     );
 
     return () => {
@@ -114,6 +114,16 @@ const PlayingScreen = ({route, navigation}: any) => {
       TrackPlayer.reset(); // Also causes a crash :(
     };
   }, []);
+
+  useEffect(() => {
+    if (activiTrack) {
+      // console.log(activiTrack);
+      // HandleAudio.HandleUpdateListening(
+      //   activiTrack.lastIndex as number,
+      //   activiTrack.lastPosition,
+      // );
+    }
+  }, [activiTrack?.index]);
 
   useEffect(() => {
     handleAddTrack();
@@ -163,27 +173,46 @@ const PlayingScreen = ({route, navigation}: any) => {
     changePosition();
   }, [position]);
 
-  const handleCheckLiked = async () => {
-    await firestore()
-      .collection(appInfos.databaseNames.audios)
-      .doc(audio.key)
-      .get()
-      .then((snap: any) => {
-        if (snap.exists) {
-          setLiked(snap.data().liked ?? []);
-        }
-      });
+  const backAction = () => {
+    Alert.alert(
+      'Khoan đã!',
+      'Quá trình nghe sẽ bị dừng lại, bạn muốn nghe audio khác?',
+      [
+        {
+          text: 'Tiếp tục nghe',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'Thoát',
+          onPress: async () => {
+            await TrackPlayer.pause().then(() => navigation.goBack());
+          },
+        },
+      ],
+    );
+    return true;
   };
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const handleStopPlaylist = async () => {
     setIsUpdating(true);
-    await TrackPlayer.stop().then(async () => {
-      await TrackPlayer.removeUpcomingTracks();
-      await AsyncStorage.removeItem(appInfos.localNames.audioId).then(() => {
-        setIsUpdating(false);
-        navigation.goBack();
-      });
-    });
+    await HandleAudio.HandleUpdateListening(
+      activiTrack?.index ?? 0,
+      progress.position,
+    );
+    await TrackPlayer.stop();
+    await TrackPlayer.removeUpcomingTracks();
+    await AsyncStorage.removeItem(appInfos.localNames.audioId);
+    setIsUpdating(false);
+    navigation.goBack();
   };
 
   const handleSkipTo = async (index: number) => {
@@ -213,9 +242,11 @@ const PlayingScreen = ({route, navigation}: any) => {
 
   const togglePlayer = async () => {
     if (playBackState.state === State.Playing) {
-      await HandleAudio.SaveListeningProgress(
-        progress.position,
-        activiTrack?.index ?? 0,
+      await HandleAudio.HandleUpdateListening(
+        activiTrack?.index as number,
+        (
+          await TrackPlayer.getProgress()
+        ).position,
       );
       await TrackPlayer.pause();
     } else {
@@ -244,10 +275,18 @@ const PlayingScreen = ({route, navigation}: any) => {
     setIsVisibleModalSleepTimer(false);
   };
 
+  const handleGetCurrent = async () => {
+    const currentTrackIndex = await TrackPlayer.getActiveTrackIndex();
+
+    currentTrackIndex &&
+      currentTrackIndex >= 0 &&
+      HandleAudio.HandleUpdateListening(currentTrackIndex, progress.position);
+  };
+
   return audio && chaps.length > 0 ? (
     <Container>
       <RowComponent styles={{padding: 16, justifyContent: 'space-between'}}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={backAction}>
           <ArrowLeft2
             size={26}
             color={theme === 'dark' ? appColors.white : appColors.text}
@@ -321,7 +360,10 @@ const PlayingScreen = ({route, navigation}: any) => {
         <RowComponent styles={{justifyContent: 'space-around'}}>
           <TouchableOpacity
             disabled={activiTrack?.index === 0}
-            onPress={async () => await TrackPlayer.skip(0)}>
+            onPress={async () => {
+              await handleGetCurrent();
+              await TrackPlayer.skip(0);
+            }}>
             <Ionicons
               name="play-skip-back"
               size={iconSize - 2}
@@ -330,7 +372,10 @@ const PlayingScreen = ({route, navigation}: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             disabled={activiTrack?.index === 0}
-            onPress={async () => await TrackPlayer.skipToPrevious()}>
+            onPress={async () => {
+              await handleGetCurrent();
+              await TrackPlayer.skipToPrevious();
+            }}>
             <Ionicons
               name="play-back"
               size={iconSize}
@@ -384,7 +429,10 @@ const PlayingScreen = ({route, navigation}: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             disabled={activiTrack?.index === chaps.length}
-            onPress={async () => await TrackPlayer.skipToNext()}>
+            onPress={async () => {
+              await handleGetCurrent();
+              await TrackPlayer.skipToNext();
+            }}>
             <Ionicons
               name="play-forward"
               size={iconSize}
@@ -397,7 +445,10 @@ const PlayingScreen = ({route, navigation}: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             disabled={activiTrack?.index === chaps.length - 1}
-            onPress={async () => await TrackPlayer.skip(chaps.length - 1)}>
+            onPress={async () => {
+              await handleGetCurrent();
+              await TrackPlayer.skip(chaps.length - 1);
+            }}>
             <Ionicons
               name="play-skip-forward"
               size={iconSize - 2}
@@ -453,7 +504,7 @@ const PlayingScreen = ({route, navigation}: any) => {
                   audio.liked,
                   audio.key as string,
                   auth.uid,
-                ).then(res => handleCheckLiked())
+                )
               }
               styles={{
                 paddingHorizontal: 12,

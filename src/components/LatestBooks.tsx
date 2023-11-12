@@ -39,26 +39,21 @@ const LatestBooks = () => {
       .orderBy('updatedAt')
       .limitToLast(10);
 
-    await filter
-      .get()
-      .then(snap => {
-        if (snap.empty) {
-          console.log('Books not found');
-        } else {
-          const items: Book[] = [];
-          snap.forEach((item: any) => {
-            items.push({
-              key: item.id,
-              ...item.data(),
-            });
+    filter.onSnapshot(snap => {
+      if (snap.empty) {
+        console.log('Books not found');
+      } else {
+        const items: Book[] = [];
+        snap.forEach((item: any) => {
+          items.push({
+            key: item.id,
+            ...item.data(),
           });
-          setItem(JSON.stringify(items));
-          setBooks(items);
-        }
-      })
-      .catch(error => {
-        console.log('Can not get books');
-      });
+        });
+        setItem(JSON.stringify(items));
+        setBooks(items);
+      }
+    });
   };
 
   const renderBook = (item: Book) => (

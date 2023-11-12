@@ -50,7 +50,7 @@ const AudioDetail = ({route, navigation}: any) => {
   const [totalRating, setTotalRating] = useState(0);
   const [star, setStar] = useState(0);
   const [isVisibleModalRating, setIsVisibleModalRating] = useState(false);
-  const [listening, setListening] = useState<Listening>();
+  const [listening, setListening] = useState<Listening[]>([]);
 
   const auth = useSelector(userSelector);
 
@@ -75,12 +75,16 @@ const AudioDetail = ({route, navigation}: any) => {
         .where('uid', '==', auth.uid)
         .onSnapshot(snap => {
           if (!snap.empty) {
+            const items: Listening[] = [];
+
             snap.forEach((item: any) => {
-              setListening({
+              items.push({
                 key: item.id,
                 ...item.data(),
               });
             });
+
+            setListening(items.sort((a, b) => a.date - b.date));
           }
         });
     }
@@ -156,6 +160,34 @@ const AudioDetail = ({route, navigation}: any) => {
         ],
       );
     }
+  };
+
+  const renderChapItem = (item: Chapter, index: number) => {
+    const itemListening = listening.find(element => element.chap === index + 1);
+    return (
+      <RowComponent
+        key={`item${index}`}
+        onPress={() => handleAddPlaylist(index)}
+        styles={{
+          paddingHorizontal: 16,
+          marginBottom: 16,
+          justifyContent: 'space-between',
+        }}>
+        <TextComponent
+          text={item.title}
+          font={fontFamilies.medium}
+          color={itemListening ? appColors.gray : appColors.white}
+        />
+
+        {itemListening && (
+          <TextComponent
+            text={GetTime.getTimeProgress(itemListening.position)}
+            size={12}
+            color={appColors.gray}
+          />
+        )}
+      </RowComponent>
+    );
   };
 
   return (
@@ -351,95 +383,80 @@ const AudioDetail = ({route, navigation}: any) => {
                 </SectionComponent>
               </>
             ) : chapters.length > 0 ? (
-              chapters.map((item, index) => (
-                <RowComponent
-                  key={`item${index}`}
-                  onPress={() => handleAddPlaylist(index)}
-                  styles={{
-                    paddingHorizontal: 16,
-                    marginBottom: 16,
-                  }}>
-                  <TextComponent
-                    text={item.title}
-                    flex={1}
-                    font={fontFamilies.medium}
-                    color={
-                      listening
-                        ? listening.chaps && listening.chaps.includes(index - 1)
-                          ? appColors.gray
-                          : appColors.white
-                        : appColors.white
-                    }
-                  />
-                </RowComponent>
-              ))
+              chapters.map((item, index) => renderChapItem(item, index))
             ) : (
               <LoadingComponent isLoading={isLoading} value={chapters.length} />
             )}
           </ScrollView>
-          {chapters.length > 0 && listening && listening.chap ? (
-            <RowComponent styles={{paddingVertical: 12}}>
-              <TouchableOpacity
-                style={{flex: 2, alignItems: 'center'}}
-                onPress={() =>
-                  handleAddPlaylist(listening.chap - 1, listening.position)
-                }>
-                {chapters[listening.chap - 1].title && (
+          {chapters.length > 0 ? (
+            listening.length > 0 ? (
+              <RowComponent styles={{paddingVertical: 12}}>
+                <TouchableOpacity
+                  style={{flex: 2, alignItems: 'center'}}
+                  onPress={() =>
+                    handleAddPlaylist(
+                      listening[listening.length - 1].chap - 1,
+                      listening[listening.length - 1].position,
+                    )
+                  }>
                   <TextComponent
                     color={appColors.link}
-                    text={`Nghe tiếp ${
-                      chapters[listening.chap - 1].title
-                    } - ${GetTime.getTimeProgress(listening.position)}`}
+                    text={`Nghe tiếp - ${
+                      chapters[listening[listening.length - 1].chap - 1].title
+                    } - ${GetTime.getTimeProgress(
+                      listening[listening.length - 1].position,
+                    )}`}
                   />
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleAddPlaylist(0)}
-                style={[
-                  styles.tab,
-                  globalStyles.rowCenter,
-                  {
-                    flex: 1,
-                    backgroundColor: `rgba(245, 245, 246, 1)`,
-                    paddingHorizontal: 16,
-                  },
-                ]}>
-                <MaterialCommunityIcons
-                  name="motion-play"
-                  size={14}
-                  color={appColors.primary}
-                  style={{marginRight: 4}}
-                />
-                <TextComponent text="Nghe từ đầu" color={appColors.primary} />
-              </TouchableOpacity>
-            </RowComponent>
-          ) : (
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 20,
-                right: 20,
-              }}>
-              <TouchableOpacity
-                onPress={() => handleAddPlaylist(0)}
-                style={[
-                  styles.tab,
-                  globalStyles.rowCenter,
-                  {
-                    backgroundColor: `rgba(245, 245, 246, 1)`,
-                    paddingHorizontal: 16,
-                  },
-                ]}>
-                <MaterialCommunityIcons
-                  name="motion-play"
-                  size={14}
-                  color={appColors.primary}
-                  style={{marginRight: 4}}
-                />
-                <TextComponent text="Nghe từ đầu" color={appColors.primary} />
-              </TouchableOpacity>
-            </View>
-          )}
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => handleAddPlaylist(0)}
+                  style={[
+                    styles.tab,
+                    globalStyles.rowCenter,
+                    {
+                      flex: 1,
+                      backgroundColor: `rgba(245, 245, 246, 1)`,
+                      paddingHorizontal: 16,
+                    },
+                  ]}>
+                  <MaterialCommunityIcons
+                    name="motion-play"
+                    size={14}
+                    color={appColors.primary}
+                    style={{marginRight: 4}}
+                  />
+                  <TextComponent text="Nghe từ đầu" color={appColors.primary} />
+                </TouchableOpacity>
+              </RowComponent>
+            ) : (
+              <View
+                style={{
+                  position: 'absolute',
+                  bottom: 20,
+                  right: 20,
+                }}>
+                <TouchableOpacity
+                  onPress={() => handleAddPlaylist(0)}
+                  style={[
+                    styles.tab,
+                    globalStyles.rowCenter,
+                    {
+                      backgroundColor: `rgba(245, 245, 246, 1)`,
+                      paddingHorizontal: 16,
+                    },
+                  ]}>
+                  <MaterialCommunityIcons
+                    name="motion-play"
+                    size={14}
+                    color={appColors.primary}
+                    style={{marginRight: 4}}
+                  />
+                  <TextComponent text="Nghe từ đầu" color={appColors.primary} />
+                </TouchableOpacity>
+              </View>
+            )
+          ) : null}
         </LinearGradient>
       </ImageBackground>
       <ModalRating

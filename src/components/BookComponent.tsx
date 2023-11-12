@@ -29,8 +29,7 @@ const BookComponent = (props: Props) => {
     await firestore()
       .collection(appInfos.databaseNames.audios)
       .doc(id)
-      .get()
-      .then((snap: any) => {
+      .onSnapshot((snap: any) => {
         if (snap.exists) {
           setBookDetail({
             key: id,

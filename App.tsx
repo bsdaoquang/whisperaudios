@@ -35,7 +35,7 @@ const App = () => {
           Capability.Pause,
           Capability.SkipToNext,
           Capability.SkipToPrevious,
-          Capability.Stop,
+          // Capability.Stop,
           Capability.SeekTo,
         ],
       });
