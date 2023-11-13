@@ -16,26 +16,23 @@ import {FlatList, View, useColorScheme} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ButtonIcon from '../../components/ButtonIcon';
 import Container from '../../components/Container';
+import ListBookItem from '../../components/ListBookItem';
+import ListeningCardItem from '../../components/ListeningCardItem';
 import {RowComponent} from '../../components/RowComponent';
 import SectionComponent from '../../components/SectionComponent';
+import TabbarComponent from '../../components/TabbarComponent';
 import TextComponent from '../../components/TextComponent';
 import TitleComponent from '../../components/TitleComponent';
 import UserComponent from '../../components/UserComponent';
 import {appColors} from '../../constants/appColors';
 import {appInfos} from '../../constants/appInfos';
+import {i18n} from '../../languages/i18n';
 import {Book, Listening} from '../../models/Book';
 import {removeUser, userSelector} from '../../redux/reducers/userReducer';
-import {darkStyles} from '../../styles/darkStyles';
-import {lightStyles} from '../../styles/lightStyles';
-import TabbarComponent from '../../components/TabbarComponent';
-import {i18n} from '../../languages/i18n';
-import ListeningCardItem from '../../components/ListeningCardItem';
-import ListBookItem from '../../components/ListBookItem';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const theme = useColorScheme();
-  const textStyle = theme === 'light' ? lightStyles.text : darkStyles.text;
   const textColor = theme === 'light' ? appColors.text : appColors.light;
   const navigation: any = useNavigation();
   const user = useSelector(userSelector);
@@ -55,12 +52,9 @@ const Profile = () => {
       .collection(appInfos.databaseNames.listenings)
       .where('uid', '==', user.uid)
       .orderBy('date')
-      .limitToLast(10)
-      .get()
-      .then(snap => {
-        if (snap.empty) {
-          console.log('listening not found!!');
-        } else {
+      .limit(10)
+      .onSnapshot(snap => {
+        if (snap) {
           const items: Listening[] = [];
           snap.forEach((item: any) => {
             items.push({
@@ -144,20 +138,24 @@ const Profile = () => {
           seemore
           onPress={() => navigation.navigate('ListeningsScreen')}
         />
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={listenings}
-          renderItem={({item, index}) => (
-            <ListeningCardItem
-              item={item}
-              styles={{
-                marginLeft: 12,
-                marginRight: index === listenings.length - 1 ? 12 : 0,
-              }}
-            />
-          )}
-        />
+        {listenings.length > 0 ? (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={listenings}
+            renderItem={({item, index}) => (
+              <ListeningCardItem
+                item={item}
+                styles={{
+                  marginLeft: 12,
+                  marginRight: index === listenings.length - 1 ? 12 : 0,
+                }}
+              />
+            )}
+          />
+        ) : (
+          <TextComponent text={i18n.t('dataNotFound')} />
+        )}
       </View>
       <View>
         <TabbarComponent

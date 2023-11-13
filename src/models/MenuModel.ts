@@ -1,6 +1,6 @@
 import {ReactNode} from 'react';
 
-export interface SelectionItem {
+export interface MenuModel {
   key: string;
   title: string;
   icon?: ReactNode;

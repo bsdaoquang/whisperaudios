@@ -15,14 +15,28 @@ import {appColors} from '../../constants/appColors';
 import {replaceName} from '../../utils/replaceName';
 import TextComponent from '../../components/TextComponent';
 import ButtonIcon from '../../components/ButtonIcon';
+import ModalizeSettingListening from '../../modals/ModalizeSettingListening';
+import ModalizeDefault from '../../modals/ModalizeDefault';
 
 const ListeningsScreen = () => {
   const [listenings, setListenings] = useState<Listening[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchKey, setSearchKey] = useState('');
   const [results, setResults] = useState<Listening[]>([]);
+  const [isVisibleModalListening, setIsVisibleModalListening] = useState(false);
 
   const theme = useColorScheme();
+
+  const menusListenings = [
+    {
+      key: 'stop',
+      title: 'Tạm dừng ghi nhật ký nghe',
+    },
+    {
+      key: 'clear',
+      title: 'Xoá tất cả nhật ký nghe',
+    },
+  ];
 
   const user = useSelector(userSelector);
   useEffect(() => {
@@ -93,7 +107,7 @@ const ListeningsScreen = () => {
               color={theme === 'dark' ? appColors.white : appColors.text}
             />
           }
-          onPress={() => {}}
+          onPress={() => setIsVisibleModalListening(true)}
         />
       }>
       <View style={{paddingHorizontal: 16}}>
@@ -116,6 +130,12 @@ const ListeningsScreen = () => {
       ) : (
         <LoadingComponent isLoading={isLoading} value={listenings.length} />
       )}
+
+      <ModalizeSettingListening
+        isVisible={isVisibleModalListening}
+        onClose={() => setIsVisibleModalListening(false)}
+        menus={menusListenings}
+      />
     </Container>
   );
 };
