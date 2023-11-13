@@ -10,14 +10,16 @@ interface Props {
   onPress: () => void;
   color?: string;
   size?: number;
+  flex?: number;
 }
 
 const LinkComponent = (props: Props) => {
-  const {text, onPress, color, size} = props;
+  const {text, onPress, color, size, flex} = props;
 
   return (
     <TouchableOpacity onPress={onPress}>
       <TextComponent
+        flex={flex ?? 1}
         text={text}
         color={color ?? appColors.link}
         size={size ?? 14}

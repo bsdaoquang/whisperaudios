@@ -24,10 +24,14 @@ export interface Book {
 }
 
 export interface Chapter {
+  audio: string;
+  buyUrl: string;
+  cover: string;
+  downloadFilename: string;
+  downloadUrl: string;
+  lyrics: string;
+  subtitle: string;
   title: string;
-  source: string;
-  time?: string;
-  audio?: string;
 }
 
 export interface ChapterStory {

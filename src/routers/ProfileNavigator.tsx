@@ -7,6 +7,7 @@ import RegisterScreen from '../screens/auth/RegisterScreen';
 import LoginWithPhone from '../screens/auth/LoginWithPhone';
 import NotificationsScreen from '../screens/auth/NotificationsScreen';
 import SettingScreen from '../screens/auth/SettingScreen';
+import ListeningsScreen from '../screens/auth/ListeningsScreen';
 
 const ProfileNavigator = () => {
   const AuthStack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ const ProfileNavigator = () => {
       <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} />
       <AuthStack.Screen name="LoginWithPhone" component={LoginWithPhone} />
       <AuthStack.Screen name="SettingScreen" component={SettingScreen} />
+      <AuthStack.Screen name="ListeningsScreen" component={ListeningsScreen} />
       <AuthStack.Screen
         name="NotificationsScreen"
         component={NotificationsScreen}

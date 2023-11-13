@@ -1,19 +1,35 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {useEffect, useState} from 'react';
-import {ImageBackground, TouchableOpacity, View} from 'react-native';
-import {appInfos} from '../constants/appInfos';
-import {Book, Chapter, Listening} from '../models/Book';
-import TitleComponent from './TitleComponent';
-import {GetTime} from '../utils/getTime';
-import {PlayCircle} from 'iconsax-react-native';
-import {appColors} from '../constants/appColors';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {
+  ImageBackground,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {appColors} from '../constants/appColors';
+import {appInfos} from '../constants/appInfos';
 import {fontFamilies} from '../constants/fontFamilies';
-import TextComponent from './TextComponent';
+import {Book, Chapter, Listening} from '../models/Book';
+import {GetTime} from '../utils/getTime';
 import SpaceComponent from './SpaceComponent';
+import TextComponent from './TextComponent';
+import TitleComponent from './TitleComponent';
+import {RowComponent} from './RowComponent';
+import FastImage from 'react-native-fast-image';
+import LinkComponent from './LinkComponent';
 
-const ListeningCardItem = ({item}: {item: Listening}) => {
+const ListeningCardItem = ({
+  item,
+  styles,
+  type,
+}: {
+  item: Listening;
+  styles?: StyleProp<ViewStyle>;
+  type?: 'horizontal' | 'vertical';
+}) => {
   const [audio, setaudio] = useState<Book>();
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const size = (appInfos.sizes.width - 52) / 3;
@@ -57,13 +73,51 @@ const ListeningCardItem = ({item}: {item: Listening}) => {
         }));
   };
 
+  const renderListening = () => {
+    const chapter = chapters[item.chap - 1];
+
+    return chapter ? (
+      <RowComponent
+        onPress={handleAddPlaylist}
+        key={item.key}
+        styles={{marginBottom: 18}}>
+        <FastImage
+          source={{uri: chapter.cover ? chapter.cover : audio?.image}}
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 12,
+            marginRight: 12,
+          }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <View style={{flex: 1}}>
+          <TitleComponent text={audio?.title ?? ''} />
+          <TextComponent
+            flex={1}
+            text={`${chapter.title} - ${GetTime.getTimeProgress(
+              item.position,
+            )}`}
+          />
+          <TextComponent
+            text={GetTime.getFullTimeString(item.date, true)}
+            flex={1}
+          />
+          <LinkComponent text="Nghe tiếp" onPress={handleAddPlaylist} />
+        </View>
+      </RowComponent>
+    ) : (
+      <></>
+    );
+  };
+
   const handleAddPlaylist = () => {
     if (audio) {
       const data = {
         key: audio.chapsId,
         audio,
         chaps: chapters,
-        chapIndex: item.chap,
+        chapIndex: item.chap - 1,
         position: item.position,
       };
 
@@ -72,47 +126,53 @@ const ListeningCardItem = ({item}: {item: Listening}) => {
   };
 
   return audio ? (
-    <TouchableOpacity onPress={handleAddPlaylist}>
-      <ImageBackground
-        source={{uri: audio.image}}
-        style={{
-          width: size,
-          height: size * 1.4,
-          marginBottom: 16,
-        }}
-        imageStyle={{
-          borderRadius: 12,
-        }}
-        resizeMode="cover">
-        <View
+    !type || type === 'vertical' ? (
+      <TouchableOpacity onPress={handleAddPlaylist} style={[styles]}>
+        <ImageBackground
+          source={{uri: audio.image}}
           style={{
-            flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Ionicons name="play" size={32} color={appColors.white} />
-          <SpaceComponent height={12} />
-          <TitleComponent
-            font={fontFamilies.medium}
-            flex={0}
-            text={chapters[item.chap - 1] ? chapters[item.chap - 1].title : ''}
-            size={16}
-          />
-          <TextComponent
-            flex={0}
-            size={12}
-            text={GetTime.getTimeProgress(item.position)}
-          />
-          <SpaceComponent height={8} />
-          <TextComponent
-            size={12}
-            flex={0}
-            text={GetTime.getFullTimeString(item.date, true)}
-          />
-        </View>
-      </ImageBackground>
-    </TouchableOpacity>
+            width: size,
+            height: size * 1.4,
+            marginBottom: 16,
+          }}
+          imageStyle={{
+            borderRadius: 12,
+          }}
+          resizeMode="cover">
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.6)',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Ionicons name="play" size={32} color={appColors.white} />
+            <SpaceComponent height={12} />
+            <TitleComponent
+              font={fontFamilies.medium}
+              flex={0}
+              text={
+                chapters[item.chap - 1] ? chapters[item.chap - 1].title : ''
+              }
+              size={16}
+            />
+            <TextComponent
+              flex={0}
+              size={12}
+              text={GetTime.getTimeProgress(item.position)}
+            />
+            <SpaceComponent height={8} />
+            <TextComponent
+              size={12}
+              flex={0}
+              text={GetTime.getFullTimeString(item.date, true)}
+            />
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    ) : (
+      renderListening()
+    )
   ) : (
     <></>
   );

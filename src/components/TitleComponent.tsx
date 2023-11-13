@@ -23,7 +23,7 @@ const TitleComponent = (props: Props) => {
 
   return (
     <Text
-      numberOfLines={line ?? 1}
+      numberOfLines={line ? line : undefined}
       style={[
         textStyle,
         {

@@ -30,4 +30,6 @@ export const vi = {
   setting: 'Cài đặt',
   language: 'Ngôn ngữ',
   theme: 'Giao diện',
+  yourListenings: 'Bạn đang nghe',
+  history: 'Lịch sử nghe',
 };
