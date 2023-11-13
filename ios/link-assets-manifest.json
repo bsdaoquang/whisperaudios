@@ -2,24 +2,20 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/GreycliffCF-Bold.ttf",
-      "sha1": "4bcec1ec7cbdb8099d2646c0bad443c6a2e841aa"
+      "path": "assets/fonts/Roboto-Bold.ttf",
+      "sha1": "62442a18a9fe9457c1afeabf683d263a691b7798"
     },
     {
-      "path": "assets/fonts/GreycliffCF-DemiBold.ttf",
-      "sha1": "c7412108e872d13f901ab86f87959ccc3242558c"
+      "path": "assets/fonts/Roboto-Italic.ttf",
+      "sha1": "65f3f6a7e1bd2fa6f2df35e4b07775d7f1dde4f0"
     },
     {
-      "path": "assets/fonts/GreycliffCF-ExtraBold.ttf",
-      "sha1": "bb8d848e5de226adce14cf6dfa42ee955748512a"
+      "path": "assets/fonts/Roboto-Medium.ttf",
+      "sha1": "3c6a09fcc6a454924c81af7dff94fc6d399ed79b"
     },
     {
-      "path": "assets/fonts/GreycliffCF-Medium.ttf",
-      "sha1": "83793506ce1144f268d01c8e25c2480a61a59c64"
-    },
-    {
-      "path": "assets/fonts/GreycliffCF-Regular.ttf",
-      "sha1": "d6d1974fc9cd0a22eb8c1b4919eef9a33c09759f"
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "sha1": "56c5c0d38bde4c1f1549dda43db37b09c608aad3"
     }
   ]
 }
