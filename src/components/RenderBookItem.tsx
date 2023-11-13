@@ -11,6 +11,7 @@ import RatingComponent from './RatingComponent';
 import TextComponent from './TextComponent';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import {globalStyles} from '../styles/globalStyles';
 
 interface Props {
   item: Book;
@@ -27,11 +28,12 @@ const RenderBookItem = (props: Props) => {
     <TouchableOpacity
       onPress={() => navigation.navigate('AudioDetail', {audio: item})}
       style={[
+        globalStyles.shadow,
         {
           width,
           marginLeft: 16,
           marginBottom: 16,
-          backgroundColor: theme === 'dark' ? appColors.dark1 : appColors.white,
+          // backgroundColor: theme === 'dark' ? appColors.dark1 : appColors.white,
           borderBottomLeftRadius: 12,
           borderBottomRightRadius: 12,
         },
@@ -49,6 +51,9 @@ const RenderBookItem = (props: Props) => {
         style={{
           padding: 8,
           alignItems: 'flex-start',
+          backgroundColor: theme === 'dark' ? appColors.dark1 : appColors.white,
+          borderBottomLeftRadius: 12,
+          borderBottomRightRadius: 12,
         }}>
         <RatingComponent bookId={item.key} readOnly size={14} />
         <TextComponent text={item.title} font={fontFamilies.medium} />

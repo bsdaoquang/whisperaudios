@@ -20,6 +20,7 @@ import TitleComponent from './TitleComponent';
 import {RowComponent} from './RowComponent';
 import FastImage from 'react-native-fast-image';
 import LinkComponent from './LinkComponent';
+import {globalStyles} from '../styles/globalStyles';
 
 const ListeningCardItem = ({
   item,
@@ -80,7 +81,7 @@ const ListeningCardItem = ({
       <RowComponent
         onPress={handleAddPlaylist}
         key={item.key}
-        styles={{marginBottom: 18}}>
+        styles={[globalStyles.shadow, {marginBottom: 18}]}>
         <FastImage
           source={{uri: chapter.cover ? chapter.cover : audio?.image}}
           style={{
@@ -145,10 +146,12 @@ const ListeningCardItem = ({
               backgroundColor: 'rgba(0,0,0,0.6)',
               justifyContent: 'center',
               alignItems: 'center',
+              borderRadius: 12,
             }}>
             <Ionicons name="play" size={32} color={appColors.white} />
             <SpaceComponent height={12} />
             <TitleComponent
+              color={appColors.white}
               font={fontFamilies.medium}
               flex={0}
               text={
@@ -157,12 +160,14 @@ const ListeningCardItem = ({
               size={16}
             />
             <TextComponent
+              color={appColors.white}
               flex={0}
               size={12}
               text={GetTime.getTimeProgress(item.position)}
             />
             <SpaceComponent height={8} />
             <TextComponent
+              color={appColors.white}
               size={12}
               flex={0}
               text={GetTime.getFullTimeString(item.date, true)}

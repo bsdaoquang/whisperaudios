@@ -32,16 +32,12 @@ const HeaderAudioDetail = (props: Props) => {
   const auth = useSelector(userSelector);
 
   useEffect(() => {
-    handleCheckLiked();
-  }, [audioId]);
-
-  const handleCheckLiked = () => {
     firestore()
       .doc(`${appInfos.databaseNames.audios}/${audioId}`)
       .onSnapshot((snap: any) => {
         setLikedData(snap.data().liked ? snap.data().liked : []);
       });
-  };
+  }, [audioId]);
 
   return (
     <LinearGradient colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0)']}>
@@ -67,7 +63,9 @@ const HeaderAudioDetail = (props: Props) => {
         <RowComponent styles={{justifyContent: 'flex-end'}}>
           <ButtonIcon
             onPress={onShare}
-            icon={<MaterialIcons name={'share'} size={24} />}
+            icon={
+              <MaterialIcons name={'share'} size={24} color={appColors.white} />
+            }
           />
           <SpaceComponent width={12} />
           <ButtonIcon
@@ -76,8 +74,13 @@ const HeaderAudioDetail = (props: Props) => {
             }
             icon={
               <Ionicons
-                name={likedData.includes(auth.uid) ? 'heart' : 'heart-outline'}
+                name={
+                  likedData.length > 0 && likedData.includes(auth.uid)
+                    ? 'heart'
+                    : 'heart-outline'
+                }
                 size={24}
+                color={appColors.error4}
               />
             }
           />

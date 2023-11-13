@@ -71,6 +71,7 @@ const Infocomponent = (props: Props) => {
           />
           <SpaceComponent width={12} />
           <TextComponent
+            color={appColors.white}
             text={
               followers && followers.includes(user.uid)
                 ? 'Huỷ theo dõi'
@@ -109,24 +110,37 @@ const Infocomponent = (props: Props) => {
         {renderInfoItem('Người đăng', item.uploadBy ?? <></>)}
         {renderInfoItem(
           'Ngày tạo',
-          <TextComponent text={GetTime.getFullTimeString(item.createdAt)} />,
+          <TextComponent
+            text={GetTime.getFullTimeString(item.createdAt)}
+            color={appColors.white}
+          />,
         )}
         {renderInfoItem(
           'Số chương',
-          <TextComponent text={item.totalChaps?.toString() ?? ''} />,
+          <TextComponent
+            text={item.totalChaps?.toString() ?? ''}
+            color={appColors.white}
+          />,
         )}
         {renderInfoItem(
           'Cập nhật lần cuối',
-          <TextComponent text={GetTime.getFullTimeString(item.updatedAt)} />,
+          <TextComponent
+            text={GetTime.getFullTimeString(item.updatedAt)}
+            color={appColors.white}
+          />,
         )}
         {renderInfoItem(
           'Lượt nghe',
-          <TextComponent text={item.listens.toString() ?? ''} />,
+          <TextComponent
+            text={item.listens.toString() ?? ''}
+            color={appColors.white}
+          />,
         )}
         {renderInfoItem(
           'Yêu thích',
           <TextComponent
             text={item.liked ? item.liked.length.toString() : '0'}
+            color={appColors.white}
           />,
         )}
       </SectionComponent>

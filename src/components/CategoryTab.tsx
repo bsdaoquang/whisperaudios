@@ -5,13 +5,15 @@ import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../constants/appInfos';
 import TagComponent from './TagComponent';
 import {useNavigation} from '@react-navigation/native';
+import {appColors} from '../constants/appColors';
 
 interface Props {
   catId: string;
+  textColor?: string;
 }
 
 const CategoryTab = (props: Props) => {
-  const {catId} = props;
+  const {catId, textColor} = props;
 
   const [category, setCategory] = useState<Category>();
   const navigation: any = useNavigation();
@@ -42,6 +44,10 @@ const CategoryTab = (props: Props) => {
           title: category.title,
         })
       }
+      styles={{borderColor: appColors.white}}
+      textStyle={{
+        color: textColor ?? appColors.text,
+      }}
       text={category.title}
     />
   ) : (

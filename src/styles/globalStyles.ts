@@ -35,13 +35,13 @@ export const globalStyles = StyleSheet.create({
   },
 
   shadow: {
-    shadowColor: '#000',
+    shadowColor: 'rgba(0,0,0,0.8)',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.15,
     shadowRadius: 4,
-    elevation: 15,
+    elevation: 10,
   },
 });

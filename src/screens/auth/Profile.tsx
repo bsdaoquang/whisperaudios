@@ -12,7 +12,7 @@ import {
   Setting2,
 } from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, View, useColorScheme} from 'react-native';
+import {FlatList, TouchableOpacity, View, useColorScheme} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ButtonIcon from '../../components/ButtonIcon';
 import Container from '../../components/Container';
@@ -29,6 +29,11 @@ import {appInfos} from '../../constants/appInfos';
 import {i18n} from '../../languages/i18n';
 import {Book, Listening} from '../../models/Book';
 import {removeUser, userSelector} from '../../redux/reducers/userReducer';
+import FastImage from 'react-native-fast-image';
+import RenderBookItem from '../../components/RenderBookItem';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {globalStyles} from '../../styles/globalStyles';
+import {HandleAudio} from '../../utils/handleAudio';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -72,8 +77,7 @@ const Profile = () => {
       .collection(appInfos.databaseNames.audios)
       .where('liked', 'array-contains', user.uid)
       .limit(10)
-      .get()
-      .then(snap => {
+      .onSnapshot(snap => {
         if (snap.empty) {
           console.log('Liked not found');
         } else {
@@ -157,16 +161,47 @@ const Profile = () => {
           <TextComponent text={i18n.t('dataNotFound')} />
         )}
       </View>
-      <View>
-        <TabbarComponent
-          title={i18n.t('audioLiked')}
-          seemore
-          onPress={() => navigation.navigate('ListeningsScreen')}
-        />
-        {likedAudios.map(item => (
-          <ListBookItem book={item} key={item.key} />
-        ))}
-      </View>
+      {likedAudios.length > 0 && (
+        <View>
+          <TabbarComponent
+            title={i18n.t('audioLiked')}
+            seemore
+            onPress={() => navigation.navigate('LikedAudios')}
+          />
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            style={{paddingRight: 16}}
+            horizontal
+            data={likedAudios}
+            renderItem={({item}) => (
+              <View>
+                <RenderBookItem item={item} key={item.key} />
+                <TouchableOpacity
+                  onPress={() =>
+                    HandleAudio.UpdateLiked(
+                      item.liked,
+                      item.key as string,
+                      user.uid,
+                    )
+                  }
+                  style={[
+                    globalStyles.shadow,
+                    {
+                      position: 'absolute',
+                      right: 4,
+                      top: 4,
+                      padding: 4,
+                      backgroundColor: appColors.white,
+                      borderRadius: 100,
+                    },
+                  ]}>
+                  <Ionicons name="heart" size={20} color={appColors.error4} />
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </View>
+      )}
     </Container>
   );
 };

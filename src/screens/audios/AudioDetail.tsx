@@ -284,7 +284,11 @@ const AudioDetail = ({route, navigation}: any) => {
 
                 <RowComponent styles={{marginTop: 12, flexWrap: 'wrap'}}>
                   {audio.categories.map(catId => (
-                    <CategoryTab catId={catId} key={catId} />
+                    <CategoryTab
+                      catId={catId}
+                      key={catId}
+                      textColor={appColors.white}
+                    />
                   ))}
                 </RowComponent>
               </View>
@@ -343,8 +347,12 @@ const AudioDetail = ({route, navigation}: any) => {
               <>
                 <Infocomponent item={audio} />
                 <SectionComponent>
-                  <TitleComponent text="Đánh giá" />
-                  <TextComponent text="Bạn thấy audio này thế nào" flex={1} />
+                  <TitleComponent text="Đánh giá" color={appColors.white} />
+                  <TextComponent
+                    text="Bạn thấy audio này thế nào"
+                    flex={1}
+                    color={appColors.white}
+                  />
                   <RowComponent styles={{paddingVertical: 16}}>
                     <Rating
                       rating={star}
@@ -357,11 +365,13 @@ const AudioDetail = ({route, navigation}: any) => {
                   </RowComponent>
                   <SpaceComponent height={18} />
                   <TextComponent
+                    color={appColors.white}
                     text="Điểm đánh giá bởi những người dùng khác đã nghe audio này"
                     line={2}
                   />
                   <View style={{alignItems: 'center'}}>
                     <TitleComponent
+                      color={appColors.white}
                       text={totalRating.toFixed(1)}
                       size={42}
                       flex={0}
@@ -377,6 +387,7 @@ const AudioDetail = ({route, navigation}: any) => {
                       size={12}
                       flex={0}
                       styles={{paddingVertical: 8}}
+                      color={appColors.white}
                     />
                   </View>
 
@@ -389,6 +400,7 @@ const AudioDetail = ({route, navigation}: any) => {
 
                   <LinkComponent
                     text="Xem tất cả đánh giá"
+                    flex={0}
                     onPress={() =>
                       navigation.navigate('RatingsScreen', {ratings})
                     }

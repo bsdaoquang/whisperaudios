@@ -18,6 +18,7 @@ import TitleComponent from './TitleComponent';
 import FastImage from 'react-native-fast-image';
 import {DocumentUpload} from 'iconsax-react-native';
 import {appColors} from '../constants/appColors';
+import {globalStyles} from '../styles/globalStyles';
 
 const LatestBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -60,9 +61,15 @@ const LatestBooks = () => {
     <RowComponent
       onPress={() => navigation.navigate('AudioDetail', {audio: item})}
       key={item.key}
-      styles={{
-        marginBottom: 24,
-      }}>
+      styles={[
+        globalStyles.shadow,
+        {
+          marginBottom: 18,
+          backgroundColor: theme === 'dark' ? appColors.dark1 : appColors.white,
+          padding: 8,
+          borderRadius: 12,
+        },
+      ]}>
       <FastImage
         source={{uri: item.image}}
         style={{

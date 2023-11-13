@@ -63,7 +63,8 @@ const TabNavigator = () => {
                   borderRadius: 100,
                   padding: focused ? 2 : 0,
                   borderWidth: focused ? 2 : 0,
-                  borderColor: appColors.white,
+                  borderColor:
+                    theme === 'light' ? appColors.primary : appColors.white,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />
