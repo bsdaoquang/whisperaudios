@@ -175,7 +175,11 @@ const SearchBooks = ({navigation}: any) => {
           max={50}
           onEnd={() => handleSaveSearchKey(searchKey)}
           prefix={
-            <AntDesign name="search1" size={20} color={appColors.light} />
+            <AntDesign
+              name="search1"
+              size={20}
+              color={theme === 'light' ? appColors.gray : appColors.light}
+            />
           }
           placeholder={i18n.t('searchPlaceholder')}
           autoFocus={false}

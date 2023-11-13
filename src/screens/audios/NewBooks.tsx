@@ -38,6 +38,7 @@ const NewBooks = ({route, navigation}: any) => {
   }, [tab]);
 
   const getBooksByTab = async () => {
+    setIsLoading(true);
     firestore()
       .collection(appInfos.databaseNames.audios)
       .orderBy(tab)
@@ -68,7 +69,7 @@ const NewBooks = ({route, navigation}: any) => {
           onPress={() =>
             navigation.navigate('SearchTab', {screen: 'SearchScreen'})
           }>
-          <AntDesign name="search1" size={20} color={appColors.gray7} />
+          <AntDesign name="search1" size={22} color={appColors.gray7} />
         </TouchableOpacity>
       }>
       {books.length > 0 ? (

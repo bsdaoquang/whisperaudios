@@ -19,7 +19,7 @@ const HeartListenCount = (props: Props) => {
   const {liked, chaps, listen, type} = props;
 
   const theme = useColorScheme();
-  const color = theme === 'dark' ? appColors.light : appColors.dark1;
+  const color = theme === 'dark' ? appColors.light : appColors.gray;
 
   return (
     <RowComponent>
@@ -27,7 +27,7 @@ const HeartListenCount = (props: Props) => {
         text={`${liked ? liked.length : 0}`}
         size={12}
         line={1}
-        icon={<AntDesign name="star" size={14} color={color} />}
+        icon={<AntDesign name="star" size={14} color={appColors.yellow4} />}
       />
       <SpaceComponent width={8} />
       <TextComponent

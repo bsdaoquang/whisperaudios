@@ -14,10 +14,6 @@ import TopRatingBooks from '../../components/TopRatingBooks';
 import {userSelector} from '../../redux/reducers/userReducer';
 import Categories from './components/Categories';
 import TopLikedSwiper from './components/TopLikedSwiper';
-import ButtonComponent from '../../components/ButtonComponent';
-
-import firestore from '@react-native-firebase/firestore';
-import {appInfos} from '../../constants/appInfos';
 
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);

@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 
 interface Props {
   authorId?: string;
-  onPress?: boolean;
+  onPress?: () => void;
   author?: Author;
   textStyle?: StyleProp<TextStyle>;
 }

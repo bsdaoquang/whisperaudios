@@ -18,6 +18,7 @@ import {showToast} from '../utils/showToast';
 import {RowComponent} from './RowComponent';
 import TextComponent from './TextComponent';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SectionComponent from './SectionComponent';
 const LoginComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -70,7 +71,7 @@ const LoginComponent = () => {
           size={16}
           flex={1}
           text="Google"
-          font={fontFamilies.semiBole}
+          font={fontFamilies.medium}
           color={appColors.white}
         />
       </RowComponent>
@@ -95,7 +96,7 @@ const LoginComponent = () => {
           size={16}
           flex={1}
           text="Facebook"
-          font={fontFamilies.semiBole}
+          font={fontFamilies.medium}
           color={appColors.white}
         />
       </RowComponent>
@@ -146,6 +147,7 @@ const LoginComponent = () => {
           {i18n.t('our')}
         </Text>
       </RowComponent>
+
       <LoadingModal visible={isLoading} />
     </View>
   );

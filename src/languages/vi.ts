@@ -35,4 +35,8 @@ export const vi = {
   searchOnHistory: 'Tìm kiếm trong lịch sử',
   dataNotFound: 'Không tìm thấy dữ liệu',
   audioLiked: 'Audios đã thích',
+  yourAudios: 'Audios của bạn',
+  supportAndHelp: 'Trợ giúp và phản hồi',
+  logout: 'Đăng xuất',
+  cancel: 'Huỷ',
 };

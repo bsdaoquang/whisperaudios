@@ -103,6 +103,7 @@ const ListeningCardItem = ({
           <TextComponent
             text={GetTime.getFullTimeString(item.date, true)}
             flex={1}
+            size={12}
           />
           <LinkComponent text="Nghe tiếp" onPress={handleAddPlaylist} />
         </View>

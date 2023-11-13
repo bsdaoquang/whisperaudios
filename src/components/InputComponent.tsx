@@ -73,30 +73,43 @@ export const InputCompoment = (props: Props) => {
     numberOfLine,
   } = props;
 
+  const style: StyleProp<ViewStyle> = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: borderRadius ?? 10,
+    borderColor: isFocus
+      ? appColors.gray3
+      : helpText
+      ? appColors.danger
+      : appColors.white,
+    borderWidth: isFocus || helpText ? 1 : 0,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    minHeight: height ?? 42,
+    marginTop: 5,
+  };
   const theme = useColorScheme();
   const inputContainerStyle: StyleProp<ViewStyle> =
     theme === 'light'
-      ? {}
+      ? {
+          ...style,
+          backgroundColor: color ?? appColors.gray2,
+        }
       : {
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderRadius: borderRadius ?? 10,
-          borderColor: isFocus
-            ? appColors.gray3
-            : helpText
-            ? appColors.danger
-            : appColors.white,
-          borderWidth: isFocus || helpText ? 1 : 0,
-          paddingHorizontal: 10,
-          paddingVertical: 10,
-          minHeight: height ?? 42,
-          marginTop: 5,
+          ...style,
           backgroundColor: color ?? appColors.dark1,
         };
 
   const inputStyle: StyleProp<TextStyle> =
     theme === 'light'
-      ? {}
+      ? {
+          flex: 1,
+          margin: 0,
+          padding: 0,
+          color: appColors.dark,
+          fontFamily: fontFamilies.regular,
+          marginLeft: prefix ? 10 : 0,
+        }
       : {
           flex: 1,
           margin: 0,

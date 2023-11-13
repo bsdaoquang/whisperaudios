@@ -160,14 +160,14 @@ const LoginScreen = () => {
               <TextComponent
                 text={errorText}
                 color={appColors.danger}
-                flex={1}
+                flex={0}
                 line={2}
                 styles={{marginBottom: 16}}
               />
             )}
             <ButtonComponent
               text={i18n.t('login')}
-              textStyle={{textTransform: 'uppercase'}}
+              textStyle={{textTransform: 'uppercase', color: appColors.white}}
               onPress={handleLoginWithEmailAndPass}
               disable={isLogin}
             />
@@ -178,6 +178,7 @@ const LoginScreen = () => {
                 marginTop: 12,
               }}>
               <TextComponent
+                flex={0}
                 text="Bạn chưa có tài khoản? "
                 color={appColors.gray}
               />

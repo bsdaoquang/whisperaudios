@@ -65,7 +65,7 @@ const Container = (props: Props) => {
                 size={20}
                 text={title}
                 line={1}
-                styles={{lineHeight: 22}}
+                styles={{lineHeight: 24}}
               />
             </View>
           )}

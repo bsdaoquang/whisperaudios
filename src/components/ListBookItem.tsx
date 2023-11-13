@@ -16,6 +16,7 @@ import SpaceComponent from './SpaceComponent';
 import TitleComponent from './TitleComponent';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../constants/appInfos';
+import {appColors} from '../constants/appColors';
 
 interface Props {
   book: Book;
@@ -30,7 +31,7 @@ const ListBookItem = (props: Props) => {
   const [listenCount, setListenCount] = useState(0);
 
   const theme = useColorScheme();
-  const styleTheme = theme === 'dark' ? darkStyles.card : lightStyles.card;
+  const styleTheme = theme === 'light' ? darkStyles.card : lightStyles.card;
 
   useEffect(() => {
     getListeningCount();
@@ -51,7 +52,17 @@ const ListBookItem = (props: Props) => {
     <RowComponent
       key={book.key}
       onPress={() => navigation.navigate('AudioDetail', {audio: book})}
-      styles={[globalStyles.card, styleTheme]}>
+      styles={[
+        globalStyles.shadow,
+        {
+          marginHorizontal: 16,
+          marginBottom: 16,
+          padding: 8,
+          borderRadius: 12,
+          backgroundColor:
+            theme === 'light' ? appColors.white : appColors.dark1,
+        },
+      ]}>
       <RowComponent
         styles={{
           alignItems: 'flex-start',
