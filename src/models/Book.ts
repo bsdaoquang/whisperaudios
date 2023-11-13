@@ -71,6 +71,7 @@ export interface Listening {
   chap: number;
   audioId: string;
   uid: string;
+  slug: string;
 }
 
 export enum Fillter {

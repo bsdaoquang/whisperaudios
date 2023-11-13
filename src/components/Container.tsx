@@ -51,7 +51,7 @@ const Container = (props: Props) => {
               onPress={() => navigation.goBack()}
               style={{paddingRight: 16}}>
               <ArrowLeft2
-                size={20}
+                size={24}
                 color={theme === 'dark' ? appColors.light : appColors.dark}
               />
             </TouchableOpacity>
@@ -60,12 +60,9 @@ const Container = (props: Props) => {
           )}
 
           {title && (
-            <TitleComponent
-              text={title}
-              line={1}
-              flex={1}
-              styles={{textAlign: 'center'}}
-            />
+            <View style={{flex: 1}}>
+              <TitleComponent text={title} line={1} />
+            </View>
           )}
 
           {search && search}

@@ -32,4 +32,6 @@ export const vi = {
   theme: 'Giao diện',
   yourListenings: 'Bạn đang nghe',
   history: 'Lịch sử nghe',
+  searchOnHistory: 'Tìm kiếm trong lịch sử',
+  dataNotFound: 'Không tìm thấy dữ liệu',
 };

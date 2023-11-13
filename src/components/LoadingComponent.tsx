@@ -5,6 +5,7 @@ import {ActivityIndicator, Text, View, useColorScheme} from 'react-native';
 import {fontFamilies} from '../constants/fontFamilies';
 import SpaceComponent from './SpaceComponent';
 import {appColors} from '../constants/appColors';
+import TextComponent from './TextComponent';
 
 interface Props {
   isLoading: boolean;
@@ -16,6 +17,8 @@ export const LoadingComponent = (props: Props) => {
   const {isLoading, value, message} = props;
 
   const theme = useColorScheme();
+
+  console.log(isLoading, value);
 
   return (
     <View>
@@ -37,14 +40,13 @@ export const LoadingComponent = (props: Props) => {
       ) : (
         <>
           {!isLoading && value === 0 && (
-            <Text
-              style={{
-                color: theme === 'light' ? appColors.gray : appColors.white,
+            <TextComponent
+              text={message ? message : 'Không tìm thấy dữ liệu'}
+              styles={{
                 textAlign: 'center',
                 fontFamily: fontFamilies.regular,
-              }}>
-              {message ? message : 'Không tìm thấy dữ liệu'}
-            </Text>
+              }}
+            />
           )}
         </>
       )}
