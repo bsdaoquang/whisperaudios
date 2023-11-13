@@ -34,4 +34,5 @@ export const vi = {
   history: 'Lịch sử nghe',
   searchOnHistory: 'Tìm kiếm trong lịch sử',
   dataNotFound: 'Không tìm thấy dữ liệu',
+  audioLiked: 'Audios đã thích',
 };

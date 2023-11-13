@@ -61,7 +61,7 @@ const Container = (props: Props) => {
 
           {title && (
             <View style={{flex: 1}}>
-              <TitleComponent text={title} line={1} />
+              <TitleComponent text={title} line={1} styles={{lineHeight: 24}} />
             </View>
           )}
 

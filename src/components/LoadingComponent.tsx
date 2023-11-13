@@ -18,8 +18,6 @@ export const LoadingComponent = (props: Props) => {
 
   const theme = useColorScheme();
 
-  console.log(isLoading, value);
-
   return (
     <View>
       {isLoading ? (

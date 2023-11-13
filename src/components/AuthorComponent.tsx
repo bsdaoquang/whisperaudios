@@ -57,6 +57,7 @@ const AuthorComponent = (props: Props) => {
           <TextComponent
             styles={[textStyle]}
             text={authorDetail.name}
+            size={12}
             color={onPress ? appColors.link : undefined}
           />
         </RowComponent>

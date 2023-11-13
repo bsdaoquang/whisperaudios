@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, View, useColorScheme} from 'react-native';
 import {useSelector} from 'react-redux';
 import Container from '../../components/Container';
 import ListeningCardItem from '../../components/ListeningCardItem';
@@ -10,16 +10,19 @@ import {i18n} from '../../languages/i18n';
 import {Listening} from '../../models/Book';
 import {userSelector} from '../../redux/reducers/userReducer';
 import {InputCompoment} from '../../components/InputComponent';
-import {SearchNormal, SearchNormal1} from 'iconsax-react-native';
+import {More, SearchNormal, SearchNormal1} from 'iconsax-react-native';
 import {appColors} from '../../constants/appColors';
 import {replaceName} from '../../utils/replaceName';
 import TextComponent from '../../components/TextComponent';
+import ButtonIcon from '../../components/ButtonIcon';
 
 const ListeningsScreen = () => {
   const [listenings, setListenings] = useState<Listening[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchKey, setSearchKey] = useState('');
   const [results, setResults] = useState<Listening[]>([]);
+
+  const theme = useColorScheme();
 
   const user = useSelector(userSelector);
   useEffect(() => {
@@ -79,7 +82,20 @@ const ListeningsScreen = () => {
   );
 
   return (
-    <Container back title={i18n.t('history')}>
+    <Container
+      back
+      title={i18n.t('history')}
+      right={
+        <ButtonIcon
+          icon={
+            <More
+              size={24}
+              color={theme === 'dark' ? appColors.white : appColors.text}
+            />
+          }
+          onPress={() => {}}
+        />
+      }>
       <View style={{paddingHorizontal: 16}}>
         <InputCompoment
           prefix={<SearchNormal1 size={20} color={appColors.gray} />}

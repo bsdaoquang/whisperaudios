@@ -23,13 +23,14 @@ import TitleComponent from '../../components/TitleComponent';
 import UserComponent from '../../components/UserComponent';
 import {appColors} from '../../constants/appColors';
 import {appInfos} from '../../constants/appInfos';
-import {Listening} from '../../models/Book';
+import {Book, Listening} from '../../models/Book';
 import {removeUser, userSelector} from '../../redux/reducers/userReducer';
 import {darkStyles} from '../../styles/darkStyles';
 import {lightStyles} from '../../styles/lightStyles';
 import TabbarComponent from '../../components/TabbarComponent';
 import {i18n} from '../../languages/i18n';
 import ListeningCardItem from '../../components/ListeningCardItem';
+import ListBookItem from '../../components/ListBookItem';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -40,9 +41,13 @@ const Profile = () => {
   const user = useSelector(userSelector);
 
   const [listenings, setListenings] = useState<Listening[]>([]);
+  const [likedAudios, setLikedAudios] = useState<Book[]>([]);
 
   useEffect(() => {
-    user.uid && getNewListenings();
+    if (user.uid) {
+      getNewListenings();
+      getLikedByUid();
+    }
   }, [user.uid]);
 
   const getNewListenings = () => {
@@ -68,6 +73,26 @@ const Profile = () => {
       });
   };
 
+  const getLikedByUid = () => {
+    firestore()
+      .collection(appInfos.databaseNames.audios)
+      .where('liked', 'array-contains', user.uid)
+      .limit(10)
+      .get()
+      .then(snap => {
+        if (snap.empty) {
+          console.log('Liked not found');
+        } else {
+          const items: Book[] = [];
+          snap.forEach((item: any) => {
+            items.push({key: item.id, ...item.data()});
+          });
+
+          setLikedAudios(items);
+        }
+      });
+  };
+
   const handleSignOut = async () => {
     await GoogleSignin.signOut();
     await auth()
@@ -79,7 +104,7 @@ const Profile = () => {
   };
 
   return (
-    <Container>
+    <Container scroll>
       <SectionComponent styles={{top: 20}}>
         <RowComponent styles={{justifyContent: 'flex-end'}}>
           <ButtonIcon
@@ -113,7 +138,7 @@ const Profile = () => {
           <ArrowRight2 size={22} color={textColor} />
         </RowComponent>
       </SectionComponent>
-      <View>
+      <View style={{marginBottom: 18}}>
         <TabbarComponent
           title={i18n.t('yourListenings')}
           seemore
@@ -133,6 +158,16 @@ const Profile = () => {
             />
           )}
         />
+      </View>
+      <View>
+        <TabbarComponent
+          title={i18n.t('audioLiked')}
+          seemore
+          onPress={() => navigation.navigate('ListeningsScreen')}
+        />
+        {likedAudios.map(item => (
+          <ListBookItem book={item} key={item.key} />
+        ))}
       </View>
     </Container>
   );
