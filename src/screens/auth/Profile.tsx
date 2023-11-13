@@ -5,7 +5,12 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useNavigation} from '@react-navigation/native';
-import {Notification, SearchNormal1, Setting2} from 'iconsax-react-native';
+import {
+  Notification,
+  SearchNormal1,
+  Setting2,
+  UserEdit,
+} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
@@ -171,7 +176,7 @@ const Profile = () => {
           />
         </RowComponent>
       </SectionComponent>
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
         <SectionComponent styles={{marginTop: 12}}>
           <RowComponent>
             <UserComponent uid={user.uid} size={48} />
@@ -179,6 +184,15 @@ const Profile = () => {
               <TitleComponent text={user.displayName} size={20} line={1} />
               <TextComponent text={user.email} flex={1} line={1} />
             </View>
+            <ButtonIcon
+              icon={
+                <UserEdit
+                  size={26}
+                  color={theme === 'light' ? appColors.primary : appColors.gray}
+                />
+              }
+              onPress={() => navigation.navigate('EditProfile')}
+            />
           </RowComponent>
         </SectionComponent>
         <View style={{marginBottom: 18}}>

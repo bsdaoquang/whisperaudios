@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "^3.0.7",
     "@kolking/react-native-rating": "^1.1.2",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-community/slider": "^4.4.3",
@@ -30,6 +31,8 @@
     "react-native-fbsdk-next": "^12.1.0",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.13.3",
+    "react-native-image-crop-picker": "^0.40.2",
+    "react-native-image-picker": "^7.0.2",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-localize": "^3.0.2",
     "react-native-modalize": "^2.1.1",

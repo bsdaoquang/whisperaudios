@@ -39,4 +39,6 @@ export const vi = {
   supportAndHelp: 'Trợ giúp và phản hồi',
   logout: 'Đăng xuất',
   cancel: 'Huỷ',
+  updateProfile: 'Cập nhật tài khoản',
+  updatePhoto: 'Cập nhật ảnh đại diện',
 };

@@ -9,6 +9,7 @@ import NotificationsScreen from '../screens/auth/NotificationsScreen';
 import SettingScreen from '../screens/auth/SettingScreen';
 import ListeningsScreen from '../screens/auth/ListeningsScreen';
 import LikedAudios from '../screens/auth/LikedAudios';
+import EditProfile from '../screens/auth/EditProfile';
 
 const ProfileNavigator = () => {
   const AuthStack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ const ProfileNavigator = () => {
       <AuthStack.Screen name="SettingScreen" component={SettingScreen} />
       <AuthStack.Screen name="ListeningsScreen" component={ListeningsScreen} />
       <AuthStack.Screen name="LikedAudios" component={LikedAudios} />
+      <AuthStack.Screen name="EditProfile" component={EditProfile} />
       <AuthStack.Screen
         name="NotificationsScreen"
         component={NotificationsScreen}
