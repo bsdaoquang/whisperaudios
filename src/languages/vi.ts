@@ -27,4 +27,7 @@ export const vi = {
   reComfirm: 'Nhập lại mật khẩu',
   listening: 'Bạn đang nghe',
   agree: 'Đồng ý',
+  setting: 'Cài đặt',
+  language: 'Ngôn ngữ',
+  theme: 'Giao diện',
 };

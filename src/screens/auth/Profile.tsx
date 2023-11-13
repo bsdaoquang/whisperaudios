@@ -41,7 +41,7 @@ const Profile = () => {
           <ButtonIcon
             styles={{paddingHorizontal: 8}}
             icon={<Notification size={22} color={textColor} />}
-            onPress={() => {}}
+            onPress={() => navigation.navigate('NotificationsScreen')}
           />
           <ButtonIcon
             styles={{paddingHorizontal: 8}}
@@ -55,7 +55,7 @@ const Profile = () => {
           <ButtonIcon
             styles={{paddingHorizontal: 8}}
             icon={<Setting2 size={22} color={textColor} />}
-            onPress={() => {}}
+            onPress={() => navigation.navigate('SettingScreen')}
           />
         </RowComponent>
       </SectionComponent>

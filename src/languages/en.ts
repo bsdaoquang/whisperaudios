@@ -27,4 +27,7 @@ export const en = {
   reComfirm: 'Comfirm password',
   listening: 'Listening',
   agree: 'Agree',
+  setting: 'Setting',
+  language: 'Language',
+  theme: 'Theme',
 };

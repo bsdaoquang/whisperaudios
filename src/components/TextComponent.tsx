@@ -27,7 +27,7 @@ const TextComponent = (props: Props) => {
   const textColor = theme === 'light' ? appColors.text : appColors.light;
 
   return (
-    <RowComponent>
+    <RowComponent styles={{flex: flex ?? 0}}>
       {icon && icon}
       <SpaceComponent width={icon ? 4 : 0} />
       <Text
@@ -35,8 +35,8 @@ const TextComponent = (props: Props) => {
         style={[
           textStyle,
           {
-            fontSize: size ?? 14,
             flex: flex ?? 0,
+            fontSize: size ?? 14,
             fontFamily: font ?? fontFamilies.regular,
             color: color ?? textColor,
           },
