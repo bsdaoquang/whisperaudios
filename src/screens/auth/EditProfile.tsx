@@ -1,19 +1,42 @@
+import auth from '@react-native-firebase/auth';
 import {Camera} from 'iconsax-react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useSelector} from 'react-redux';
 import Container from '../../components/Container';
+import InputEditComponent from '../../components/InputEditComponent';
 import {RowComponent} from '../../components/RowComponent';
 import SectionComponent from '../../components/SectionComponent';
 import {appColors} from '../../constants/appColors';
 import {i18n} from '../../languages/i18n';
-import {userSelector} from '../../redux/reducers/userReducer';
 import ModalChoiceCamera from '../../modals/ModalChoiceCamera';
+import {useDispatch} from 'react-redux';
+import {handleAuthentication} from '../../utils/handleAuthentication';
+import {showToast} from '../../utils/showToast';
+import LoadingModal from '../../modals/LoadingModal';
 
 const EditProfile = ({navigation}: any) => {
-  const user = useSelector(userSelector);
   const [isVisibleModalCamera, setIsVisibleModalCamera] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const currentUser = auth().currentUser;
+  const dispatch = useDispatch();
+
+  const handleUpdateProfile = async (
+    type: 'displayName' | 'phoneNumber',
+    val: string,
+  ) => {
+    const data: any = {};
+    setIsLoading(true);
+    data[`${type}`] = val;
+
+    currentUser?.updateProfile(data);
+    const user = auth().currentUser;
+
+    await handleAuthentication.UpdateUser(user, dispatch).then(() => {
+      showToast('Đã cập nhật thông tin tài khoản');
+      setIsLoading(false);
+    });
+  };
 
   return (
     <Container back title={i18n.t('updateProfile')}>
@@ -29,8 +52,8 @@ const EditProfile = ({navigation}: any) => {
             <View>
               <FastImage
                 source={
-                  user && user.photoURL
-                    ? {uri: user.photoURL}
+                  currentUser && currentUser.photoURL
+                    ? {uri: currentUser.photoURL}
                     : require('../../../assets/images/default-avatar.webp')
                 }
                 style={{
@@ -58,11 +81,20 @@ const EditProfile = ({navigation}: any) => {
           </View>
         </RowComponent>
       </SectionComponent>
+      {currentUser && (
+        <SectionComponent>
+          <InputEditComponent
+            val={currentUser.displayName ?? ''}
+            onFinish={newVal => handleUpdateProfile('displayName', newVal)}
+            placeHolder="Display name"
+          />
+        </SectionComponent>
+      )}
       <ModalChoiceCamera
         isVisible={isVisibleModalCamera}
         onClose={() => setIsVisibleModalCamera(false)}
-        onSelectedFile={file => console.log(file)}
       />
+      <LoadingModal visible={isLoading} />
     </Container>
   );
 };

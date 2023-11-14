@@ -23,15 +23,10 @@ const UserComponent = (props: Props) => {
   const [profile, setProfile] = useState<UserModel>();
 
   useEffect(() => {
-    getProfileDetail();
-  }, [uid]);
-
-  const getProfileDetail = async () => {
-    await firestore()
+    firestore()
       .collection(appInfos.databaseNames.users)
       .doc(uid)
-      .get()
-      .then((snap: any) => {
+      .onSnapshot((snap: any) => {
         if (snap.exists) {
           setProfile({
             uid,
@@ -41,7 +36,7 @@ const UserComponent = (props: Props) => {
           console.log('user not found');
         }
       });
-  };
+  }, [uid]);
 
   return isTitle ? (
     <RowComponent>

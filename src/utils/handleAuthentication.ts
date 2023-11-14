@@ -6,6 +6,7 @@ import firestore from '@react-native-firebase/firestore';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager} from 'react-native-fbsdk-next';
 import {appInfos} from '../constants/appInfos';
+import {addUser} from '../redux/reducers/userReducer';
 
 export class handleAuthentication {
   static Register = async (data: {email: string; pass: string}) => {
@@ -106,7 +107,7 @@ export class handleAuthentication {
     // }
   };
 
-  static UpdateUser = async (user: any, dispatch: any) => {
+  static UpdateUser = async (user: any, dispatch?: any) => {
     const data: any = {
       // metaData: user.metadata,
       displayName: user.displayName
@@ -116,12 +117,14 @@ export class handleAuthentication {
         : '',
       email: user.email ?? '',
       mota: '',
+      uid: user.uid,
       phoneNumber: user.phoneNumber ?? '',
       photoURL: user.photoURL ?? '',
       emailVerified: user.emailVerified,
     };
 
     await AsyncStorage.setItem(appInfos.localNames.uid, user.uid);
+    dispatch && dispatch(addUser(data));
 
     try {
       await firestore()
@@ -135,51 +138,4 @@ export class handleAuthentication {
       console.log(`Không thể cập nhật thông tin user: ${error}`);
     }
   };
-
-  // 	static Logout = async () => {
-  // 		try {
-  // 			await auth()
-  // 				.signOut()
-  // 				.then(() => {
-  // 					return 'Logout';
-  // 				});
-  // 		} catch (error) {
-  // 			return error;
-  // 		}
-  // 	};
-
-  // 	static FogetPass = async (email: string) => {
-  // 		try {
-  // 			// Kiểm tra xem có email này hay không
-  // 			const api = `${apis.users}.json?orderBy="email"&equalTo="${email}"`;
-  // 			const res: any = await getData.getData(api);
-
-  // 			if (res && res.length > 0) {
-  // 				// return 'OK';
-  // 				await auth()
-  // 					.sendPasswordResetEmail(email)
-  // 					.then(() => {
-  // 						Alert.alert(
-  // 							'Quên mật khẩu',
-  // 							`Một email thay đổi mật khẩu đã được gửi đến ${email}, vui lòng kiểm tra và làm theo hướng dẫn để đổi mật khẩu\n\nNếu không nhận được, vui lòng kiểm tra trong hộp thư spam `,
-  // 							[
-  // 								{
-  // 									text: 'Đến hộp thư',
-  // 									onPress: () => Linking.openURL('https://mail.google.com'),
-  // 								},
-  // 							]
-  // 						);
-
-  // 						return 'OK';
-  // 					})
-  // 					.catch(() => {
-  // 						return 'Error';
-  // 					});
-  // 			} else {
-  // 				return 'Error';
-  // 			}
-  // 		} catch (error) {
-  // 			return error;
-  // 		}
-  // 	};
 }

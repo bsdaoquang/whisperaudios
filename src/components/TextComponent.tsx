@@ -27,14 +27,14 @@ const TextComponent = (props: Props) => {
   const textColor = theme === 'light' ? appColors.text : appColors.light;
 
   return (
-    <RowComponent styles={{flex: flex ?? 0}}>
+    <RowComponent styles={{flex: flex ?? 0, justifyContent: 'flex-start'}}>
       {icon && icon}
-      <SpaceComponent width={icon ? 4 : 0} />
       <Text
         numberOfLines={line ?? undefined}
         style={[
           textStyle,
           {
+            marginLeft: icon ? 4 : 0,
             flex: flex ?? 0,
             fontSize: size ?? 14,
             fontFamily: font ?? fontFamilies.regular,

@@ -1,28 +1,34 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef} from 'react';
+import {Camera} from 'iconsax-react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  ActionSheetIOS,
   ImageProps,
-  Platform,
+  PermissionsAndroid,
   View,
   useColorScheme,
 } from 'react-native';
 import ImageCropPicker, {ImageOrVideo} from 'react-native-image-crop-picker';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
-import {RowComponent} from '../components/RowComponent';
-import TextComponent from '../components/TextComponent';
-import {i18n} from '../languages/i18n';
-import {appColors} from '../constants/appColors';
-import TitleComponent from '../components/TitleComponent';
-import ButtonIcon from '../components/ButtonIcon';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ButtonIcon from '../components/ButtonIcon';
+import {RowComponent} from '../components/RowComponent';
+import SpaceComponent from '../components/SpaceComponent';
+import TextComponent from '../components/TextComponent';
+import TitleComponent from '../components/TitleComponent';
+import {appColors} from '../constants/appColors';
+import storage from '@react-native-firebase/storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {userSelector} from '../redux/reducers/userReducer';
+import {showToast} from '../utils/showToast';
+import LoadingModal from './LoadingModal';
+import auth from '@react-native-firebase/auth';
+import {handleAuthentication} from '../utils/handleAuthentication';
 
 interface Props {
   isVisible: boolean;
   onClose: () => void;
-  onSelectedFile: (selectedFile: any) => void;
   title?: string;
 }
 
@@ -30,118 +36,86 @@ interface AvatarProps extends ImageProps {
   onChange?: (image: ImageOrVideo) => void;
 }
 
-const menuUpdateProfile = ['Đóng', 'Chụp ảnh', 'Chọn ảnh từ album'];
-
 const ModalChoiceCamera = (props: Props, avatarProps: AvatarProps) => {
-  const {isVisible, onClose, onSelectedFile, title} = props;
+  const {isVisible, onClose, title} = props;
+
+  const [isUploadFile, setIsUploadFile] = useState(false);
 
   const modalizeRef = useRef<Modalize>();
   const navigation: any = useNavigation();
   const theme = useColorScheme();
+  const dispatch = useDispatch();
+
+  const user = useSelector(userSelector);
+  const currentUser = auth().currentUser;
 
   useEffect(() => {
     if (isVisible) {
-      Platform.OS === 'android'
-        ? modalizeRef.current?.open()
-        : ActionSheetIOS.showActionSheetWithOptions(
-            {
-              options: menuUpdateProfile,
-              cancelButtonIndex: 0,
-              userInterfaceStyle: 'light',
-              title: 'Cập nhật ảnh đại diện',
-            },
-
-            buttonIndex => handleChoiceUpdateImage(buttonIndex),
-          );
+      modalizeRef.current?.open();
     } else {
-      Platform.OS === 'android' && modalizeRef.current?.close();
+      modalizeRef.current?.close();
     }
   }, [isVisible]);
 
-  const handleChoiceUpdateImage = (index: number) => {
-    // switch (index) {
-    //   case 0:
-    //     Platform.OS === 'android' ? modalize.current?.close() : onClose();
-    //     break;
-    //   case 1:
-    //     photoId
-    //       ? navigation.navigate('ImageViewDetail', {
-    //           fileId: photoId,
-    //           title: '',
-    //         })
-    //       : showToast('');
-    //     break;
-    //   case 2:
-    //     handlePickerImage('camera');
-    //     break;
-    //   case 3:
-    //     handlePickerImage('library');
-    //     break;
-    // }
+  const optionPicker = {
+    width: 300,
+    height: 300,
+    cropping: true,
   };
 
   const handlePickerImage = async (target: 'camera' | 'library') => {
+    const cameraGranded = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+
     onClose();
     if (target === 'camera') {
+      if (cameraGranded) {
+        ImageCropPicker.openCamera({...optionPicker, mediaType: 'photo'})
+          .then((image: ImageOrVideo) => {
+            handleUploadImage(image);
+          })
+          .catch(error => console.log('Lỗi', error.toString()));
+      } else {
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+      }
       //request permision
-      ImageCropPicker.openCamera({
-        width: 300,
-        height: 300,
-        cropping: true,
-      })
-        .then((image: ImageOrVideo) => {
-          const file = {
-            uri: image.path,
-            name: 'image',
-            type: image.mime,
-            size: image.size,
-          };
-
-          // handleUploadFile(file);
-          handleChangeImage(file);
-          avatarProps.onChange?.(image);
-        })
-        .catch(error => console.log('Lỗi', error.toString()));
     } else {
-      await launchImageLibrary({mediaType: 'photo'}, result => {
-        if (result && result.assets) {
-          const file = result.assets[0];
-          if (file && file.uri) {
-            const newFile = {
-              uri: file.uri,
-              name: file.fileName ?? '',
-              type: file.type as string,
-              size: file.fileSize ?? 0,
-            };
-
-            handleChangeImage(newFile);
-          }
-        }
+      await ImageCropPicker.openPicker({
+        ...optionPicker,
+        mediaType: 'photo',
+      }).then((image: ImageOrVideo) => {
+        handleUploadImage(image);
       });
     }
   };
 
-  const handleChangeImage = async (file: any) => {
-    ImageCropPicker.openCropper({
-      width: 300,
-      height: 300,
-      cropping: true,
-      mediaType: 'photo',
-      path: file.uri,
-    })
-      .then((image: ImageOrVideo) => {
-        const file = {
-          uri: image.path,
-          name: `image-${image.modificationDate}.${image.mime.split('/')[1]}`,
-          type: image.mime,
-          size: image.size,
-        };
+  const handleUploadImage = async (file: ImageOrVideo) => {
+    setIsUploadFile(true);
+    const filePath = `avatars/uid-${user.uid}-${Date.now()}.${
+      file.path.split('.')[file.path.split('.').length - 1]
+    }`;
+    const res = await storage().ref(filePath).putFile(file.path);
+    storage()
+      .ref(filePath)
+      .getDownloadURL()
+      .then(async url => {
+        await currentUser
+          ?.updateProfile({
+            photoURL: url,
+          })
+          .then(() => {
+            handleAuthentication.UpdateUser(auth().currentUser, dispatch);
 
-        // handleUploadFile(file);
-        onSelectedFile(file);
-        avatarProps.onChange?.(image);
+            setIsUploadFile(false);
+            modalizeRef.current?.close();
+          });
       })
-      .catch(error => console.log('Lỗi', error.toString()));
+      .catch(error => {
+        showToast('Không thể tải file lên');
+        setIsUploadFile(false);
+        modalizeRef.current?.close();
+      });
   };
 
   return (
@@ -186,45 +160,27 @@ const ModalChoiceCamera = (props: Props, avatarProps: AvatarProps) => {
               onPress={() => modalizeRef.current?.close()}
             />
           </RowComponent>
-          {menuUpdateProfile.map(
-            (item, index) =>
-              index > 0 && (
-                <RowComponent
-                  styles={{marginVertical: 12}}
-                  key={`item${index}`}>
-                  <TextComponent text={item} flex={1} />
-                </RowComponent>
-              ),
-          )}
+          <RowComponent
+            onPress={() => handlePickerImage('camera')}
+            styles={{marginVertical: 12}}>
+            <Camera size={22} color={appColors.gray} />
+            <SpaceComponent width={12} />
+            <TextComponent text={'Chụp ảnh'} flex={1} size={16} />
+          </RowComponent>
+          <RowComponent
+            onPress={() => handlePickerImage('library')}
+            styles={{marginVertical: 12}}>
+            <MaterialCommunityIcons
+              name="folder-multiple-image"
+              size={22}
+              color={appColors.gray}
+            />
+            <SpaceComponent width={12} />
+            <TextComponent text={'Chọn ảnh từ thư viện'} flex={1} size={16} />
+          </RowComponent>
         </View>
       </Modalize>
-      {/* <Modalize
-        ref={modalize}
-        adjustToContentHeight
-        avoidKeyboardLikeIOS
-        handlePosition="inside">
-        <View
-          style={{
-            padding: 16,
-            marginBottom: 20,
-          }}>
-          <View>
-            {menuUpdateProfile.map(
-              (item, index) =>
-                index > 0 && (
-                  <RowComponent key={`item${index}`}>
-                    <TextComponent text={item} flex={1} />
-                  </RowComponent>
-                  // <ListMenuItem
-                  //   key={`item${index}`}
-                  //   title={item}
-                  //   onPress={() => handleChoiceUpdateImage(index)}
-                  // />
-                ),
-            )}
-          </View>
-        </View>
-      </Modalize> */}
+      <LoadingModal visible={isUploadFile} />
     </Portal>
   );
 };
