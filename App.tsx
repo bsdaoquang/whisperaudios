@@ -1,4 +1,3 @@
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {NativeEventEmitter, StatusBar} from 'react-native';
@@ -10,7 +9,6 @@ import {Provider} from 'react-redux';
 import {i18n} from './src/languages/i18n';
 import store from './src/redux/store';
 import Router from './src/routers/Router';
-import _BackgroundTimer from 'react-native-background-timer';
 
 const eventEmitter = new NativeEventEmitter();
 

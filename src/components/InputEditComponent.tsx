@@ -1,4 +1,11 @@
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  KeyboardTypeOptions,
+  KeyboardType,
+} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import TextComponent from './TextComponent';
 import {RowComponent} from './RowComponent';
@@ -7,16 +14,35 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {appColors} from '../constants/appColors';
 import {fontFamilies} from '../constants/fontFamilies';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TitleComponent from './TitleComponent';
 
 interface Props {
   val: string;
   title?: string;
-  onFinish: (newVal: string) => void;
+  onFinish?: (newVal: string) => void;
   placeHolder?: string;
+  type?:
+    | 'default'
+    | 'number-pad'
+    | 'decimal-pad'
+    | 'numeric'
+    | 'email-address'
+    | 'phone-pad'
+    | 'url';
+  inputMode?:
+    | 'none'
+    | 'text'
+    | 'decimal'
+    | 'numeric'
+    | 'tel'
+    | 'search'
+    | 'email'
+    | 'url';
+  isEdit?: boolean;
 }
 
 const InputEditComponent = (props: Props) => {
-  const {val, title, onFinish, placeHolder} = props;
+  const {val, title, onFinish, placeHolder, type, inputMode, isEdit} = props;
 
   const [value, setValue] = useState(val);
   const [isEneable, setIsEneable] = useState(false);
@@ -33,44 +59,55 @@ const InputEditComponent = (props: Props) => {
   }, [value]);
 
   return (
-    <View>
+    <View style={{marginBottom: 16}}>
       {title && <TextComponent text={title} flex={0} />}
-      <RowComponent>
-        <TextInput
-          ref={inputRef}
-          placeholder={placeHolder ? placeHolder : title ? title : ''}
-          value={value}
-          onChangeText={val => setValue(val)}
-          style={styles.input}
-          editable={isEneable}
-        />
+      {isEdit ? (
+        <RowComponent>
+          <TextInput
+            ref={inputRef}
+            placeholder={placeHolder ? placeHolder : title ? title : ''}
+            value={value}
+            onChangeText={val => setValue(val)}
+            style={styles.input}
+            keyboardType={type ?? 'default'}
+            inputMode={inputMode ?? 'none'}
+            editable={isEneable}
+          />
 
-        {isEneable ? (
-          <ButtonIcon
-            icon={
-              <MaterialIcons
-                name={value === val ? 'close' : 'save'}
-                size={22}
-                color={value === val ? appColors.error4 : appColors.primary}
-              />
-            }
-            onPress={() =>
-              value !== val ? onFinish(value) : setIsEneable(false)
-            }
-          />
-        ) : (
-          <ButtonIcon
-            icon={
-              <MaterialIcons
-                name={isEneable && value === val ? 'close' : 'edit'}
-                size={22}
-                color={appColors.gray}
-              />
-            }
-            onPress={() => setIsEneable(true)}
-          />
-        )}
-      </RowComponent>
+          {isEneable ? (
+            <ButtonIcon
+              icon={
+                <MaterialIcons
+                  name={value === val ? 'close' : 'save'}
+                  size={22}
+                  color={value === val ? appColors.error4 : appColors.primary}
+                />
+              }
+              onPress={
+                value !== val
+                  ? () => {
+                      setIsEneable(false);
+                      onFinish && onFinish(value);
+                    }
+                  : () => setIsEneable(false)
+              }
+            />
+          ) : (
+            <ButtonIcon
+              icon={
+                <MaterialIcons
+                  name={isEneable && value === val ? 'close' : 'edit'}
+                  size={22}
+                  color={appColors.gray}
+                />
+              }
+              onPress={() => setIsEneable(true)}
+            />
+          )}
+        </RowComponent>
+      ) : (
+        <TitleComponent flex={0} styles={{marginTop: 4}} text={val} />
+      )}
     </View>
   );
 };

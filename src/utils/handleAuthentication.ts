@@ -118,7 +118,6 @@ export class handleAuthentication {
       email: user.email ?? '',
       mota: '',
       uid: user.uid,
-      phoneNumber: user.phoneNumber ?? '',
       photoURL: user.photoURL ?? '',
       emailVerified: user.emailVerified,
     };

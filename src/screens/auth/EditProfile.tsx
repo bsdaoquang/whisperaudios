@@ -1,19 +1,20 @@
 import auth from '@react-native-firebase/auth';
 import {Camera} from 'iconsax-react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {useDispatch, useSelector} from 'react-redux';
 import Container from '../../components/Container';
 import InputEditComponent from '../../components/InputEditComponent';
 import {RowComponent} from '../../components/RowComponent';
 import SectionComponent from '../../components/SectionComponent';
 import {appColors} from '../../constants/appColors';
 import {i18n} from '../../languages/i18n';
+import LoadingModal from '../../modals/LoadingModal';
 import ModalChoiceCamera from '../../modals/ModalChoiceCamera';
-import {useDispatch} from 'react-redux';
+import {userSelector} from '../../redux/reducers/userReducer';
 import {handleAuthentication} from '../../utils/handleAuthentication';
 import {showToast} from '../../utils/showToast';
-import LoadingModal from '../../modals/LoadingModal';
 
 const EditProfile = ({navigation}: any) => {
   const [isVisibleModalCamera, setIsVisibleModalCamera] = useState(false);
@@ -21,23 +22,40 @@ const EditProfile = ({navigation}: any) => {
   const currentUser = auth().currentUser;
   const dispatch = useDispatch();
 
+  const userInfo = useSelector(userSelector);
+
   const handleUpdateProfile = async (
     type: 'displayName' | 'phoneNumber',
     val: string,
   ) => {
-    const data: any = {};
     setIsLoading(true);
-    data[`${type}`] = val;
+    if (type === 'displayName') {
+      const data: any = {};
 
-    currentUser?.updateProfile(data);
-    const user = auth().currentUser;
+      data[`${type}`] = val;
 
-    await handleAuthentication.UpdateUser(user, dispatch).then(() => {
-      showToast('Đã cập nhật thông tin tài khoản');
-      setIsLoading(false);
-    });
+      currentUser?.updateProfile(data).then(async () => {
+        await handleAuthentication
+          .UpdateUser(auth().currentUser, dispatch)
+          .then(() => {
+            showToast('Đã cập nhật thông tin tài khoản');
+            setIsLoading(false);
+          });
+      });
+    } else {
+      const data = {
+        ...userInfo,
+        phoneNumber: val,
+      };
+      await handleAuthentication.UpdateUser(data, dispatch).then(() => {
+        showToast('Đã cập nhật thông tin tài khoản');
+        setIsLoading(false);
+      });
+    }
   };
 
+  console.log(currentUser);
+  console.log(userInfo);
   return (
     <Container back title={i18n.t('updateProfile')}>
       <SectionComponent>
@@ -84,9 +102,24 @@ const EditProfile = ({navigation}: any) => {
       {currentUser && (
         <SectionComponent>
           <InputEditComponent
+            isEdit
             val={currentUser.displayName ?? ''}
             onFinish={newVal => handleUpdateProfile('displayName', newVal)}
             placeHolder="Display name"
+            title="Display name"
+          />
+          <InputEditComponent
+            isEdit
+            val={userInfo.phoneNumber ?? ''}
+            onFinish={newVal => handleUpdateProfile('phoneNumber', newVal)}
+            placeHolder="Số điện thoại"
+            title="Số điện thoại"
+            inputMode="tel"
+          />
+          <InputEditComponent
+            val={currentUser.email ?? ''}
+            title="Email"
+            inputMode="tel"
           />
         </SectionComponent>
       )}
