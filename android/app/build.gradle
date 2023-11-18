@@ -74,9 +74,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.bsdaoquang.whisperaudios"
+    namespace "com.yhocso.whisperaudios"
     defaultConfig {
-        applicationId "com.bsdaoquang.whisperaudios"
+        applicationId "com.yhocso.whisperaudios"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

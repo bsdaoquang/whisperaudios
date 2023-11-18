@@ -474,7 +474,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bsdaoquang.whisperaudios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yhocso.whisperaudios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhisperAudios.app/WhisperAudios";
 			};
@@ -498,7 +498,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bsdaoquang.whisperaudios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yhocso.whisperaudios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhisperAudios.app/WhisperAudios";
 			};
@@ -524,7 +524,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bsdaoquang.whisperaudios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yhocso.whisperaudios";
 				PRODUCT_NAME = "WhisperAudios";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -551,7 +551,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bsdaoquang.whisperaudios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yhocso.whisperaudios";
 				PRODUCT_NAME = "WhisperAudios";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
