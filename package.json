@@ -13,6 +13,7 @@
     "@bam.tech/react-native-image-resizer": "^3.0.7",
     "@kolking/react-native-rating": "^1.1.2",
     "@react-native-async-storage/async-storage": "^1.19.3",
+    "@react-native-clipboard/clipboard": "^1.12.1",
     "@react-native-community/slider": "^4.4.3",
     "@react-native-firebase/app": "^18.5.0",
     "@react-native-firebase/auth": "^18.5.0",

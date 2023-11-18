@@ -14,16 +14,29 @@ import TopRatingBooks from '../../components/TopRatingBooks';
 import {userSelector} from '../../redux/reducers/userReducer';
 import Categories from './components/Categories';
 import TopLikedSwiper from './components/TopLikedSwiper';
+import ButtonComponent from '../../components/ButtonComponent';
+import firestore from '@react-native-firebase/firestore';
+import {appInfos} from '../../constants/appInfos';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);
 
   const handleFixData = () => {
-    // firestore().collection(appInfos.databaseNames.audios).get().then(snap => {
-    //   snap.forEach(item => {
-    //     firestore().collection(appInfos.databaseNames.audios).doc(item.id).update({followers: []})
-    //   })
-    // })
+    firestore()
+      .collection(appInfos.databaseNames.chapters)
+      .get()
+      .then(snap => {
+        const items: any = [];
+        snap.forEach(item => {
+          items.push({
+            key: item.id,
+            ...item.data(),
+          });
+        });
+
+        items.length === snap.size && console.log(JSON.stringify(items));
+      });
   };
 
   return (
@@ -57,7 +70,7 @@ const HomeScreen = ({navigation}: any) => {
       <Categories />
       <TopLikedSwiper />
       <ListeningComponent />
-      {/* <ButtonComponent text="Update" onPress={handleFixData} /> */}
+      <ButtonComponent text="Update" onPress={handleFixData} />
       <LatestBooks />
       <TopAuthorBooks />
       <TopRatingBooks />
