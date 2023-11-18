@@ -13,7 +13,8 @@ import {fontFamilies} from '../../constants/fontFamilies';
 import firestore from '@react-native-firebase/firestore';
 import {i18n} from '../../languages/i18n';
 import {Category} from '../../models';
-import {ArrowRight2} from 'iconsax-react-native';
+import {ArrowRight2, Heart} from 'iconsax-react-native';
+import ButtonIcon from '../../components/ButtonIcon';
 
 const CategoriesScreen = ({navigation}: any) => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -58,6 +59,7 @@ const CategoriesScreen = ({navigation}: any) => {
     <Container back title={i18n.t('categories')}>
       {categories && categories.length > 0 && (
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={categories}
           renderItem={({item}) => (
             <RowComponent
@@ -70,15 +72,15 @@ const CategoriesScreen = ({navigation}: any) => {
               styles={{
                 marginHorizontal: 16,
                 paddingVertical: 16,
-                borderBottomWidth: 1,
-                borderBottomColor: appColors.dark1,
+                borderBottomWidth: 0.5,
+                borderBottomColor: appColors.gray2,
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
               <TextComponent
                 text={item.title}
                 // flex={1}
-                font={fontFamilies.semiBole}
+                font={fontFamilies.medium}
               />
 
               <ArrowRight2 size={16} color={appColors.gray7} />

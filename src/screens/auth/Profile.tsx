@@ -217,7 +217,9 @@ const Profile = () => {
               )}
             />
           ) : (
-            <TextComponent text={i18n.t('dataNotFound')} />
+            <View style={{paddingHorizontal: 16}}>
+              <TextComponent text={i18n.t('dataNotFound')} />
+            </View>
           )}
         </View>
         {likedAudios.length > 0 && (

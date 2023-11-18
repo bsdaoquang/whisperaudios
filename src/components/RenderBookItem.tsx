@@ -32,7 +32,7 @@ const RenderBookItem = (props: Props) => {
         {
           width,
           marginLeft: 16,
-          marginBottom: 16,
+          marginVertical: 10,
           // backgroundColor: theme === 'dark' ? appColors.dark1 : appColors.white,
           borderBottomLeftRadius: 12,
           borderBottomRightRadius: 12,
@@ -56,7 +56,7 @@ const RenderBookItem = (props: Props) => {
           borderBottomRightRadius: 12,
         }}>
         <RatingComponent bookId={item.key} readOnly size={14} />
-        <TextComponent text={item.title} font={fontFamilies.medium} />
+        <TextComponent line={1} text={item.title} font={fontFamilies.medium} />
         <AuthorComponent authorId={item.authorId} />
       </View>
     </TouchableOpacity>

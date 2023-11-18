@@ -145,7 +145,7 @@ const RegisterScreen = () => {
             <ButtonComponent
               styles={{marginTop: 16}}
               text={i18n.t('register')}
-              textStyle={{textTransform: 'uppercase'}}
+              textStyle={{textTransform: 'uppercase', color: appColors.white}}
               onPress={handleLoginWithEmailAndPass}
               disable={isLogin}
             />

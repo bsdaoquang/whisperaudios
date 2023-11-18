@@ -57,7 +57,6 @@ const AuthorComponent = (props: Props) => {
           <TextComponent
             styles={[textStyle]}
             text={authorDetail.name}
-            size={12}
             line={1}
             color={onPress ? appColors.link : undefined}
           />

@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "411226039435",
-    "project_id": "whisperaudios",
-    "storage_bucket": "whisperaudios.appspot.com"
+    "project_number": "311627208266",
+    "project_id": "whisperaudios-5f944",
+    "storage_bucket": "whisperaudios-5f944.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:411226039435:android:72347be456228dea31a08e",
+        "mobilesdk_app_id": "1:311627208266:android:2049c74491868bad9b38b3",
         "android_client_info": {
-          "package_name": "com.bsdaoquang.whisperaudios"
+          "package_name": "com.yhocso.whisperaudios"
         }
       },
       "oauth_client": [
         {
-          "client_id": "411226039435-0m793pilrklqt2mdott40512a7s67lo0.apps.googleusercontent.com",
+          "client_id": "311627208266-vksnnuochq8rpl396ciutfbbna2cbefp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.bsdaoquang.whisperaudios",
+            "package_name": "com.yhocso.whisperaudios",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "411226039435-a0bhljrf98g0eh5u7bfc6acnhgpju7os.apps.googleusercontent.com",
+          "client_id": "311627208266-1iadl63htatp64g91hs4avdrqdtsu9qv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-oBV0aN9OeBrcc3jZzF_VYJFNQsIQHEQ"
+          "current_key": "AIzaSyA98nNUQHo7eBRxOK8z3WaztXBkAkkrsl0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "411226039435-a0bhljrf98g0eh5u7bfc6acnhgpju7os.apps.googleusercontent.com",
+              "client_id": "311627208266-1iadl63htatp64g91hs4avdrqdtsu9qv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

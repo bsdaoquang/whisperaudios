@@ -18,25 +18,31 @@ import ButtonComponent from '../../components/ButtonComponent';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../constants/appInfos';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {audios} from '../../datas/audios';
+import {categories} from '../../datas/categories';
+import {chaptes} from '../../datas/chapters';
+import {authors} from '../../datas/authors';
 
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);
 
   const handleFixData = () => {
-    firestore()
-      .collection(appInfos.databaseNames.chapters)
-      .get()
-      .then(snap => {
-        const items: any = [];
-        snap.forEach(item => {
-          items.push({
-            key: item.id,
-            ...item.data(),
-          });
-        });
-
-        items.length === snap.size && console.log(JSON.stringify(items));
-      });
+    // authors.forEach((item, index) => {
+    //   // firestore()
+    //   //   .doc(`${appInfos.databaseNames.authors}/${item.key}`)
+    //   //   .set(item)
+    //   //   .then(() => {
+    //   //     console.log('author added!');
+    //   //   });
+    //   firestore()
+    //     .doc(`${appInfos.databaseNames.authors}/${item.key}`)
+    //     .update({
+    //       key: firestore.FieldValue.delete(),
+    //     })
+    //     .then(() => {
+    //       console.log('key removed!');
+    //     });
+    // });
   };
 
   return (
@@ -70,7 +76,7 @@ const HomeScreen = ({navigation}: any) => {
       <Categories />
       <TopLikedSwiper />
       <ListeningComponent />
-      <ButtonComponent text="Update" onPress={handleFixData} />
+      {/* <ButtonComponent text="Update" onPress={handleFixData} /> */}
       <LatestBooks />
       <TopAuthorBooks />
       <TopRatingBooks />

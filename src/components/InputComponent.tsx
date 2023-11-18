@@ -171,7 +171,7 @@ export const InputCompoment = (props: Props) => {
             }}>
             <AntDesign
               name="close"
-              size={16}
+              size={20}
               color={theme === 'light' ? appColors.gray : appColors.light}
             />
           </TouchableOpacity>

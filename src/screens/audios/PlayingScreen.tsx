@@ -401,7 +401,7 @@ const PlayingScreen = ({route, navigation}: any) => {
               {
                 padding: 12,
                 backgroundColor:
-                  theme === 'dark' ? appColors.white : appColors.dark,
+                  theme === 'dark' ? appColors.white : appColors.primary,
                 borderRadius: 100,
               },
             ]}>
@@ -411,7 +411,7 @@ const PlayingScreen = ({route, navigation}: any) => {
               <Ionicons
                 name={playBackState.state === State.Playing ? 'pause' : 'play'}
                 size={22}
-                color={appColors.dark}
+                color={theme === 'dark' ? appColors.primary : appColors.white}
               />
             )}
           </TouchableOpacity>

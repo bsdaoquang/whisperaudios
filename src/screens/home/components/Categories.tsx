@@ -42,8 +42,8 @@ const Categories = () => {
             ...item.data(),
           });
         });
-        setCategories(items);
         setItem(JSON.stringify(items));
+        setCategories(items);
       }
     });
   };
