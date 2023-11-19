@@ -42,4 +42,7 @@ export const vi = {
   updateProfile: 'Cập nhật tài khoản',
   updatePhoto: 'Cập nhật ảnh đại diện',
   about: 'Giới thiệu',
+  followers: 'Người theo dõi',
+  follower: 'Theo dõi',
+  unFollower: 'Huỷ theo dõi',
 };

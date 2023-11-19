@@ -6,4 +6,6 @@ export interface Author {
   followers: string[];
   star: number;
   description: string;
+  count: number;
+  listens: number;
 }

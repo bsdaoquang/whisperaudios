@@ -2,35 +2,52 @@
 
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 
-import React, {useEffect, useState} from 'react';
-import {FlatList, Image, View} from 'react-native';
-import Container from '../../components/Container';
-import RatingComponent from '../../components/RatingComponent';
-import {RowComponent} from '../../components/RowComponent';
-import TitleComponent from '../../components/TitleComponent';
-import {appInfos} from '../../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
+import {SearchNormal1} from 'iconsax-react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, View} from 'react-native';
+import Container from '../../components/Container';
+import {InputCompoment} from '../../components/InputComponent';
+import {LoadingComponent} from '../../components/LoadingComponent';
+import RenderAuthorItem from '../../components/RenderAuthorItem';
+import SectionComponent from '../../components/SectionComponent';
+import TextComponent from '../../components/TextComponent';
+import {appColors} from '../../constants/appColors';
+import {appInfos} from '../../constants/appInfos';
 import {i18n} from '../../languages/i18n';
 import {Author} from '../../models';
-import FastImage from 'react-native-fast-image';
+import {replaceName} from '../../utils/replaceName';
 
 const AuthorsScreen = ({navigation}: any) => {
   const [authors, setAuthors] = useState<Author[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const {getItem, setItem} = useAsyncStorage(appInfos.localNames.authors);
+  const [searchKey, setSearchKey] = useState('');
+  const [results, setResults] = useState<Author[]>([]);
 
   useEffect(() => {
     getAuthors();
   }, []);
 
+  useEffect(() => {
+    if (searchKey) {
+      const items = authors.filter(element =>
+        element.slug.includes(replaceName(searchKey)),
+      );
+      setResults(items);
+    } else {
+      setResults([]);
+    }
+  }, [searchKey]);
+
   const getAuthors = async () => {
-    const items: any = await getItem();
-    setAuthors(JSON.parse(items));
-    await firestore()
+    setIsLoading(true);
+    firestore()
       .collection(appInfos.databaseNames.authors)
-      .get()
-      .then(snap => {
+      .onSnapshot(snap => {
         if (snap.empty) {
           console.log('Authors not found');
+          setIsLoading(false);
         } else {
           const items: Author[] = [];
           snap.forEach((item: any) => {
@@ -40,50 +57,46 @@ const AuthorsScreen = ({navigation}: any) => {
             });
           });
 
-          setItem(
-            JSON.stringify(items.sort((a, b) => a.name.localeCompare(b.name))),
-          );
-          setAuthors(items.sort((a, b) => a.name.localeCompare(b.name)));
+          setAuthors(items);
+          setIsLoading(false);
         }
       });
   };
 
-  const renderAuthorItem = (item: Author) => (
-    <RowComponent
-      onPress={() => navigation.navigate('AuthorDetail', {author: item})}
-      key={item.key}
-      styles={{
-        paddingBottom: 16,
-        marginHorizontal: 16,
-      }}>
-      <FastImage
-        source={
-          item.image
-            ? {uri: item.image}
-            : require('../../../assets/images/default-avatar.webp')
-        }
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: 100,
-        }}
+  const renderData = (data: Author[]) =>
+    data.length > 0 ? (
+      <FlatList
+        maxToRenderPerBatch={20}
+        showsVerticalScrollIndicator={false}
+        removeClippedSubviews
+        data={data}
+        renderItem={({item}) => <RenderAuthorItem item={item} />}
       />
-      <View style={{flex: 1, marginLeft: 12, alignItems: 'flex-start'}}>
-        <TitleComponent text={item.name} />
-        <RatingComponent count={0} />
-      </View>
-    </RowComponent>
-  );
+    ) : (
+      <SectionComponent>
+        <TextComponent text="Không tìm thấy dữ liệu" flex={0} />
+      </SectionComponent>
+    );
 
   return (
     <Container back title={i18n.t('author')}>
-      {authors && authors.length > 0 && (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          removeClippedSubviews
-          data={authors}
-          renderItem={({item}) => renderAuthorItem(item)}
+      <View style={{paddingHorizontal: 16}}>
+        <InputCompoment
+          placeholder={i18n.t('search')}
+          clear
+          prefix={<SearchNormal1 size={20} color={appColors.gray} />}
+          value={searchKey}
+          onChange={val => setSearchKey(val)}
         />
+      </View>
+      {authors.length > 0 ? (
+        searchKey ? (
+          renderData(results)
+        ) : (
+          renderData(authors)
+        )
+      ) : (
+        <LoadingComponent isLoading={isLoading} value={authors.length} />
       )}
     </Container>
   );
