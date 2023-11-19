@@ -5,6 +5,7 @@ import {lightStyles} from '../styles/lightStyles';
 import {darkStyles} from '../styles/darkStyles';
 import {fontFamilies} from '../constants/fontFamilies';
 import {appColors} from '../constants/appColors';
+import TextComponent from './TextComponent';
 
 interface Props {
   color?: string;
@@ -22,14 +23,16 @@ const TitleComponent = (props: Props) => {
   const textStyle = theme === 'light' ? lightStyles.text : darkStyles.text;
 
   return (
-    <Text
-      numberOfLines={line ? line : undefined}
-      style={[
+    <TextComponent
+      text={text}
+      font={font ?? fontFamilies.bold}
+      line={line}
+      styles={[
         textStyle,
         {
           fontSize: size ?? 16,
           fontFamily: font ?? fontFamilies.bold,
-          flex: flex ?? 1,
+          flex: flex ?? 0,
           color: color
             ? color
             : theme === 'light'
@@ -37,9 +40,26 @@ const TitleComponent = (props: Props) => {
             : appColors.light,
         },
         styles,
-      ]}>
-      {text}
-    </Text>
+      ]}
+    />
+    // <Text
+    //   numberOfLines={line ? line : undefined}
+    //   style={[
+    //     textStyle,
+    //     {
+    //       fontSize: size ?? 16,
+    //       fontFamily: font ?? fontFamilies.bold,
+    //       flex: flex ?? 1,
+    //       color: color
+    //         ? color
+    //         : theme === 'light'
+    //         ? appColors.dark
+    //         : appColors.light,
+    //     },
+    //     styles,
+    //   ]}>
+    //   {text}
+    // </Text>
   );
 };
 

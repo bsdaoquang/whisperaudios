@@ -6,6 +6,7 @@ import {fontFamilies} from '../constants/fontFamilies';
 import SpaceComponent from './SpaceComponent';
 import {appColors} from '../constants/appColors';
 import TextComponent from './TextComponent';
+import SectionComponent from './SectionComponent';
 
 interface Props {
   isLoading: boolean;
@@ -38,13 +39,15 @@ export const LoadingComponent = (props: Props) => {
       ) : (
         <>
           {!isLoading && value === 0 && (
-            <TextComponent
-              text={message ? message : 'Không tìm thấy dữ liệu'}
-              styles={{
-                textAlign: 'center',
-                fontFamily: fontFamilies.regular,
-              }}
-            />
+            <SectionComponent>
+              <TextComponent
+                text={message ? message : 'Không tìm thấy dữ liệu'}
+                styles={{
+                  textAlign: 'center',
+                  fontFamily: fontFamilies.regular,
+                }}
+              />
+            </SectionComponent>
           )}
         </>
       )}

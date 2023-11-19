@@ -82,6 +82,7 @@ const TopAuthorBooks = () => {
                   width: 60,
                   height: 60,
                   marginBottom: 8,
+                  borderRadius: 100,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />

@@ -1,11 +1,12 @@
 /** @format */
 
+import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {View, useColorScheme} from 'react-native';
+import {appInfos} from '../constants/appInfos';
 import {Book} from '../models';
 import {darkStyles} from '../styles/darkStyles';
-import {globalStyles} from '../styles/globalStyles';
 import {lightStyles} from '../styles/lightStyles';
 import AuthorComponent from './AuthorComponent';
 import HeartListenCount from './HeartListenCount';
@@ -14,18 +15,19 @@ import RatingComponent from './RatingComponent';
 import {RowComponent} from './RowComponent';
 import SpaceComponent from './SpaceComponent';
 import TitleComponent from './TitleComponent';
-import firestore from '@react-native-firebase/firestore';
-import {appInfos} from '../constants/appInfos';
+import {Rating} from '@kolking/react-native-rating';
+import TextComponent from './TextComponent';
 import {appColors} from '../constants/appColors';
 
 interface Props {
   book: Book;
   color?: string;
   showRating?: boolean;
+  isShowAuthor?: boolean;
 }
 
 const ListBookItem = (props: Props) => {
-  const {book, color, showRating} = props;
+  const {book, color, showRating, isShowAuthor} = props;
   const navigation: any = useNavigation();
 
   const [listenCount, setListenCount] = useState(0);
@@ -50,48 +52,40 @@ const ListBookItem = (props: Props) => {
 
   return (
     <RowComponent
+      activeOpacity={0.8}
+      styles={{
+        paddingHorizontal: 16,
+        marginBottom: 20,
+      }}
       key={book.key}
-      onPress={() => navigation.navigate('AudioDetail', {audio: book})}
-      styles={[
-        globalStyles.shadow,
-        {
-          marginHorizontal: 16,
-          marginBottom: 16,
-          padding: 8,
-          borderRadius: 12,
-          backgroundColor:
-            theme === 'light' ? appColors.white : appColors.dark1,
-        },
-      ]}>
-      <RowComponent
-        styles={{
+      onPress={() => navigation.navigate('AudioDetail', {audio: book})}>
+      <ImageCard uri={book.image} width={95} height={130} />
+      <View
+        style={{
+          marginLeft: 12,
+          flex: 1,
           alignItems: 'flex-start',
+          justifyContent: 'space-between',
         }}>
-        <ImageCard uri={book.image} width={50} height={70} />
-        <View
-          style={{
-            marginHorizontal: 8,
-            flex: 1,
-            alignItems: 'flex-start',
-          }}>
-          <TitleComponent text={book.title} line={2} flex={0} />
-          {showRating && (
-            <RatingComponent readOnly count={5} bookId={book.key} />
-          )}
-          <RowComponent
-            styles={{justifyContent: 'flex-start', flexWrap: 'wrap'}}>
-            <AuthorComponent authorId={book.authorId} />
-            <SpaceComponent width={8} />
-          </RowComponent>
-          <SpaceComponent height={8} />
-          <HeartListenCount
-            liked={book.liked}
-            listen={listenCount}
-            type={book.type}
-            chaps={book.totalChaps}
-          />
-        </View>
-      </RowComponent>
+        <TitleComponent text={book.title} line={2} flex={0} />
+        <RatingComponent
+          readOnly
+          bookId={book.key}
+          size={18}
+          styles={{marginVertical: 8}}
+        />
+        <TextComponent
+          text={book.description}
+          line={3}
+          color={appColors.gray}
+        />
+        <TextComponent
+          text={`${book.listens} người nghe`}
+          line={1}
+          color={appColors.link}
+          size={13}
+        />
+      </View>
     </RowComponent>
   );
 };

@@ -41,4 +41,5 @@ export const vi = {
   cancel: 'Huỷ',
   updateProfile: 'Cập nhật tài khoản',
   updatePhoto: 'Cập nhật ảnh đại diện',
+  about: 'Giới thiệu',
 };

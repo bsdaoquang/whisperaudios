@@ -6,16 +6,18 @@ import {appColors} from '../constants/appColors';
 import {appInfos} from '../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
 import {RowComponent} from './RowComponent';
+import {StyleProp, ViewStyle} from 'react-native';
 
 interface Props {
   count?: number;
   readOnly?: boolean;
   bookId?: string;
   size?: number;
+  styles?: StyleProp<ViewStyle>;
 }
 
 const RatingComponent = (props: Props) => {
-  const {count, readOnly, bookId, size} = props;
+  const {count, readOnly, bookId, size, styles} = props;
   const [countStart, setCountStart] = useState<number>(count ? count : 0);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const RatingComponent = (props: Props) => {
   };
 
   return (
-    <RowComponent styles={{marginBottom: 8}}>
+    <RowComponent styles={[{marginBottom: 8}, styles]}>
       {Array.from({length: countStart}).map((_item, index) => (
         <AntDesign
           key={`iconStart${index}`}
