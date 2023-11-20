@@ -15,6 +15,7 @@ import {useSelector} from 'react-redux';
 import {userSelector} from '../../../redux/reducers/userReducer';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../../constants/appInfos';
+import {i18n} from '../../../languages/i18n';
 
 interface Props {
   item: Book;
@@ -82,7 +83,7 @@ const Infocomponent = (props: Props) => {
       </SectionComponent>
       <SectionComponent>
         <TitleComponent
-          text="Description"
+          text={i18n.t('description')}
           color={appColors.light}
           styles={{marginBottom: 8}}
         />
@@ -97,14 +98,18 @@ const Infocomponent = (props: Props) => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => setLine(line === 5 ? 25 : 5)}>
-          <TextComponent text="See more" flex={1} color={appColors.link} />
+          <TextComponent
+            text={i18n.t('seeMore')}
+            flex={1}
+            color={appColors.link}
+          />
         </TouchableOpacity>
       </SectionComponent>
 
       <SectionComponent>
         {renderInfoItem(
           'Tác giả',
-          <AuthorComponent onPress authorId={item.authorId} />,
+          <AuthorComponent authorId={item.authorId} />,
         )}
         {renderInfoItem('Giọng đọc', item.recordBy ?? <></>)}
         {renderInfoItem('Người đăng', item.uploadBy ?? <></>)}

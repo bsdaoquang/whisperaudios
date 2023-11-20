@@ -39,6 +39,7 @@ import Infocomponent from './components/Infocomponent';
 import LinkComponent from '../../components/LinkComponent';
 import {GetTime} from '../../utils/getTime';
 import CategoryTab from '../../components/CategoryTab';
+import {i18n} from '../../languages/i18n';
 
 const AudioDetail = ({route, navigation}: any) => {
   const {audio}: {audio: Book} = route.params;
@@ -314,7 +315,7 @@ const AudioDetail = ({route, navigation}: any) => {
                     },
                   ]}>
                   <TextComponent
-                    text="Infomations"
+                    text={i18n.t('infomations')}
                     color={
                       tabSelected === 'info' ? appColors.text : appColors.white
                     }
@@ -334,7 +335,7 @@ const AudioDetail = ({route, navigation}: any) => {
                     },
                   ]}>
                   <TextComponent
-                    text="Chapters"
+                    text={i18n.t('chapters')}
                     color={
                       tabSelected === 'chaps' ? appColors.text : appColors.white
                     }

@@ -55,6 +55,7 @@ import {GetTime} from '../../utils/getTime';
 import {HandleAudio} from '../../utils/handleAudio';
 import {showToast} from '../../utils/showToast';
 import AudioItem from './components/AudioItem';
+import {i18n} from '../../languages/i18n';
 const eventEmitter = new NativeEventEmitter();
 
 const PlayingScreen = ({route, navigation}: any) => {
@@ -543,7 +544,7 @@ const PlayingScreen = ({route, navigation}: any) => {
 
       <View style={{flex: 1, paddingHorizontal: 16}}>
         <RowComponent>
-          <TitleComponent text="Playlist" flex={1} />
+          <TitleComponent text={i18n.t('Playlist')} flex={1} />
           <ButtonIcon
             icon={<SearchNormal1 size={iconSize} color={textColor} />}
             onPress={() => setIsVisibleModalChoiceChap(true)}

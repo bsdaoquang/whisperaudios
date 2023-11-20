@@ -1,7 +1,7 @@
 /** @format */
 
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {i18n} from '../languages/i18n';
 import {userSelector} from '../redux/reducers/userReducer';
@@ -46,16 +46,19 @@ const ListeningComponent = () => {
   return user && user.uid && listenings.length > 0 ? (
     <View>
       <TabbarComponent title={i18n.t('listening')} />
-
-      <RowComponent
-        styles={{
-          justifyContent: 'space-between',
-          paddingHorizontal: 16,
-        }}>
-        {listenings.map(item => (
-          <ListeningCardItem item={item} key={item.key} />
-        ))}
-      </RowComponent>
+      <FlatList
+        style={{paddingLeft: 16}}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={listenings}
+        renderItem={({item}) => (
+          <ListeningCardItem
+            item={item}
+            key={item.key}
+            styles={{marginRight: 16}}
+          />
+        )}
+      />
     </View>
   ) : (
     <></>

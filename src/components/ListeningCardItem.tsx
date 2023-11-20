@@ -155,6 +155,7 @@ const ListeningCardItem = ({
               color={appColors.white}
               font={fontFamilies.medium}
               flex={0}
+              line={2}
               text={
                 chapters[item.chap - 1] ? chapters[item.chap - 1].title : ''
               }
@@ -171,7 +172,7 @@ const ListeningCardItem = ({
               color={appColors.white}
               size={12}
               flex={0}
-              text={GetTime.getFullTimeString(item.date, true)}
+              text={GetTime.getFullTimeString(item.date)}
             />
           </View>
         </ImageBackground>

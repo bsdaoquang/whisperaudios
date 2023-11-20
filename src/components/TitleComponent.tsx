@@ -1,6 +1,6 @@
 /** @format */
 
-import {StyleProp, Text, TextStyle, useColorScheme} from 'react-native';
+import {StyleProp, Text, TextStyle, View, useColorScheme} from 'react-native';
 import {lightStyles} from '../styles/lightStyles';
 import {darkStyles} from '../styles/darkStyles';
 import {fontFamilies} from '../constants/fontFamilies';
@@ -23,43 +23,27 @@ const TitleComponent = (props: Props) => {
   const textStyle = theme === 'light' ? lightStyles.text : darkStyles.text;
 
   return (
-    <TextComponent
-      text={text}
-      font={font ?? fontFamilies.bold}
-      line={line}
-      styles={[
-        textStyle,
-        {
-          fontSize: size ?? 16,
-          fontFamily: font ?? fontFamilies.bold,
-          flex: flex ?? 0,
-          color: color
-            ? color
-            : theme === 'light'
-            ? appColors.dark
-            : appColors.light,
-        },
-        styles,
-      ]}
-    />
-    // <Text
-    //   numberOfLines={line ? line : undefined}
-    //   style={[
-    //     textStyle,
-    //     {
-    //       fontSize: size ?? 16,
-    //       fontFamily: font ?? fontFamilies.bold,
-    //       flex: flex ?? 1,
-    //       color: color
-    //         ? color
-    //         : theme === 'light'
-    //         ? appColors.dark
-    //         : appColors.light,
-    //     },
-    //     styles,
-    //   ]}>
-    //   {text}
-    // </Text>
+    <View style={{flex: flex ?? 0}}>
+      <TextComponent
+        text={text}
+        font={font ?? fontFamilies.bold}
+        line={line ?? undefined}
+        styles={[
+          textStyle,
+          {
+            fontSize: size ?? 16,
+            fontFamily: font ?? fontFamilies.bold,
+
+            color: color
+              ? color
+              : theme === 'light'
+              ? appColors.dark
+              : appColors.light,
+          },
+          styles,
+        ]}
+      />
+    </View>
   );
 };
 

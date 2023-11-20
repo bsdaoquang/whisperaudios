@@ -45,4 +45,10 @@ export const vi = {
   followers: 'Người theo dõi',
   follower: 'Theo dõi',
   unFollower: 'Huỷ theo dõi',
+  infomations: 'Thông tin',
+  chapters: 'Danh sách chương',
+  description: 'Giới thiệu',
+  seeMore: 'Xem thêm',
+  Playlist: 'Danh sách phát',
+  Playing: 'Đang phát',
 };

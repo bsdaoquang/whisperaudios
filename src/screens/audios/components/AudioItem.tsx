@@ -9,6 +9,7 @@ import {appColors} from '../../../constants/appColors';
 import {fontFamilies} from '../../../constants/fontFamilies';
 import {Chap} from '../../../models/Chapter';
 import {showToast} from '../../../utils/showToast';
+import {i18n} from '../../../languages/i18n';
 
 interface Props {
   item: Chap;
@@ -130,7 +131,7 @@ const AudioItem = (props: Props) => {
           <TextComponent
             size={12}
             color={appColors.gray}
-            text={`Playing`}
+            text={i18n.t(`Playing`)}
             flex={1}
           />
         )}
