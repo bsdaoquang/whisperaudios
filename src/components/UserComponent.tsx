@@ -39,7 +39,7 @@ const UserComponent = (props: Props) => {
   }, [uid]);
 
   return isTitle ? (
-    <RowComponent>
+    <RowComponent styles={{justifyContent: 'flex-start'}}>
       <FastImage
         source={
           profile && profile.photoURL
@@ -61,7 +61,7 @@ const UserComponent = (props: Props) => {
             : ''
         }
         color={appColors.white}
-        flex={1}
+        flex={0}
         styles={{paddingHorizontal: 8}}
       />
     </RowComponent>

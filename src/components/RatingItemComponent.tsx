@@ -9,6 +9,7 @@ import RatingComponent from './RatingComponent';
 import TextComponent from './TextComponent';
 import {GetTime} from '../utils/getTime';
 import SpaceComponent from './SpaceComponent';
+import {appColors} from '../constants/appColors';
 
 interface Props {
   item: RatingModel;
@@ -31,10 +32,14 @@ const RatingItemComponent = (props: Props) => {
       <RowComponent styles={{justifyContent: 'flex-start', paddingVertical: 8}}>
         <RatingComponent count={item.star} />
         <SpaceComponent width={12} />
-        <TextComponent text={GetTime.getFullTimeString(item.time)} />
+        <TextComponent
+          text={GetTime.getFullTimeString(item.time)}
+          color={appColors.white}
+        />
       </RowComponent>
       <TextComponent
         text={item.review}
+        color={appColors.white}
         flex={1}
         styles={{textAlign: 'justify'}}
       />

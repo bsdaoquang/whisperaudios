@@ -3,7 +3,7 @@
 import {Rating} from '@kolking/react-native-rating';
 import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
 import Container from '../../components/Container';
@@ -26,6 +26,7 @@ const AuthorDetail = ({navigation, route}: any) => {
   const {author}: {author: Author} = route.params;
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [countLine, setCountLine] = useState<number | undefined>(5);
 
   const [authorDetail, setAuthorDetail] = useState<Author>();
 
@@ -177,7 +178,17 @@ const AuthorDetail = ({navigation, route}: any) => {
       </SectionComponent>
       <TabbarComponent title={i18n.t('about')} />
       <SectionComponent>
-        <TextComponent text={author.description ?? 'Đang cập nhật'} />
+        <TouchableOpacity
+          onPress={() => setCountLine(countLine === 5 ? undefined : 5)}>
+          <TextComponent
+            styles={{
+              lineHeight: 24,
+              textAlign: 'justify',
+            }}
+            text={author.description ?? 'Đang cập nhật'}
+            line={countLine}
+          />
+        </TouchableOpacity>
       </SectionComponent>
       <View>
         <TabbarComponent
