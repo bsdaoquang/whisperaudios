@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
 import {appColors} from '../constants/appColors';
 import TextComponent from './TextComponent';
 
@@ -11,13 +11,14 @@ interface Props {
   color?: string;
   size?: number;
   flex?: number;
+  styles?: StyleProp<ViewStyle>;
 }
 
 const LinkComponent = (props: Props) => {
-  const {text, onPress, color, size, flex} = props;
+  const {text, onPress, color, size, flex, styles} = props;
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={[styles]}>
       <TextComponent
         flex={flex ?? 0}
         text={text}

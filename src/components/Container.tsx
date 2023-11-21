@@ -28,10 +28,12 @@ interface Props {
   isFlex?: boolean;
   isShow?: boolean;
   onCloseModal?: () => void;
+  onBack?: () => void;
 }
 
 const Container = (props: Props) => {
-  const {title, children, back, right, scroll, styles, search, isFlex} = props;
+  const {title, children, back, right, scroll, styles, search, isFlex, onBack} =
+    props;
   const theme = useColorScheme();
   const styleTheme = theme === 'light' ? lightStyles : darkStyles;
   const navigation: any = useNavigation();
@@ -48,7 +50,7 @@ const Container = (props: Props) => {
           }}>
           {back && (
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={onBack ? () => onBack() : () => navigation.goBack()}
               style={{paddingRight: 16}}>
               <ArrowLeft2
                 size={24}

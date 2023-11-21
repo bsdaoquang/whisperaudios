@@ -17,6 +17,7 @@ import {fontFamilies} from '../constants/fontFamilies';
 import TextComponent from './TextComponent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TitleComponent from './TitleComponent';
 
 interface Props {
   placeholder?: string;
@@ -42,6 +43,7 @@ interface Props {
   borderRadius?: number;
   multiline?: boolean;
   numberOfLine?: number;
+  title?: string;
 }
 
 export const InputCompoment = (props: Props) => {
@@ -71,6 +73,7 @@ export const InputCompoment = (props: Props) => {
     borderRadius,
     multiline,
     numberOfLine,
+    title,
   } = props;
 
   const style: StyleProp<ViewStyle> = {
@@ -125,6 +128,7 @@ export const InputCompoment = (props: Props) => {
         {marginBottom: 16, flex: flex ?? 0, alignItems: 'flex-start'},
         styles,
       ]}>
+      {title && <TitleComponent text={title} font={fontFamilies.medium} />}
       <View style={inputContainerStyle}>
         {prefix && prefix}
         <TextInput

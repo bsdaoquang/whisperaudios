@@ -40,7 +40,10 @@ const ButtonComponent = (props: Props) => {
   const theme = useColorScheme();
 
   const borderColor = theme === 'light' ? appColors.dark : appColors.light;
-  const backgroundColor = bgColor
+
+  const backgroundColor = disable
+    ? appColors.gray
+    : bgColor
     ? bgColor
     : theme === 'dark'
     ? appColors.gray7

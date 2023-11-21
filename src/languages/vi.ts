@@ -52,4 +52,9 @@ export const vi = {
   Playlist: 'Danh sách phát',
   Playing: 'Đang phát',
   createAndUpload: 'Tạo mới và Tải lên',
+  choiceAuthor: 'Chọn tác giả',
+  choiceCategories: 'Chọn chuyên mục',
+  addNew: 'Tạo mới',
+  close: 'Đóng',
+  Upload: 'Tạo Audio',
 };
