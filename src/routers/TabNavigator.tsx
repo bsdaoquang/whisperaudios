@@ -3,14 +3,16 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home, MusicSquareSearch, User} from 'iconsax-react-native';
 import React from 'react';
-import {View, useColorScheme} from 'react-native';
+import {useColorScheme} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {useSelector} from 'react-redux';
 import {appColors} from '../constants/appColors';
+import {userSelector} from '../redux/reducers/userReducer';
 import HomeNavigator from './HomeNavigator';
 import ProfileNavigator from './ProfileNavigator';
 import SearchNavigator from './SearchNavigator';
-import {useSelector} from 'react-redux';
-import {userSelector} from '../redux/reducers/userReducer';
-import FastImage from 'react-native-fast-image';
+import UploadNavigator from './UploadNavigator';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const TabNavigator = () => {
   const Tabs = createBottomTabNavigator();
@@ -53,6 +55,10 @@ const TabNavigator = () => {
                 color={iconColor}
               />
             );
+          } else if (route.name === 'UploadTab') {
+            icon = (
+              <MaterialIcons name="library-add" size={size} color={iconColor} />
+            );
           } else if (route.name === 'ProfileTab') {
             icon = user.photoURL ? (
               <FastImage
@@ -78,6 +84,7 @@ const TabNavigator = () => {
       })}>
       <Tabs.Screen name="HomeTab" component={HomeNavigator} />
       <Tabs.Screen name="SearchTab" component={SearchNavigator} />
+      <Tabs.Screen name="UploadTab" component={UploadNavigator} />
       <Tabs.Screen name="ProfileTab" component={ProfileNavigator} />
     </Tabs.Navigator>
   );

@@ -42,6 +42,6 @@ export const globalStyles = StyleSheet.create({
     },
     shadowOpacity: 0.15,
     shadowRadius: 4,
-    elevation: 10,
+    elevation: 6,
   },
 });

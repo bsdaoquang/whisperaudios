@@ -76,7 +76,6 @@ const HomeScreen = ({navigation}: any) => {
       <Categories />
       <TopLikedSwiper />
       <ListeningComponent />
-      {/* <ButtonComponent text="Update" onPress={handleFixData} /> */}
       <LatestBooks />
       <TopAuthorBooks />
       <TopRatingBooks />

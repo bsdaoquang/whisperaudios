@@ -46,7 +46,7 @@ const Container = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          {back ? (
+          {back && (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{paddingRight: 16}}>
@@ -55,8 +55,6 @@ const Container = (props: Props) => {
                 color={theme === 'dark' ? appColors.light : appColors.dark}
               />
             </TouchableOpacity>
-          ) : (
-            <View style={{width: 42}} />
           )}
 
           {title && (

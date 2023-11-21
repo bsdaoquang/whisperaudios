@@ -51,4 +51,5 @@ export const vi = {
   seeMore: 'Xem thêm',
   Playlist: 'Danh sách phát',
   Playing: 'Đang phát',
+  createAndUpload: 'Tạo mới và Tải lên',
 };
