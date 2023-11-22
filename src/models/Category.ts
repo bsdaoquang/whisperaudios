@@ -11,4 +11,5 @@ export interface Category {
     type: string;
   }[];
   followers: string[];
+  image: string;
 }

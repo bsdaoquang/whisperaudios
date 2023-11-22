@@ -136,17 +136,18 @@ const CreateAudio = ({navigation}: any) => {
       followers: [],
     };
 
-    firestore()
-      .collection(appInfos.databaseNames.audios)
-      .add(data)
-      .then(() => {
-        showToast('Tạo audio thành công, cám ơn bạn!');
-        setAudio(innitialData);
-        navigation.goBack();
-      })
-      .catch(error => {
-        showToast(error.message);
-      });
+    console.log(data);
+    // firestore()
+    //   .collection(appInfos.databaseNames.audios)
+    //   .add(data)
+    //   .then(() => {
+    //     showToast('Tạo audio thành công, cám ơn bạn!');
+    //     setAudio(innitialData);
+    //     navigation.goBack();
+    //   })
+    //   .catch(error => {
+    //     showToast(error.message);
+    //   });
   };
 
   const handleCancel = () => {
@@ -235,6 +236,7 @@ const CreateAudio = ({navigation}: any) => {
             onSeleted={val => handleFormData(val, 'categories')}
             multible
             placeholder={i18n.t('choiceCategories')}
+            onAddNew={() => navigation.navigate('AddNewCategory')}
           />
           <InputCompoment
             title="Mô tả"

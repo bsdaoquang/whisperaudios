@@ -123,7 +123,7 @@ const DropdownPicker = (props: Props) => {
     <View style={{marginBottom: 16}}>
       <RowComponent>
         {title && (
-          <TitleComponent flex={0} text={title} font={fontFamilies.medium} />
+          <TitleComponent flex={1} text={title} font={fontFamilies.medium} />
         )}
         {onAddNew && (
           <RowComponent

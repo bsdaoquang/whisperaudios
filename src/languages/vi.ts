@@ -61,4 +61,6 @@ export const vi = {
   name: 'Tên',
   authorName: 'Tên tác giả',
   content: 'Nội dung',
+  addNewCategories: 'Thêm chuyên mục',
+  CategoriesName: 'Tên chuyên mục',
 };
