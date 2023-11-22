@@ -214,6 +214,7 @@ const CreateAudio = ({navigation}: any) => {
           </RowComponent>
           <InputCompoment
             title="Tên audio"
+            styles={{textTransform: 'capitalize'}}
             value={audio.title}
             onChange={val => handleFormData(val, 'title')}
             clear

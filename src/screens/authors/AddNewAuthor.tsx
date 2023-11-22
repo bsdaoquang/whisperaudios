@@ -13,7 +13,9 @@ import {appColors} from '../../constants/appColors';
 import ModalUploadFile from '../../modals/ModalUploadFile';
 import {globalStyles} from '../../styles/globalStyles';
 import ButtonBottomComponent from '../../components/ButtonBottomComponent';
-
+import firestore from '@react-native-firebase/firestore';
+import {appInfos} from '../../constants/appInfos';
+import {showToast} from '../../utils/showToast';
 const innitialData: Author = {
   name: '',
   slug: '',
@@ -29,7 +31,22 @@ const AddNewAuthor = ({navigation}: any) => {
   const [author, setAuthor] = useState(innitialData);
   const [isShowModalUploadImage, setIsShowModalUploadImage] = useState(false);
 
-  const handleAddNewAuthor = () => {};
+  const handleAddNewAuthor = () => {
+    const data = {
+      ...author,
+    };
+
+    firestore()
+      .collection(appInfos.databaseNames.authors)
+      .add(data)
+      .then(() => {
+        showToast('Đã thêm tác giả');
+        navigation.goBack();
+      })
+      .catch(error => {
+        showToast('Không thể thêm tác giả' + error.message);
+      });
+  };
 
   const handleChangeFormData = (val: string, key: string) => {
     const data: any = {...author};
@@ -96,6 +113,7 @@ const AddNewAuthor = ({navigation}: any) => {
           onChange={val => handleChangeFormData(val, 'name')}
           clear
           placeholder={i18n.t('authorName')}
+          styles={{textTransform: 'capitalize'}}
         />
         <InputCompoment
           title={i18n.t('description')}
@@ -111,6 +129,7 @@ const AddNewAuthor = ({navigation}: any) => {
         onCancel={() => navigation.goBack()}
         onOK={handleAddNewAuthor}
         disable={!author.name}
+        oKText="Thêm tác giả"
       />
       <ModalUploadFile
         isVisible={isShowModalUploadImage}

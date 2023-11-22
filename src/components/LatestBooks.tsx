@@ -23,7 +23,6 @@ import {globalStyles} from '../styles/globalStyles';
 const LatestBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
 
-  const {setItem, getItem} = useAsyncStorage(appInfos.localNames.latestBooks);
   const theme = useColorScheme();
   const navigation: any = useNavigation();
 
@@ -32,9 +31,6 @@ const LatestBooks = () => {
   }, []);
 
   const getNewBooks = async () => {
-    const items: any = await getItem();
-    setBooks(JSON.parse(items));
-
     const filter = firestore()
       .collection(appInfos.databaseNames.audios)
       .orderBy('updatedAt')
@@ -51,8 +47,7 @@ const LatestBooks = () => {
             ...item.data(),
           });
         });
-        setItem(JSON.stringify(items));
-        setBooks(items);
+        setBooks(items.sort((a, b) => b.updatedAt - a.updatedAt));
       }
     });
   };
