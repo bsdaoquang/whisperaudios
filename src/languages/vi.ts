@@ -57,4 +57,8 @@ export const vi = {
   addNew: 'Tạo mới',
   close: 'Đóng',
   Upload: 'Tạo Audio',
+  addNewAuthor: 'Thêm tác giả',
+  name: 'Tên',
+  authorName: 'Tên tác giả',
+  content: 'Nội dung',
 };

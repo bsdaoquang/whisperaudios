@@ -13,7 +13,7 @@ LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 GoogleSignin.configure({
   webClientId:
-    '311627208266-vksnnuochq8rpl396ciutfbbna2cbefp.apps.googleusercontent.com',
+    '311627208266-1iadl63htatp64g91hs4avdrqdtsu9qv.apps.googleusercontent.com',
 });
 
 // AppRegistry.registerComponent(...);

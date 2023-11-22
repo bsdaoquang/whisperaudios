@@ -121,7 +121,24 @@ const DropdownPicker = (props: Props) => {
 
   return (
     <View style={{marginBottom: 16}}>
-      {title && <TitleComponent text={title} font={fontFamilies.medium} />}
+      <RowComponent>
+        {title && (
+          <TitleComponent flex={0} text={title} font={fontFamilies.medium} />
+        )}
+        {onAddNew && (
+          <RowComponent
+            onPress={onAddNew}
+            styles={{
+              paddingLeft: 12,
+              flex: 1,
+              justifyContent: 'flex-end',
+            }}>
+            <TextComponent text={i18n.t('addNew')} color={appColors.primary} />
+            <SpaceComponent width={4} />
+            <AddSquare size={16} color={appColors.primary} variant="Bold" />
+          </RowComponent>
+        )}
+      </RowComponent>
       <RowComponent
         onPress={() => setIsVisibleModalListData(true)}
         styles={{

@@ -22,18 +22,18 @@ const LoadingModal = (props: Props) => {
       <View
         style={[
           {
-            backgroundColor: 'rgba(0,0,0,0.4)',
+            backgroundColor: 'rgba(0,0,0,0.6)',
             justifyContent: 'center',
             alignItems: 'center',
             flex: 1,
             height: appInfos.sizes.height,
           },
         ]}>
-        <ActivityIndicator color={appColors.primary} size={32} />
+        <ActivityIndicator color={appColors.white} size={32} />
         <TextComponent
           text={mess ?? 'Loading...'}
           flex={0}
-          color={appColors.text}
+          color={appColors.white}
         />
       </View>
     </Modal>

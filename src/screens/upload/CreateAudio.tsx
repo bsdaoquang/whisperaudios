@@ -21,18 +21,23 @@ import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../constants/appInfos';
 import ButtonComponent from '../../components/ButtonComponent';
 import LinkComponent from '../../components/LinkComponent';
+import {replaceName} from '../../utils/replaceName';
+import {Book} from '../../models';
+import {useSelector} from 'react-redux';
+import {userSelector} from '../../redux/reducers/userReducer';
+import {showToast} from '../../utils/showToast';
 
 const innitialData: {
   title: string;
   description: string;
-  image: any;
+  image: string;
   categories: string[];
   slug: string;
   authorId: string;
 } = {
   title: '',
   description: '',
-  image: undefined,
+  image: '',
   categories: [],
   slug: '',
   authorId: '',
@@ -43,6 +48,8 @@ const CreateAudio = ({navigation}: any) => {
   const [isShowModalUploadImage, setIsShowModalUploadImage] = useState(false);
   const [authors, setAuthors] = useState<DropdownItem[]>([]);
   const [categories, setCategories] = useState<DropdownItem[]>([]);
+
+  const user = useSelector(userSelector);
 
   useEffect(() => {
     firestore()
@@ -79,19 +86,19 @@ const CreateAudio = ({navigation}: any) => {
       });
   }, []);
 
-  useEffect(() => {
-    const backAction = () => {
-      handleCancel();
-      return true;
-    };
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     handleCancel();
+  //     return true;
+  //   };
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction,
+  //   );
 
-    return () => backHandler.remove();
-  }, []);
+  //   return () => backHandler.remove();
+  // }, []);
 
   const handleFormData = (val: string | string[], key: string) => {
     const data: any = {...audio};
@@ -102,7 +109,44 @@ const CreateAudio = ({navigation}: any) => {
   };
 
   const handleUploadBook = () => {
-    console.log(audio);
+    if (user.uid) {
+    } else {
+      Alert.alert('Lỗi', 'Vui lòng đăng nhập trước', [
+        {
+          text: i18n.t('cancel'),
+        },
+        {
+          text: 'Đăng nhập',
+          onPress: () => navigation.navigate(''),
+        },
+      ]);
+    }
+    const data: Book = {
+      ...audio,
+      slug: replaceName(audio.title),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      chapsId: '',
+      liked: [],
+      listens: 0,
+      download: 0,
+      type: '',
+      recordBy: '',
+      uploadBy: user.uid,
+      followers: [],
+    };
+
+    firestore()
+      .collection(appInfos.databaseNames.audios)
+      .add(data)
+      .then(() => {
+        showToast('Tạo audio thành công, cám ơn bạn!');
+        setAudio(innitialData);
+        navigation.goBack();
+      })
+      .catch(error => {
+        showToast(error.message);
+      });
   };
 
   const handleCancel = () => {
@@ -140,7 +184,7 @@ const CreateAudio = ({navigation}: any) => {
         <SectionComponent>
           {audio.image && (
             <FastImage
-              source={{uri: audio.image.path}}
+              source={{uri: audio.image}}
               style={{
                 width: 120,
                 height: 150,
@@ -152,12 +196,12 @@ const CreateAudio = ({navigation}: any) => {
           )}
           <RowComponent>
             <View style={{flex: 1, marginRight: 10}}>
-              {/* <InputCompoment
+              <InputCompoment
                 title="Hình ảnh"
-                value={audio.image.path}
+                value={audio.image}
                 onChange={val => handleFormData(val, 'image')}
                 placeholder="Url image"
-              /> */}
+              />
             </View>
             <TouchableOpacity onPress={() => setIsShowModalUploadImage(true)}>
               <Ionicons
@@ -181,7 +225,7 @@ const CreateAudio = ({navigation}: any) => {
             title={i18n.t('author')}
             onSeleted={val => handleFormData(val, 'authorId')}
             placeholder={i18n.t('choiceAuthor')}
-            onAddNew={() => console.log('fasfas')}
+            onAddNew={() => navigation.navigate('AddNewAuthor')}
           />
           <DropdownPicker
             items={categories}
@@ -193,8 +237,8 @@ const CreateAudio = ({navigation}: any) => {
           />
           <InputCompoment
             title="Mô tả"
-            value={audio.title}
-            onChange={val => handleFormData(val, 'title')}
+            value={audio.description}
+            onChange={val => handleFormData(val, 'description')}
             clear
             placeholder="Giới thiệu về audio này"
             multiline

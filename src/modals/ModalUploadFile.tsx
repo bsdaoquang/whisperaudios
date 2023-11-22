@@ -76,45 +76,44 @@ const ModalUploadFile = (props: Props, avatarProps: AvatarProps) => {
           mediaType: accepts ?? 'photo',
         })
           .then((image: ImageOrVideo) => {
-            onUploadFinish(image);
+            handleUploadImage(image);
           })
           .catch(error => console.log('Lỗi', error.toString()));
       } else {
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
       }
-      //request permision
     } else {
       await ImageCropPicker.openPicker({
         ...optionPicker,
         mediaType: accepts ?? 'photo',
       }).then((image: ImageOrVideo) => {
-        onUploadFinish(image);
+        handleUploadImage(image);
       });
     }
   };
 
-  // const handleUploadImage = async (file: ImageOrVideo) => {
-  //   setIsUploadFile(true);
-  //   const filePath = `uploadFiles/uid-${user.uid}-${Date.now()}.${
-  //     file.path.split('.')[file.path.split('.').length - 1]
-  //   }`;
-  //   const res = await storage().ref(filePath).putFile(file.path);
-  //   setUploadPercent(
-  //     `${((res.bytesTransferred / res.totalBytes) * 100).toFixed(2)}%`,
-  //   );
-  //   storage()
-  //     .ref(filePath)
-  //     .getDownloadURL()
-  //     .then(async url => {
-  //       setDownloadURL(url);
-  //       setIsUploadFile(false);
-  //     })
-  //     .catch(error => {
-  //       showToast('Không thể tải file lên');
-  //       setIsUploadFile(false);
-  //       modalizeRef.current?.close();
-  //     });
-  // };
+  const handleUploadImage = async (file: ImageOrVideo) => {
+    setIsUploadFile(true);
+    const filePath = `uploadFiles/uid-${user.uid}-${Date.now()}.${
+      file.path.split('.')[file.path.split('.').length - 1]
+    }`;
+    const res = await storage().ref(filePath).putFile(file.path);
+    setUploadPercent(
+      `${((res.bytesTransferred / res.totalBytes) * 100).toFixed(2)}%`,
+    );
+    storage()
+      .ref(filePath)
+      .getDownloadURL()
+      .then(async url => {
+        setDownloadURL(url);
+        setIsUploadFile(false);
+      })
+      .catch(error => {
+        showToast('Không thể tải file lên');
+        setIsUploadFile(false);
+        modalizeRef.current?.close();
+      });
+  };
 
   return (
     <Portal>

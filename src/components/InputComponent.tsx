@@ -18,6 +18,11 @@ import TextComponent from './TextComponent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TitleComponent from './TitleComponent';
+import {RowComponent} from './RowComponent';
+import ButtonIcon from './ButtonIcon';
+import {AddCircle, AddSquare} from 'iconsax-react-native';
+import {i18n} from '../languages/i18n';
+import SpaceComponent from './SpaceComponent';
 
 interface Props {
   placeholder?: string;
@@ -44,6 +49,7 @@ interface Props {
   multiline?: boolean;
   numberOfLine?: number;
   title?: string;
+  onAdd?: () => void;
 }
 
 export const InputCompoment = (props: Props) => {
@@ -74,6 +80,7 @@ export const InputCompoment = (props: Props) => {
     multiline,
     numberOfLine,
     title,
+    onAdd,
   } = props;
 
   const style: StyleProp<ViewStyle> = {
@@ -128,8 +135,16 @@ export const InputCompoment = (props: Props) => {
         {marginBottom: 16, flex: flex ?? 0, alignItems: 'flex-start'},
         styles,
       ]}>
-      {title && <TitleComponent text={title} font={fontFamilies.medium} />}
-      <View style={inputContainerStyle}>
+      <RowComponent>
+        {title && (
+          <TitleComponent flex={0} text={title} font={fontFamilies.medium} />
+        )}
+      </RowComponent>
+      <View
+        style={[
+          inputContainerStyle,
+          {alignItems: multiline ? 'flex-start' : 'center'},
+        ]}>
         {prefix && prefix}
         <TextInput
           onFocus={() => setIsFocus(true)}
@@ -144,7 +159,11 @@ export const InputCompoment = (props: Props) => {
           keyboardType={type ? type : 'default'}
           autoComplete={type === 'email-address' ? 'email' : 'off'}
           autoFocus={autoFocus}
-          style={[inputStyle, styles]}
+          style={[
+            inputStyle,
+            styles,
+            {textAlignVertical: multiline ? 'top' : 'auto'},
+          ]}
           autoCapitalize={isCapitalize}
           onEndEditing={onEnd}
           numberOfLines={numberOfLine ?? 1}
