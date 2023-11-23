@@ -1,63 +1,103 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
-import {Category} from '../../models';
+import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import {i18n} from '../../languages/i18n';
-import SectionComponent from '../../components/SectionComponent';
-import TextComponent from '../../components/TextComponent';
-import {InputCompoment} from '../../components/InputComponent';
-import FastImage from 'react-native-fast-image';
-import {RowComponent} from '../../components/RowComponent';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {appColors} from '../../constants/appColors';
-import ModalUploadFile from '../../modals/ModalUploadFile';
-import {globalStyles} from '../../styles/globalStyles';
-import ButtonBottomComponent from '../../components/ButtonBottomComponent';
+import {Book, Chapter} from '../../models/Book';
+import {Chap} from '../../models/Chapter';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../constants/appInfos';
-import {showToast} from '../../utils/showToast';
-const innitialData: Category = {
-  description: '',
+import {useSelector} from 'react-redux';
+import {userSelector} from '../../redux/reducers/userReducer';
+import SectionComponent from '../../components/SectionComponent';
+import {LoadingComponent} from '../../components/LoadingComponent';
+import {InputCompoment} from '../../components/InputComponent';
+
+const innitialData: Chap = {
+  audio: '',
+  buyUrl: '',
+  cover: '',
+  downloadFilename: '',
+  downloadUrl: '',
+  lyrics: '',
+  subtitle: '',
   title: '',
-  titleEnglish: '',
-  slug: '',
-  type: '',
-  bookIds: [],
-  followers: [],
-  image: '',
 };
 
-const AddNewCategory = ({navigation}: any) => {
-  const [Categories, setCategories] = useState(innitialData);
-  const [isShowModalUploadImage, setIsShowModalUploadImage] = useState(false);
+const AddNewChapter = ({navigation}: any) => {
+  const [chapDetail, setChapDetail] = useState<Chapter>();
+  const [chap, setChap] = useState(innitialData);
+  const [audioByUser, setAudioByUser] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddNewCategories = () => {
-    const data = {
-      ...Categories,
-    };
+  const user = useSelector(userSelector);
 
+  useEffect(() => {
+    !user.uid ? navigation.navigate('ProfileTab') : getAudiosByUser();
+  }, [user]);
+
+  const handleUpdateForm = (val: string, key: string) => {
+    const data: any = {...chap};
+
+    data[`${key}`] = val;
+
+    setChap(data);
+  };
+
+  const getAudiosByUser = () => {
+    setIsLoading(true);
     firestore()
-      .collection(appInfos.databaseNames.categories)
-      .add(data)
-      .then(() => {
-        showToast('Đã thêm chuyên mục');
-        navigation.goBack();
-      })
-      .catch(error => {
-        showToast('Không thể thêm chuyên mục' + error.message);
+      .collection(appInfos.databaseNames.audios)
+      .where('uploadBy', '==', user.uid)
+      .get()
+      .then(snap => {
+        if (snap.empty) {
+          console.log('Audios not found');
+          setIsLoading(false);
+        } else {
+          const items: Book[] = [];
+          snap.forEach((item: any) => {
+            items.push({
+              key: item.id,
+              ...item.data(),
+            });
+          });
+
+          setAudioByUser(items);
+          setIsLoading(false);
+        }
+      });
+  };
+  const getChapDetailByAudioId = (id: string) => {
+    firestore()
+      .doc(`${appInfos.databaseNames.chapters}/${id}`)
+      .get()
+      .then(snap => {
+        if (snap.exists) {
+          console.log(snap.data());
+        } else {
+          console.log('Chapter not found');
+        }
       });
   };
 
-  const handleChangeFormData = (val: string, key: string) => {
-    const data: any = {...Categories};
-    data[`${key}`] = val;
-
-    setCategories(data);
-  };
-
   return (
-    <Container back title={i18n.t('addNewCategories')}>
-      <SectionComponent>
+    <Container back title={i18n.t('uploadChapter')}>
+      {audioByUser.length > 0 ? (
+        <SectionComponent>
+          <InputCompoment
+            value={chap.title}
+            onChange={val => handleUpdateForm(val, 'title')}
+            title={i18n.t('title')}
+            placeholder={i18n.t('title')}
+          />
+        </SectionComponent>
+      ) : (
+        <LoadingComponent
+          isLoading={false}
+          value={audioByUser.length}
+          message="Bạn chưa tạo audio nào, hãy tạo audio trước nhé"
+        />
+      )}
+      {/* <SectionComponent>
         <RowComponent>
           {Categories.image ? (
             <FastImage
@@ -113,6 +153,7 @@ const AddNewCategory = ({navigation}: any) => {
           onChange={val => handleChangeFormData(val, 'title')}
           clear
           placeholder={i18n.t('CategoriesName')}
+          
         />
         <InputCompoment
           title={i18n.t('description')}
@@ -134,9 +175,9 @@ const AddNewCategory = ({navigation}: any) => {
         isVisible={isShowModalUploadImage}
         onClose={() => setIsShowModalUploadImage(false)}
         onUploadFinish={val => handleChangeFormData(val, 'image')}
-      />
+      /> */}
     </Container>
   );
 };
 
-export default AddNewCategory;
+export default AddNewChapter;

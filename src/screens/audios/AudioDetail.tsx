@@ -58,9 +58,9 @@ const AudioDetail = ({route, navigation}: any) => {
 
   useEffect(() => {
     getChapterInfo();
-    getListening();
     getRatings();
     getListeningCount();
+    audio.chapsId && getListening();
   }, [audio]);
 
   useEffect(() => {
@@ -106,6 +106,7 @@ const AudioDetail = ({route, navigation}: any) => {
 
   const getChapterInfo = async () => {
     setIsLoading(true);
+
     await firestore()
       .collection(appInfos.databaseNames.chapters)
       .doc(audio.chapsId)
@@ -247,7 +248,7 @@ const AudioDetail = ({route, navigation}: any) => {
                       style={{marginRight: 4}}
                     />
                   }
-                  text={audio.totalChaps?.toString() ?? ''}
+                  text={audio.totalChaps?.toString() ?? '0'}
                   styles={styles.tag}
                   textStyle={{color: appColors.primary, fontSize: 12}}
                 />
@@ -411,7 +412,11 @@ const AudioDetail = ({route, navigation}: any) => {
             ) : chapters.length > 0 ? (
               chapters.map((item, index) => renderChapItem(item, index))
             ) : (
-              <LoadingComponent isLoading={isLoading} value={chapters.length} />
+              <LoadingComponent
+                isLoading={isLoading}
+                value={chapters.length}
+                message="Đang cập nhật"
+              />
             )}
           </ScrollView>
           {chapters.length > 0 ? (
@@ -482,7 +487,9 @@ const AudioDetail = ({route, navigation}: any) => {
                 </TouchableOpacity>
               </View>
             )
-          ) : null}
+          ) : (
+            <></>
+          )}
         </LinearGradient>
       </ImageBackground>
       <ModalRating

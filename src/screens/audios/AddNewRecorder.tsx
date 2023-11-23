@@ -27,7 +27,7 @@ const innitialData: Author = {
   listens: 0,
 };
 
-const AddNewAuthor = ({navigation}: any) => {
+const AddNewRecorder = ({navigation}: any) => {
   const [author, setAuthor] = useState(innitialData);
   const [isShowModalUploadImage, setIsShowModalUploadImage] = useState(false);
 
@@ -37,14 +37,14 @@ const AddNewAuthor = ({navigation}: any) => {
     };
 
     firestore()
-      .collection(appInfos.databaseNames.authors)
+      .collection(appInfos.databaseNames.recorders)
       .add(data)
       .then(() => {
-        showToast('Đã thêm tác giả');
+        showToast('Đã thêm giọng đọc');
         navigation.goBack();
       })
       .catch(error => {
-        showToast('Không thể thêm tác giả' + error.message);
+        showToast('Không thể thêm giọng đọc' + error.message);
       });
   };
 
@@ -56,7 +56,7 @@ const AddNewAuthor = ({navigation}: any) => {
   };
 
   return (
-    <Container back title={i18n.t('addNewAuthor')}>
+    <Container back title={i18n.t('addNewRecorder')}>
       <SectionComponent>
         <RowComponent>
           {author.image ? (
@@ -128,7 +128,7 @@ const AddNewAuthor = ({navigation}: any) => {
         onCancel={() => navigation.goBack()}
         onOK={handleAddNewAuthor}
         disable={!author.name}
-        oKText="Thêm tác giả"
+        oKText="Thêm giọng đọc"
       />
       <ModalUploadFile
         isVisible={isShowModalUploadImage}
@@ -139,4 +139,4 @@ const AddNewAuthor = ({navigation}: any) => {
   );
 };
 
-export default AddNewAuthor;
+export default AddNewRecorder;

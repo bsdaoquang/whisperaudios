@@ -38,7 +38,7 @@ const UploadScreen = ({navigation}: any) => {
       icon: (
         <MaterialIcons name="audio-file" size={42} color={appColors.primary} />
       ),
-      onPress: () => console.log(''),
+      onPress: () => navigation.navigate('AddNewChapter'),
     },
     {
       key: 'live',

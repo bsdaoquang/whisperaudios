@@ -48,6 +48,12 @@ const DropdownPicker = (props: Props) => {
     }
   }, [searchKey]);
 
+  useEffect(() => {
+    if (multible) {
+      onSeleted(itemSelected);
+    }
+  }, [multible, itemSelected]);
+
   const getItemSelectedValue = (id: string) => {
     const item = items.find(element => element.value === id);
     return item?.label ?? '';

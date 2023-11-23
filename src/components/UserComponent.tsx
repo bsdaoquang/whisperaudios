@@ -1,7 +1,7 @@
 /** @format */
 
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, TouchableOpacity} from 'react-native';
+import {Alert, Image, TouchableOpacity, View} from 'react-native';
 import {appInfos} from '../constants/appInfos';
 import firestore from '@react-native-firebase/firestore';
 import {UserModel} from '../models';
@@ -10,6 +10,7 @@ import {RowComponent} from './RowComponent';
 import TitleComponent from './TitleComponent';
 import {appColors} from '../constants/appColors';
 import TextComponent from './TextComponent';
+import {Text} from 'react-native-svg';
 
 interface Props {
   uid: string;
@@ -52,18 +53,20 @@ const UserComponent = (props: Props) => {
           borderRadius: 100,
         }}
       />
-      <TitleComponent
-        text={
-          profile
-            ? profile.displayName
+      <View style={{flex: 1, paddingHorizontal: 8}}>
+        <TitleComponent
+          text={
+            profile
               ? profile.displayName
-              : profile.email
-            : ''
-        }
-        color={appColors.white}
-        flex={0}
-        styles={{paddingHorizontal: 8}}
-      />
+                ? profile.displayName
+                : profile.email
+              : ''
+          }
+          color={appColors.white}
+          flex={0}
+        />
+        <TextComponent text={`Lever 3`} size={12} color={appColors.white1} />
+      </View>
     </RowComponent>
   ) : (
     <TouchableOpacity onPress={() => Alert.alert('Login', 'Login request')}>

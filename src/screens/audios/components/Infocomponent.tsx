@@ -16,6 +16,8 @@ import {userSelector} from '../../../redux/reducers/userReducer';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../../constants/appInfos';
 import {i18n} from '../../../languages/i18n';
+import {audios} from '../../../datas/audios';
+import UserComponent from '../../../components/UserComponent';
 
 interface Props {
   item: Book;
@@ -76,11 +78,12 @@ const Infocomponent = (props: Props) => {
             text={
               followers && followers.includes(user.uid)
                 ? 'Huỷ theo dõi'
-                : 'Đăng ký nhận thông báo cập nhật'
+                : 'Nhận thông báo khi có chap mới'
             }
           />
         </RowComponent>
       </SectionComponent>
+
       <SectionComponent>
         <TitleComponent
           text={i18n.t('description')}
@@ -96,23 +99,25 @@ const Infocomponent = (props: Props) => {
             styles={{textAlign: 'justify', lineHeight: 20}}
           />
         </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => setLine(line === 5 ? 25 : 5)}>
-          <TextComponent
-            text={i18n.t('seeMore')}
-            flex={1}
-            color={appColors.link}
-          />
-        </TouchableOpacity>
       </SectionComponent>
+      {item.uploadBy && (
+        <SectionComponent>
+          <TitleComponent
+            text={'Tải lên bởi'}
+            color={appColors.light}
+            styles={{marginBottom: 8}}
+          />
+
+          <UserComponent uid={item.uploadBy} isTitle />
+        </SectionComponent>
+      )}
 
       <SectionComponent>
         {renderInfoItem(
           'Tác giả',
-          <AuthorComponent authorId={item.authorId} />,
+          <AuthorComponent authorId={item.authorId} onPress={() => {}} />,
         )}
-        {renderInfoItem('Giọng đọc', item.recordBy ?? <></>)}
-        {renderInfoItem('Người đăng', item.uploadBy ?? <></>)}
+
         {renderInfoItem(
           'Ngày tạo',
           <TextComponent

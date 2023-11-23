@@ -12,6 +12,7 @@ export const appInfos = {
     users: 'users',
     searchs: 'searchs',
     listenings: 'listenings',
+    recorders: 'recorders',
   },
   sizes: {
     width: Dimensions.get('window').width,

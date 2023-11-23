@@ -22,25 +22,28 @@ import {appInfos} from '../../constants/appInfos';
 import ButtonComponent from '../../components/ButtonComponent';
 import LinkComponent from '../../components/LinkComponent';
 import {replaceName} from '../../utils/replaceName';
-import {Book} from '../../models';
+import {Author, Book} from '../../models';
 import {useSelector} from 'react-redux';
 import {userSelector} from '../../redux/reducers/userReducer';
 import {showToast} from '../../utils/showToast';
 
-const innitialData: {
-  title: string;
-  description: string;
-  image: string;
-  categories: string[];
-  slug: string;
-  authorId: string;
-} = {
+const innitialData: Book = {
   title: '',
   description: '',
   image: '',
   categories: [],
   slug: '',
   authorId: '',
+  chapsId: '',
+  createdAt: 0,
+  updatedAt: 0,
+  liked: [],
+  listens: 0,
+  download: 0,
+  type: '',
+  recordBy: '',
+  uploadBy: '',
+  followers: [],
 };
 
 const CreateAudio = ({navigation}: any) => {
@@ -86,20 +89,6 @@ const CreateAudio = ({navigation}: any) => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     handleCancel();
-  //     return true;
-  //   };
-
-  //   const backHandler = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     backAction,
-  //   );
-
-  //   return () => backHandler.remove();
-  // }, []);
-
   const handleFormData = (val: string | string[], key: string) => {
     const data: any = {...audio};
 
@@ -123,31 +112,25 @@ const CreateAudio = ({navigation}: any) => {
     }
     const data: Book = {
       ...audio,
+
       slug: replaceName(audio.title),
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      chapsId: '',
-      liked: [],
-      listens: 0,
-      download: 0,
-      type: '',
-      recordBy: '',
+
       uploadBy: user.uid,
-      followers: [],
     };
 
-    console.log(data);
-    // firestore()
-    //   .collection(appInfos.databaseNames.audios)
-    //   .add(data)
-    //   .then(() => {
-    //     showToast('Tạo audio thành công, cám ơn bạn!');
-    //     setAudio(innitialData);
-    //     navigation.goBack();
-    //   })
-    //   .catch(error => {
-    //     showToast(error.message);
-    //   });
+    firestore()
+      .collection(appInfos.databaseNames.audios)
+      .add(data)
+      .then(() => {
+        showToast('Tạo audio thành công, cám ơn bạn!');
+        setAudio(innitialData);
+        navigation.goBack();
+      })
+      .catch(error => {
+        showToast(error.message);
+      });
   };
 
   const handleCancel = () => {
@@ -215,7 +198,6 @@ const CreateAudio = ({navigation}: any) => {
           </RowComponent>
           <InputCompoment
             title="Tên audio"
-            styles={{textTransform: 'capitalize'}}
             value={audio.title}
             onChange={val => handleFormData(val, 'title')}
             clear
@@ -229,6 +211,7 @@ const CreateAudio = ({navigation}: any) => {
             placeholder={i18n.t('choiceAuthor')}
             onAddNew={() => navigation.navigate('AddNewAuthor')}
           />
+
           <DropdownPicker
             items={categories}
             selected={audio.categories}
