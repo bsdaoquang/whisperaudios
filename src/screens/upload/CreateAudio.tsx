@@ -26,6 +26,7 @@ import {Author, Book} from '../../models';
 import {useSelector} from 'react-redux';
 import {userSelector} from '../../redux/reducers/userReducer';
 import {showToast} from '../../utils/showToast';
+import {handleCheckAndSendNotification} from '../../utils/handleCheckAndSendNotification';
 
 const innitialData: Book = {
   title: '',
@@ -124,6 +125,10 @@ const CreateAudio = ({navigation}: any) => {
       .collection(appInfos.databaseNames.audios)
       .add(data)
       .then(() => {
+        handleCheckAndSendNotification({
+          cats: data.categories,
+          authorId: data.authorId,
+        });
         showToast('Tạo audio thành công, cám ơn bạn!');
         setAudio(innitialData);
         navigation.goBack();

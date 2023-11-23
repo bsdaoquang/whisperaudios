@@ -31,6 +31,7 @@ import {userSelector} from '../../redux/reducers/userReducer';
 import {calcFileSize} from '../../utils/calcFileSize';
 import {showToast} from '../../utils/showToast';
 import storage from '@react-native-firebase/storage';
+import {handleCheckAndSendNotification} from '../../utils/handleCheckAndSendNotification';
 
 const innitialData: Chap = {
   audio: '',
@@ -175,6 +176,7 @@ const AddNewChapter = ({navigation}: any) => {
           });
         })
         .then(() => {
+          handleCheckAndSendNotification({bookId});
           showToast('Đã tải lên chương mới, cám ơn sự đóng góp của bạn');
           navigation.goBack();
         });
@@ -197,6 +199,7 @@ const AddNewChapter = ({navigation}: any) => {
               totalChaps: chaps.length,
             })
             .then(() => {
+              handleCheckAndSendNotification({bookId});
               showToast('Đã tải lên chương mới, cám ơn sự đóng góp của bạn');
               navigation.goBack();
             });

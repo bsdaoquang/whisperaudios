@@ -1,12 +1,11 @@
 import messaging from '@react-native-firebase/messaging';
 import auth from '@react-native-firebase/auth';
-import {apis} from '../api/apis';
-import getData from '../api/getDataAPI';
-import {database} from '../firebase/firebaseConfig';
+import firestore from '@react-native-firebase/firestore';
+import {appInfos} from '../constants/appInfos';
 
 //request permision for message
 export const requestUserPermission = async () => {
-  await messaging().setBackgroundMessageHandler(async () => {});
+  messaging().setBackgroundMessageHandler(async () => {});
   const authStatus = await messaging().requestPermission();
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -24,47 +23,28 @@ export const getFCMToken = async () => {
   const user = auth().currentUser;
 
   if (user) {
-    const apiUser = `${apis.users}/${user.uid}.json`;
+    const fcmtoken = await messaging().getToken();
 
-    try {
-      const res: any = await getData.getData(apiUser, user.uid);
+    if (fcmtoken) {
+      firestore()
+        .doc(`${appInfos.databaseNames.users}/${user.uid}`)
+        .get()
+        .then((snap: any) => {
+          if (snap.exists) {
+            const tokens = snap.data().tokens ?? [];
 
-      if (res) {
-        if (!res.fcmtoken) {
-          const fcmtoken = await messaging().getToken();
+            if (!tokens.includes(fcmtoken)) {
+              tokens.push(fcmtoken);
 
-          if (fcmtoken) {
-            database.ref(`users/${user.uid}`).update({
-              fcmtoken,
-            });
+              firestore()
+                .doc(`${appInfos.databaseNames.users}/${user.uid}`)
+                .update({tokens})
+                .then(() => console.log('Tokens updated'));
+            }
           }
-        } else {
-          // Đa có token
-          // console.log(res.fcmtoken);
-        }
-      } else {
-        console.log('Không tìm thấy dữ liệu user');
-      }
-    } catch (error) {
-      console.log(error);
+        });
+    } else {
+      console.log('Can not get FCMToken');
     }
   }
-};
-
-export const notificationListener = () => {
-  messaging().onNotificationOpenedApp(remoteMessage => {
-    // console.log('Notification caused app to open from background state: ', remoteMessage.notification);
-  });
-
-  messaging()
-    .getInitialNotification()
-    .then(remoteMessage => {
-      if (remoteMessage) {
-        // console.log('Notification caused app to open quit state: ', remoteMessage.notification);
-      }
-    });
-
-  messaging().onMessage(async remoteMessage => {
-    // console.log('Notification froground state....', remoteMessage);
-  });
 };

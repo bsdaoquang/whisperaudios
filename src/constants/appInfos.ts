@@ -14,6 +14,8 @@ export const appInfos = {
     listenings: 'listenings',
     recorders: 'recorders',
   },
+  serverKey:
+    'AAAASI5t1ko:APA91bH2U5razXZTsxETNGRvFZNNHaj2CtWErbgSAlNGRkKiwwr8dAAxEX0sGO4AgyiBoCB4VepkZit4almzpJZU0WAWi4Sh3T5yUONQgOsGYV2WCttyA1VLKwqZzFXOoaZ6MMhR_WsG',
   sizes: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,

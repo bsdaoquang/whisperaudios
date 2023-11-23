@@ -9,6 +9,8 @@ import {Provider} from 'react-redux';
 import {i18n} from './src/languages/i18n';
 import store from './src/redux/store';
 import Router from './src/routers/Router';
+import {requestUserPermission} from './src/utils/notificationsHelper';
+import Toast from 'react-native-toast-message';
 
 const eventEmitter = new NativeEventEmitter();
 
@@ -18,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     settupPlayer();
-
+    requestUserPermission();
     eventEmitter.removeAllListeners('backgroundTimer');
   }, []);
 
@@ -54,6 +56,7 @@ const App = () => {
               <Router />
             </NavigationContainer>
           </Host>
+          <Toast />
         </Provider>
       </GestureHandlerRootView>
     </>

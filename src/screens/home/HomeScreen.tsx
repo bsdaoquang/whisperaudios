@@ -1,6 +1,6 @@
 /** @format */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
@@ -22,9 +22,33 @@ import {audios} from '../../datas/audios';
 import {categories} from '../../datas/categories';
 import {chaptes} from '../../datas/chapters';
 import {authors} from '../../datas/authors';
+import messaging from '@react-native-firebase/messaging';
+import Toast from 'react-native-toast-message';
 
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);
+
+  useEffect(() => {
+    // cập nhật lại số lượng thông báo
+    messaging().onMessage(async message => {
+      console.log(message);
+      Toast.show({
+        text1: message.notification?.title ?? '',
+        text2: message.notification?.body ?? '',
+        type: 'success',
+        onPress: () => console.log(''),
+      });
+    });
+
+    messaging()
+      .getInitialNotification()
+      .then(mess => {
+        if (mess) {
+          const data: any = mess.data;
+          console.log(data);
+        }
+      });
+  }, []);
 
   const handleFixData = () => {
     // authors.forEach((item, index) => {
