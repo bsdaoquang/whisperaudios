@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ArrowLeft2} from 'iconsax-react-native';
 import React, {ReactNode} from 'react';
 import {
+  KeyboardAvoidingView,
   ScrollView,
   StyleProp,
   TouchableOpacity,
@@ -39,60 +40,62 @@ const Container = (props: Props) => {
   const navigation: any = useNavigation();
 
   return (
-    <View style={[styleTheme.container, styles]}>
-      {title || right || back ? (
-        <RowComponent
-          styles={{
-            paddingHorizontal: 16,
-            paddingVertical: 16,
-            justifyContent: 'space-between',
-            alignItems: 'center',
+    <KeyboardAvoidingView style={{flex: 1}}>
+      <View style={[styleTheme.container, styles]}>
+        {title || right || back ? (
+          <RowComponent
+            styles={{
+              paddingHorizontal: 16,
+              paddingVertical: 16,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            {back && (
+              <TouchableOpacity
+                onPress={onBack ? () => onBack() : () => navigation.goBack()}
+                style={{paddingRight: 16}}>
+                <ArrowLeft2
+                  size={24}
+                  color={theme === 'dark' ? appColors.light : appColors.dark}
+                />
+              </TouchableOpacity>
+            )}
+
+            {title && (
+              <View style={{flex: 1}}>
+                <TitleComponent
+                  size={20}
+                  text={title}
+                  line={1}
+                  styles={{lineHeight: 24}}
+                />
+              </View>
+            )}
+
+            {search && search}
+
+            {right ? right : <View style={{width: 42}} />}
+          </RowComponent>
+        ) : null}
+
+        <View
+          style={{
+            flex: 1,
           }}>
-          {back && (
-            <TouchableOpacity
-              onPress={onBack ? () => onBack() : () => navigation.goBack()}
-              style={{paddingRight: 16}}>
-              <ArrowLeft2
-                size={24}
-                color={theme === 'dark' ? appColors.light : appColors.dark}
-              />
-            </TouchableOpacity>
+          {scroll ? (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="always"
+              contentContainerStyle={{flexGrow: isFlex ? 1 : 0}}
+              automaticallyAdjustContentInsets={false}>
+              {children}
+            </ScrollView>
+          ) : (
+            <View style={{flex: 1}}>{children}</View>
           )}
-
-          {title && (
-            <View style={{flex: 1}}>
-              <TitleComponent
-                size={20}
-                text={title}
-                line={1}
-                styles={{lineHeight: 24}}
-              />
-            </View>
-          )}
-
-          {search && search}
-
-          {right ? right : <View style={{width: 42}} />}
-        </RowComponent>
-      ) : null}
-
-      <View
-        style={{
-          flex: 1,
-        }}>
-        {scroll ? (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="always"
-            contentContainerStyle={{flexGrow: isFlex ? 1 : 0}}
-            automaticallyAdjustContentInsets={false}>
-            {children}
-          </ScrollView>
-        ) : (
-          <View style={{flex: 1}}>{children}</View>
-        )}
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

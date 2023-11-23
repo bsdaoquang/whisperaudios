@@ -94,7 +94,7 @@ const ModalUploadFile = (props: Props, avatarProps: AvatarProps) => {
 
   const handleUploadImage = async (file: ImageOrVideo) => {
     setIsUploadFile(true);
-    const filePath = `uploadFiles/uid-${user.uid}-${Date.now()}.${
+    const filePath = `images/uid-${user.uid}-${Date.now()}.${
       file.path.split('.')[file.path.split('.').length - 1]
     }`;
     const res = await storage().ref(filePath).putFile(file.path);
