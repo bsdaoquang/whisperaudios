@@ -16,6 +16,7 @@ import ButtonBottomComponent from '../../components/ButtonBottomComponent';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../constants/appInfos';
 import {showToast} from '../../utils/showToast';
+import {replaceName} from '../../utils/replaceName';
 const innitialData: Category = {
   description: '',
   title: '',
@@ -34,6 +35,7 @@ const AddNewCategory = ({navigation}: any) => {
   const handleAddNewCategories = () => {
     const data = {
       ...Categories,
+      slug: replaceName(Categories.title),
     };
 
     firestore()

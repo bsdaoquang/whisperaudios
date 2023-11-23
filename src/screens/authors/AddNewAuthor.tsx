@@ -16,6 +16,7 @@ import ButtonBottomComponent from '../../components/ButtonBottomComponent';
 import firestore from '@react-native-firebase/firestore';
 import {appInfos} from '../../constants/appInfos';
 import {showToast} from '../../utils/showToast';
+import {replaceName} from '../../utils/replaceName';
 const innitialData: Author = {
   name: '',
   slug: '',
@@ -34,6 +35,7 @@ const AddNewAuthor = ({navigation}: any) => {
   const handleAddNewAuthor = () => {
     const data = {
       ...author,
+      slug: replaceName(author.name),
     };
 
     firestore()
