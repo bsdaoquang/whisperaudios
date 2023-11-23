@@ -2,28 +2,42 @@
 
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 
-import React, {useEffect, useState} from 'react';
-import {FlatList} from 'react-native';
-import Container from '../../components/Container';
-import {RowComponent} from '../../components/RowComponent';
-import TextComponent from '../../components/TextComponent';
-import {appColors} from '../../constants/appColors';
-import {appInfos} from '../../constants/appInfos';
-import {fontFamilies} from '../../constants/fontFamilies';
 import firestore from '@react-native-firebase/firestore';
+import React, {useEffect, useState} from 'react';
+import {FlatList, View} from 'react-native';
+import Container from '../../components/Container';
+import {appInfos} from '../../constants/appInfos';
 import {i18n} from '../../languages/i18n';
 import {Category} from '../../models';
-import {ArrowRight2, Heart} from 'iconsax-react-native';
-import ButtonIcon from '../../components/ButtonIcon';
+import CatItemComponent from './components/CatItemComponent';
+import {replaceName} from '../../utils/replaceName';
+import SectionComponent from '../../components/SectionComponent';
+import TextComponent from '../../components/TextComponent';
+import {InputCompoment} from '../../components/InputComponent';
+import {SearchNormal1} from 'iconsax-react-native';
+import {appColors} from '../../constants/appColors';
 
 const CategoriesScreen = ({navigation}: any) => {
   const [categories, setCategories] = useState<Category[]>([]);
-
   const {setItem, getItem} = useAsyncStorage(appInfos.localNames.categories);
+  const [searchKey, setSearchKey] = useState('');
+  const [results, setResults] = useState<Category[]>([]);
 
   useEffect(() => {
     getCategories();
   }, []);
+
+  useEffect(() => {
+    if (!searchKey) {
+      setResults([]);
+    } else {
+      const items = categories.filter(element =>
+        replaceName(element.title).includes(replaceName(searchKey)),
+      );
+
+      setResults(items);
+    }
+  }, [searchKey]);
 
   const getCategories = async () => {
     const items: any = await getItem();
@@ -58,35 +72,29 @@ const CategoriesScreen = ({navigation}: any) => {
   return (
     <Container back title={i18n.t('categories')}>
       {categories && categories.length > 0 && (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={categories}
-          renderItem={({item}) => (
-            <RowComponent
-              onPress={() =>
-                navigation.navigate('CategoryBooks', {
-                  id: item.key,
-                  title: item.title,
-                })
-              }
-              styles={{
-                marginHorizontal: 16,
-                paddingVertical: 16,
-                borderBottomWidth: 0.5,
-                borderBottomColor: appColors.gray2,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <TextComponent
-                text={item.title}
-                // flex={1}
-                font={fontFamilies.medium}
-              />
-
-              <ArrowRight2 size={16} color={appColors.gray7} />
-            </RowComponent>
-          )}
-        />
+        <>
+          <View style={{paddingHorizontal: 16}}>
+            <InputCompoment
+              clear
+              value={searchKey}
+              onChange={val => setSearchKey(val)}
+              prefix={<SearchNormal1 size={20} color={appColors.gray} />}
+              placeholder={i18n.t('search')}
+            />
+          </View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={searchKey ? results : categories}
+            ListEmptyComponent={
+              searchKey ? (
+                <SectionComponent>
+                  <TextComponent text="Không tìm thấy nội dung phù hợp" />
+                </SectionComponent>
+              ) : null
+            }
+            renderItem={({item}) => <CatItemComponent item={item} />}
+          />
+        </>
       )}
     </Container>
   );
