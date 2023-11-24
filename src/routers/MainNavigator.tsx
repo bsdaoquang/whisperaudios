@@ -9,6 +9,7 @@ import AddNewAuthor from '../screens/authors/AddNewAuthor';
 import AddNewCategory from '../screens/categories/AddNewCategory';
 import AddNewChapter from '../screens/audios/AddNewChapter';
 import AddNewRecorder from '../screens/audios/AddNewRecorder';
+import Recording from '../screens/audios/Recording';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -24,6 +25,7 @@ const MainNavigator = () => {
       <Stack.Screen name="AddNewAuthor" component={AddNewAuthor} />
       <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
       <Stack.Screen name="AddNewChapter" component={AddNewChapter} />
+      <Stack.Screen name="Recording" component={Recording} />
       <Stack.Screen name="AddNewRecorder" component={AddNewRecorder} />
     </Stack.Navigator>
   );

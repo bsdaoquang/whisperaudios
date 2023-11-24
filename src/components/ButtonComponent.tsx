@@ -64,7 +64,13 @@ const ButtonComponent = (props: Props) => {
         styles,
       ]}>
       {icon && icon}
-      {text && <TitleComponent styles={textStyle} text={text} flex={0} />}
+      {text && (
+        <TitleComponent
+          styles={[{color: appColors.white}, textStyle]}
+          text={text}
+          flex={0}
+        />
+      )}
     </TouchableOpacity>
   );
 };

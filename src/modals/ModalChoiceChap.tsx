@@ -11,6 +11,7 @@ import TitleComponent from '../components/TitleComponent';
 import {appColors} from '../constants/appColors';
 import {i18n} from '../languages/i18n';
 import {globalStyles} from '../styles/globalStyles';
+import {appInfos} from '../constants/appInfos';
 
 interface Props {
   visible: boolean;
@@ -31,27 +32,30 @@ const ModalChoiceChap = (props: Props) => {
       visible={visible}
       animationType="slide"
       transparent
-      style={{flex: 1, height: '100%'}}
+      style={{flex: 1, width: appInfos.sizes.width}}
       statusBarTranslucent>
       <View
         style={[
-          globalStyles.shadow,
+          // globalStyles.shadow,
           {
             flex: 1,
-            backgroundColor: 'rgba(255,255,255,0.2)',
+            backgroundColor: 'rgba(0,0,0,0.6)',
             justifyContent: 'center',
             alignItems: 'center',
             padding: 20,
           },
         ]}>
         <View
-          style={{
-            backgroundColor:
-              theme === 'light' ? appColors.white : appColors.dark,
-            width: '100%',
-            padding: 16,
-            borderRadius: 12,
-          }}>
+          style={[
+            globalStyles.shadow,
+            {
+              backgroundColor:
+                theme === 'light' ? appColors.white : appColors.dark,
+              width: '100%',
+              padding: 16,
+              borderRadius: 12,
+            },
+          ]}>
           <RowComponent styles={{justifyContent: 'flex-end', marginBottom: 12}}>
             <TitleComponent flex={1} text="Chọn chương" />
             <ButtonIcon

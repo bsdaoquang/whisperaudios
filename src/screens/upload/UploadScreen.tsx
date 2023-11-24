@@ -58,7 +58,7 @@ const UploadScreen = ({navigation}: any) => {
       title: 'Ghi âm',
       subTitle: 'Tạo bản ghi âm của bạn, chia sẻ khi bạn muốn',
       icon: <Ionicons name="recording" size={32} color={appColors.primary} />,
-      onPress: () => console.log(''),
+      onPress: () => navigation.navigate('Recording'),
     },
   ];
 

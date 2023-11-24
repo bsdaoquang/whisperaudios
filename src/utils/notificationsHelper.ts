@@ -35,7 +35,7 @@ export const getFCMToken = async () => {
 
             if (!tokens.includes(fcmtoken)) {
               tokens.push(fcmtoken);
-
+              // console.log(tokens, fcmtoken);
               firestore()
                 .doc(`${appInfos.databaseNames.users}/${user.uid}`)
                 .update({tokens})

@@ -56,6 +56,7 @@ import {HandleAudio} from '../../utils/handleAudio';
 import {showToast} from '../../utils/showToast';
 import AudioItem from './components/AudioItem';
 import {i18n} from '../../languages/i18n';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const eventEmitter = new NativeEventEmitter();
 
 const PlayingScreen = ({route, navigation}: any) => {
@@ -293,11 +294,15 @@ const PlayingScreen = ({route, navigation}: any) => {
             color={theme === 'dark' ? appColors.white : appColors.text}
           />
         </TouchableOpacity>
-        <TouchableOpacity
+        <ButtonIcon
+          icon={<FontAwesome name="eject" color={appColors.red4} size={24} />}
+          onPress={handleStopPlaylist}
+        />
+        {/* <TouchableOpacity
           style={[globalStyles.rowCenter]}
           onPress={handleStopPlaylist}>
           <TextComponent text="Xoá danh sách phát" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </RowComponent>
 
       <SectionComponent

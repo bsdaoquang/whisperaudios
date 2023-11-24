@@ -35,7 +35,7 @@ const RatingComponent = (props: Props) => {
         setCountStart(0);
       } else {
         snap.forEach((item: any) => {
-          setCountStart(item.data().start);
+          setCountStart(item.data().star);
         });
       }
     });

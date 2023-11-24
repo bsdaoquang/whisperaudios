@@ -20,32 +20,44 @@ export const LoadingComponent = (props: Props) => {
   const theme = useColorScheme();
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       {isLoading ? (
-        <>
+        <SectionComponent
+          styles={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+          }}>
           <ActivityIndicator
             size={20}
             color={theme === 'light' ? appColors.gray : appColors.light}
           />
           <SpaceComponent height={10} />
-          <Text
-            style={{
+          <TextComponent
+            styles={{
               color: theme === 'light' ? appColors.gray : appColors.light,
               textAlign: 'center',
-            }}>
-            Đang tải...
-          </Text>
-        </>
+            }}
+            text="Đang tải..."
+            flex={0}
+          />
+        </SectionComponent>
       ) : (
         <>
           {!isLoading && value === 0 && (
-            <SectionComponent>
+            <SectionComponent
+              styles={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1,
+              }}>
               <TextComponent
                 text={message ? message : 'Không tìm thấy dữ liệu'}
                 styles={{
                   textAlign: 'center',
                   fontFamily: fontFamilies.regular,
                 }}
+                flex={0}
               />
             </SectionComponent>
           )}
