@@ -143,7 +143,11 @@ export const InputCompoment = (props: Props) => {
       <View
         style={[
           inputContainerStyle,
-          {alignItems: multiline ? 'flex-start' : 'center'},
+          {
+            alignItems: multiline ? 'flex-start' : 'center',
+            borderColor: isFocus ? appColors.success3 : appColors.gray,
+            backgroundColor: isFocus ? appColors.white : appColors.gray2,
+          },
         ]}>
         {prefix && prefix}
         <TextInput

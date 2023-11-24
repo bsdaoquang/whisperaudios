@@ -64,10 +64,10 @@ const Container = (props: Props) => {
             {title && (
               <View style={{flex: 1}}>
                 <TitleComponent
-                  size={20}
+                  size={18}
                   text={title}
                   line={1}
-                  styles={{lineHeight: 24}}
+                  styles={{lineHeight: 26}}
                 />
               </View>
             )}

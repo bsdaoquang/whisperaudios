@@ -261,7 +261,7 @@ const AudioDetail = ({route, navigation}: any) => {
                       style={{marginRight: 4}}
                     />
                   }
-                  text={listensCount.toString()}
+                  text={audio.listens.toString()}
                   styles={styles.tag}
                   textStyle={{color: appColors.primary, fontSize: 12}}
                 />

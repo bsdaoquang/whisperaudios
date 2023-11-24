@@ -182,7 +182,7 @@ const SearchBooks = ({navigation}: any) => {
             />
           }
           placeholder={i18n.t('searchPlaceholder')}
-          autoFocus={false}
+          autoFocus={true}
         />
       </View>
 

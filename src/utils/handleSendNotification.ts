@@ -10,12 +10,20 @@ export const handleSendNotification = (
   firestore()
     .doc(`${appInfos.databaseNames.users}/${uid}`)
     .get()
-    .then((snap: any) => {
+    .then(async (snap: any) => {
       if (snap.exists) {
         const tokens = snap.data().tokens ?? [];
 
         if (tokens.length > 0) {
-          pushNotification(tokens, title, body);
+          await pushNotification(tokens, title, body);
+
+          // console.log(JSON.stringify(response.data));
+          firestore().collection('notifications').add({
+            title,
+            body,
+            isRead: false,
+            uid,
+          });
         }
       }
     });
@@ -47,9 +55,7 @@ const pushNotification = async (
 
   axios
     .request(config)
-    .then(response => {
-      console.log(JSON.stringify(response.data));
-    })
+    .then(response => {})
     .catch(error => {
       console.log(error);
     });

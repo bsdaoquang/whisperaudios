@@ -30,6 +30,7 @@ import ListeningsScreen from '../screens/auth/ListeningsScreen';
 import LikedAudios from '../screens/auth/LikedAudios';
 import EditProfile from '../screens/auth/EditProfile';
 import NotificationsScreen from '../screens/auth/NotificationsScreen';
+import ProfileData from '../screens/auth/ProfileData';
 
 const Router = () => {
   const dispatch = useDispatch();
@@ -68,14 +69,13 @@ const Router = () => {
       <Stack.Screen name="ListeningsScreen" component={ListeningsScreen} />
       <Stack.Screen name="LikedAudios" component={LikedAudios} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="ProfileData" component={ProfileData} />
       <Stack.Screen
         name="NotificationsScreen"
         component={NotificationsScreen}
       />
     </Stack.Navigator>
   );
-
-  return <MainNavigator />;
 };
 
 export default Router;

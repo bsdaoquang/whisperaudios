@@ -1,29 +1,24 @@
 /** @format */
 
+import messaging from '@react-native-firebase/messaging';
+import {Notification, SearchNormal1} from 'iconsax-react-native';
 import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import Toast from 'react-native-toast-message';
 import {useSelector} from 'react-redux';
+import ButtonIcon from '../../components/ButtonIcon';
 import Container from '../../components/Container';
 import LatestBooks from '../../components/LatestBooks';
 import ListeningComponent from '../../components/ListeningComponent';
 import {RowComponent} from '../../components/RowComponent';
-import TitleComponent from '../../components/TitleComponent';
+import SpaceComponent from '../../components/SpaceComponent';
 import TopAuthorBooks from '../../components/TopAuthorBooks';
 import TopRatingBooks from '../../components/TopRatingBooks';
+import {appColors} from '../../constants/appColors';
 import {userSelector} from '../../redux/reducers/userReducer';
 import Categories from './components/Categories';
 import TopLikedSwiper from './components/TopLikedSwiper';
-import ButtonComponent from '../../components/ButtonComponent';
-import firestore from '@react-native-firebase/firestore';
-import {appInfos} from '../../constants/appInfos';
-import Clipboard from '@react-native-clipboard/clipboard';
-import {audios} from '../../datas/audios';
-import {categories} from '../../datas/categories';
-import {chaptes} from '../../datas/chapters';
-import {authors} from '../../datas/authors';
-import messaging from '@react-native-firebase/messaging';
-import Toast from 'react-native-toast-message';
 
 const HomeScreen = ({navigation}: any) => {
   const user = useSelector(userSelector);
@@ -91,6 +86,17 @@ const HomeScreen = ({navigation}: any) => {
             resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity>
+        <RowComponent>
+          <ButtonIcon
+            icon={<Notification size={22} color={appColors.text} />}
+            onPress={() => navigation.navigate('NotificationsScreen')}
+          />
+          <SpaceComponent width={12} />
+          <ButtonIcon
+            icon={<SearchNormal1 size={22} color={appColors.text} />}
+            onPress={() => navigation.navigate('Search')}
+          />
+        </RowComponent>
       </RowComponent>
 
       <Categories />

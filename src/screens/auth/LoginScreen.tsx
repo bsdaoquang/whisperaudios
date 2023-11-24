@@ -93,18 +93,6 @@ const LoginScreen = () => {
       if (validate) {
         setHelpEmail('');
         setIsChangePass(true);
-        // const res = await handleAuthentication.FogetPass(email);
-
-        // if (res === 'OK') {
-        // 	// Đã gửi email
-        // 	console.log('OK');
-        // 	setIsChangePass(false);
-        // } else {
-        // 	// Lỗi
-        // 	setErrorText(
-        // 		'Địa chỉ email của bạn không tồn tại trong hệ thống, vui lòng kiểm tra lại'
-        // 	);
-        // }
       } else {
         setHelpEmail('Địa chỉ email không đúng');
       }
